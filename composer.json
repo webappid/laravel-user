@@ -1,0 +1,44 @@
+{
+  "name": "webappid/laravel-user",
+  "description": "Core simple user management for laravel",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dyan Galih",
+      "email": "dyan.galih@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "WebAppId\\User\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WebAppId\\User\\Tests\\": "src/tests"
+    }
+  },
+  "require": {
+    "php" : ">=7.1.0",
+    "illuminate/support": "~5.5",
+    "doctrine/dbal": "^2.5",
+    "nesbot/carbon": "^1.33"
+  },
+  "require-dev": {
+    "phpunit/phpunit" : "7.2.6",
+    "squizlabs/php_codesniffer": "3.*",
+    "mockery/mockery": "dev-master@dev",
+    "orchestra/testbench": "~3.5"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    },
+    "laravel": {
+      "providers": [
+        "WebAppId\\User\\ServiceProvider"
+      ]
+    }
+  }
+}
