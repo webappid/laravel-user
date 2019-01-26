@@ -1,9 +1,11 @@
 <?php
 
-use WebAppId\User\UserRepository;
-use WebAppId\User\UserRoleRepository;
+namespace WebAppId\User\Seeds;
+
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use WebAppId\User\Repositories\UserRepository;
+use WebAppId\User\Repositories\UserRoleRepository;
 
 class UsersTableSeeder extends Seeder
 {

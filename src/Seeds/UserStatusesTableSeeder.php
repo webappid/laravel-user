@@ -1,7 +1,9 @@
 <?php
 
+namespace WebAppId\User\Seeds;
+
 use Illuminate\Database\Seeder;
-use WebAppId\User\UserStatusRepository;
+use WebAppId\User\Repositories\UserStatusRepository;
 
 class UserStatusesTableSeeder extends Seeder
 {

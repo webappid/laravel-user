@@ -6,7 +6,7 @@
  * Time: 16.02
  */
 
-namespace Tests\Unit;
+namespace WebAppId\User\Tests\Unit\Repositories;
 
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\RoleRepository;

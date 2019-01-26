@@ -6,7 +6,7 @@
  * Time: 18.03
  */
 
-namespace Tests\Unit\Repositories;
+namespace WebAppId\User\Tests\Unit\Repositories;
 
 use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Tests\TestCase;

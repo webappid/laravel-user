@@ -6,7 +6,7 @@
  * Time: 16.43
  */
 
-namespace WebAppId\User\Service;
+namespace WebAppId\User\Services;
 
 
 use Illuminate\Container\Container;

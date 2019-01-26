@@ -8,10 +8,31 @@
 
 namespace WebAppId\User\Models;
 
-use App\User AS LaravelUser;
+use Illuminate\Foundation\Auth\User AS Authentication;
+use Illuminate\Notifications\Notifiable;
 
-class User extends LaravelUser
+class User extends Authentication
 {
+    use Notifiable;
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password', 'status_id'
+    ];
+    
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+    
     public function status()
     {
         return $this->hasOne(UserStatus::class, 'id', 'status_id');

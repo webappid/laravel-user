@@ -1,7 +1,9 @@
 <?php
 
+namespace WebAppId\User\Seeds;
+
 use Illuminate\Database\Seeder;
-use WebAppId\User\RoleRepository;
+use WebAppId\User\Repositories\RoleRepository;
 
 class RoleTableSeeder extends Seeder
 {

@@ -1,8 +1,10 @@
 <?php
+namespace WebAppId\User\Seeds;
 
 use Illuminate\Database\Seeder;
-use WebAppId\User\UserRepository;
 use Faker\Factory as Faker;
+use WebAppId\User\Repositories\UserRepository;
+
 
 class AdminResetPasswordTableSeeder extends Seeder
 {

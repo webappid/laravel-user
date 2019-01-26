@@ -6,7 +6,7 @@
  * Time: 00.41
  */
 
-namespace Tests\Unit\Repositories;
+namespace WebAppId\User\Tests\Unit\Repositories;
 
 
 use WebAppId\User\Repositories\RoleRepository;
