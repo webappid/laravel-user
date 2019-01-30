@@ -8,6 +8,7 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
+use WebAppId\User\Models\Activation;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\RoleRepository;
@@ -69,12 +70,9 @@ class UserRepositoryTest extends TestCase
         return $this->getContainer()->call([$this->userRepository(), 'addUser'], ['request' => $dummy]);
     }
     
-    public function setActivation($user_id)
+    public function setActivation(int $userId): ?Activation
     {
-        $activation = new \StdClass();
-        $activation->user_id = $user_id;
-        
-        return $this->getContainer()->call([$this->activationRepository(), 'addActivation'], ['request' => $activation]);
+        return $this->getContainer()->call([$this->activationRepository(), 'addActivation'], ['userId' => $userId]);
     }
     
     public function testAddUser(): ?User
@@ -82,9 +80,8 @@ class UserRepositoryTest extends TestCase
         $dummy = $this->getDummyUser();
         $result = $this->createDummy($dummy);
         $resultFailed = $this->createDummy($dummy);
-        if ($resultFailed == null) {
-            $this->assertTrue(true);
-        }
+        self::assertEquals(null, $resultFailed);
+        
         $resultStatus = $this->getContainer()->call([$this->userStatusRepository(), 'getStatusById'], ['id' => $dummy->getStatusId()]);
         
         if ($result != null) {
@@ -103,20 +100,12 @@ class UserRepositoryTest extends TestCase
                 self::assertEquals($objUserRole->getRoleId(), $resultUserRole->role_id);
                 
                 $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getRoleById'], ['id' => $objUserRole->getRoleId()]);
-                if ($roleResult == null) {
-                    self::assertTrue(false);
-                } else {
-                    self::assertTrue(true);
-                    self::assertEquals($result->roles[0]->name, $roleResult->name);
-                }
+                self::assertNotEquals(null, $roleResult);
+                self::assertEquals($result->roles[0]->name, $roleResult->name);
             }
             
             $activationResult = $this->setActivation($result->id);
-            if ($activationResult != null) {
-                $this->assertTrue(true);
-            } else {
-                $this->assertTrue(false);
-            }
+            self::assertNotEquals(null, $activationResult);
             
             $this->assertTrue(true);
             $this->assertEquals($dummy->getStatusId(), $result->status_id);
@@ -135,11 +124,7 @@ class UserRepositoryTest extends TestCase
         
         if ($result != null) {
             $result = $this->getContainer()->call([$this->userRepository(), 'getUserByEmail'], ['email' => $result->email]);
-            if ($result != null) {
-                $this->assertTrue(true);
-            } else {
-                $this->assertTrue(false);
-            }
+            self::assertNotEquals(null, $result);
         }
     }
     
@@ -151,11 +136,7 @@ class UserRepositoryTest extends TestCase
             if ($result != null) {
                 $result->password = $this->getFaker()->password;
                 $resultUpdate = $this->getContainer()->call([$this->userRepository(), 'setUpdatePassword'], ['email' => $result->email, 'password' => $result->password]);
-                if ($resultUpdate == null) {
-                    $this->assertTrue(false);
-                } else {
-                    $this->assertTrue(true);
-                }
+                self::assertNotEquals(null, $resultUpdate);
             } else {
                 $this->assertTrue(false);
             }
@@ -170,11 +151,7 @@ class UserRepositoryTest extends TestCase
             if ($result != null) {
                 $result->status_id = $this->getFaker()->numberBetween(1, 4);
                 $resultUpdate = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $result->email, 'status' => $result->status_id]);
-                if ($resultUpdate == null) {
-                    $this->assertTrue(false);
-                } else {
-                    $this->assertTrue(true);
-                }
+                self::assertNotEquals(null, $resultUpdate);
             } else {
                 $this->assertTrue(false);
             }
@@ -204,13 +181,8 @@ class UserRepositoryTest extends TestCase
         $result = $this->testAddUser();
         
         if ($result != null) {
-            self::assertTrue(true);
             $resultActivate = $this->getContainer()->call([$this->activationRepository(), 'setActivate'], ['key' => 'invalid key']);
-            if ($resultActivate == null) {
-                self::assertFalse(false);
-            } else {
-                self::assertFalse(true);
-            }
+            self::assertNotEquals('null', $resultActivate);
         }
     }
     

@@ -2,20 +2,8 @@
 
 namespace WebAppId\User\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class AddUserRequest extends FormRequest
+class AddUserRequest extends AbstractFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,6 +15,8 @@ class AddUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'status_id' => 'required|int',
+            'roles' => 'required|array'
         ];
     }
 }

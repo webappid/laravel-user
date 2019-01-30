@@ -49,14 +49,19 @@ class UserServiceTest extends TestCase
     {
         $dummy = $this->getDummyUser();
         
-        $dummy->setRoleId($this->getFaker()->numberBetween(1, 2));
+        $roles = [];
+        $roles[] = $this->getFaker()->numberBetween(1, 2);
+        
+        $dummy->setRoles($roles);
         
         $resultUser = $this->getContainer()->call([$this->userService(), 'addUser'], ['request' => $dummy]);
+        
         if ($resultUser == null) {
             self::assertTrue(false);
         } else {
             self::assertTrue(true);
-            $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getRoleById'], ['id' => $dummy->getRoleId()]);
+            
+            $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getRoleById'], ['id' => $resultUser->getRoles()[0]->id]);
             
             self::assertEquals($dummy->getName(), $resultUser->getUser()->name);
             self::assertEquals($dummy->getEmail(), $resultUser->getUser()->email);
@@ -190,13 +195,10 @@ class UserServiceTest extends TestCase
         $randomStatusId = $this->uniqueRandomNotIn($resultUser->getStatusId());
         
         $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $resultUser->getEmail(), 'status' => $randomStatusId]);
+    
+        $this->assertNotEquals(null, $result);
         
-        if ($result->getStatus()) {
-            $this->assertTrue(true);
-            $this->assertNotEquals($resultUser->getStatusId(), $result->getData()->status_id);
-        } else {
-            $this->assertTrue(false);
-        }
+        $this->assertNotEquals($resultUser->getStatusId(), $result->status_id);
     }
     
     public function testUpdateStatusName(): void
@@ -206,13 +208,10 @@ class UserServiceTest extends TestCase
         $name = $this->getFaker()->name;
         
         $result = $this->getContainer()->call([$this->userService(), 'updateUserName'], ['email' => $resultUser->getEmail(), 'name' => $name]);
+    
+        self::assertNotEquals(null, $result);
         
-        if ($result->getStatus()) {
-            $this->assertTrue(true);
-            $this->assertNotEquals($resultUser->getName(), $result->getData()->name);
-        } else {
-            $this->assertTrue(false);
-        }
+        $this->assertNotEquals($resultUser->getName(), $result->name);
     }
     
     public function testUserDelete(): void

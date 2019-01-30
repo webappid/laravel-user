@@ -18,7 +18,7 @@ class UserParam
     private $email;
     private $password;
     private $status_id;
-    private $role_id;
+    private $roles;
     
     /**
      * @return mixed
@@ -87,18 +87,16 @@ class UserParam
     /**
      * @return mixed
      */
-    public function getRoleId(): int
+    public function getRoles(): array
     {
-        return $this->role_id;
+        return $this->roles;
     }
     
     /**
-     * @param mixed $role_id
+     * @param array $roles
      */
-    public function setRoleId($role_id): void
+    public function setRoles(array $roles): void
     {
-        $this->role_id = $role_id;
+        $this->roles = $roles;
     }
-    
-    
 }

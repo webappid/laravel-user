@@ -15,6 +15,7 @@ class AddUserResponse extends AbstractResponse
 {
     private $user;
     private $roles;
+    private $activation;
     
     /**
      * @return mixed
@@ -47,4 +48,22 @@ class AddUserResponse extends AbstractResponse
     {
         $this->roles = $roles;
     }
+    
+    /**
+     * @return mixed
+     */
+    public function getActivation(): ?string
+    {
+        return $this->activation;
+    }
+    
+    /**
+     * @param mixed $activation
+     */
+    public function setActivation(string $activation): void
+    {
+        $this->activation = $activation;
+    }
+    
+    
 }

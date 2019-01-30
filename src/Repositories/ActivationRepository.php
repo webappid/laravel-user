@@ -12,6 +12,7 @@ use WebAppId\User\Models\Activation;
 use Faker\Factory as Faker;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
+use Webpatser\Uuid\Uuid;
 
 /**
  * Class ActivationRepository
@@ -20,16 +21,17 @@ use Illuminate\Support\Carbon;
 class ActivationRepository
 {
     /**
-     * @param $request
+     * @param int $userId
      * @param Activation $activation
      * @return Activation|null
+     * @throws \Exception
      */
-    public function addActivation($request, Activation $activation)
+    public function addActivation(int $userId, Activation $activation): ?Activation
     {
         try {
             $activation->status = 'unused';
-            $activation->user_id = $request->user_id;
-            $activation->key = Faker::create()->uuid;
+            $activation->user_id = $userId;
+            $activation->key = Uuid::generate(4)->string;
             $activation->valid_until = Carbon::now('UTC')->addHour(8)->toDateTimeString();
             $activation->save();
             return $activation;
@@ -44,7 +46,7 @@ class ActivationRepository
      * @param Activation $activation
      * @return mixed
      */
-    public function getActivationByKey($key, Activation $activation)
+    public function getActivationByKey($key, Activation $activation): ?Activation
     {
         return $activation
             ->selectRaw(
@@ -57,9 +59,9 @@ class ActivationRepository
     /**
      * @param $key
      * @param Activation $activation
-     * @return null
+     * @return Activation|null
      */
-    public function setActivate($key, Activation $activation)
+    public function setActivate($key, Activation $activation): ?Activation
     {
         try {
             $resultActivation = $this->getActivationByKey($key, $activation);

@@ -19,10 +19,7 @@ abstract class AbstractFormRequest extends FormRequest implements FormRequestCon
         return true;
     }
     
-    public function rules()
-    {
-        return [];
-    }
+    abstract function rules();
     
     public function messages()
     {
