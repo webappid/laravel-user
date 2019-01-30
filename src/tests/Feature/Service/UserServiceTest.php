@@ -163,11 +163,11 @@ class UserServiceTest extends TestCase
     {
         $randomUserList = $this->generateRandomUser();
         
-        $randomNumber = $this->getFaker()->numberBetween(0, count($randomUserList)-1);
+        $randomNumber = $this->getFaker()->numberBetween(0, count($randomUserList) - 1);
         
         $randomUser = $randomUserList[$randomNumber];
         
-        $userResult = $this->getContainer()->call([$this->userService(), 'searchUserByEmail'], ['email' => $randomUser->getEmail()]);
+        $userResult = $this->getContainer()->call([$this->userService(), 'getUserByEmail'], ['email' => $randomUser->getEmail()]);
         
         $this->assertEquals($randomUser->getName(), $userResult->getData()->name);
         $this->assertEquals($randomUser->getEmail(), $userResult->getData()->email);
@@ -213,6 +213,23 @@ class UserServiceTest extends TestCase
         } else {
             $this->assertTrue(false);
         }
+    }
+    
+    public function testUserDelete(): void
+    {
+        $randomUserList = $this->generateRandomUser();
+        
+        $randomNumber = $this->getFaker()->numberBetween(0, count($randomUserList) - 1);
+        
+        $randomUser = $randomUserList[$randomNumber];
+        
+        $resultUser = $this->getContainer()->call([$this->userService(), 'deleteUserByEmail'], ['email' => $randomUser->getEmail()]);
+        
+        self::assertEquals(true, $resultUser);
+        
+        $resultSearch = $this->getContainer()->call([$this->userService(), 'getUserByEmail'], ['email' => $randomUser->getEmail()]);
+        
+        self::assertEquals(null, $resultSearch->getData());
     }
     
 }

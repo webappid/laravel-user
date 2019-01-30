@@ -137,7 +137,7 @@ class UserService
      * @param UserSearchResponse $userSearchResponse
      * @return UserSearchResponse|null
      */
-    public function searchUserByEmail(string $email, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
+    public function getUserByEmail(string $email, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
     {
         $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $email]);
         
@@ -174,6 +174,13 @@ class UserService
         return $userSearchResponse;
     }
     
+    /**
+     * @param string $email
+     * @param string $name
+     * @param UserRepository $userRepository
+     * @param UserSearchResponse $userSearchResponse
+     * @return UserSearchResponse|null
+     */
     public function updateUserName(string $email, string $name, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
     {
         $result = $this->container->call([$userRepository, 'setUpdateName'], ['email' => $email, 'name' => $name]);
@@ -187,5 +194,15 @@ class UserService
             $userSearchResponse->setData($result);
         }
         return $userSearchResponse;
+    }
+    
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @return bool|null
+     */
+    public function deleteUserByEmail(string $email, UserRepository $userRepository): ?bool
+    {
+        return $this->container->call([$userRepository, 'deleteUserByEmail'], ['email' => $email]);
     }
 }
