@@ -6,6 +6,7 @@ namespace WebAppId\User\Repositories;
 use Illuminate\Database\QueryException;
 use WebAppId\User\Models\User;
 use WebAppId\User\Services\Params\UserParam;
+use WebAppId\User\Services\Params\UserSearchParam;
 
 /**
  * Class UserRepository
@@ -57,18 +58,18 @@ class UserRepository
     }
     
     /**
-     * @param $request
+     * @param UserSearchParam $userSearchParam
      * @param User $user
-     * @return mixed
+     * @return int|null
      */
-    public function getUserSearchCount($request, User $user): ?int
+    public function getUserSearchCount(UserSearchParam $userSearchParam, User $user): ?int
     {
-        return $this->getUserQuery($user, $request->q)->count();
+        return $this->getUserQuery($user, $userSearchParam->getQ())->count();
     }
     
     /**
      * @param User $user
-     * @return mixed
+     * @return int|null
      */
     public function getCountAllUser(User $user): ?int
     {
@@ -76,14 +77,14 @@ class UserRepository
     }
     
     /**
-     * @param $request
+     * @param UserSearchParam $userSearchParam
      * @param User $user
      * @param $paginate
-     * @return mixed
+     * @return object|null
      */
-    public function getUserSearch($request, User $user, $paginate): ?object
+    public function getUserSearch(UserSearchParam $userSearchParam, User $user, $paginate = '12'): ?object
     {
-        return $this->getUserQuery($user, $request->q)->paginate($paginate);
+        return $this->getUserQuery($user, $userSearchParam->getQ())->paginate($paginate);
     }
     
     /**
@@ -130,6 +131,46 @@ class UserRepository
             }
         } else {
             return null;
+        }
+    }
+    
+    /**
+     * @param string $email
+     * @param string $name
+     * @param User $user
+     * @return User|null
+     */
+    public function setUpdateName(string $email, string $name, User $user): ?User
+    {
+        $user = $this->getUserByEmail($email, $user);
+        if ($user != null) {
+            try {
+                $user->name = $name;
+                $user->save();
+                return $user;
+            } catch (QueryException $queryException) {
+                report($queryException);
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * @param string $email
+     * @param User $user
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteUserByEmail(string $email, User $user): bool
+    {
+        $user = $this->getUserByEmail($email, $user);
+        try {
+            return $user->delete();
+        } catch (QueryException $queryException) {
+            report($queryException);
+            return false;
         }
     }
 }

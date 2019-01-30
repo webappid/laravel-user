@@ -4,13 +4,16 @@ namespace WebAppId\User\Services;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\DB;
+use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
 use WebAppId\User\Response\AddUserResponse;
 use WebAppId\User\Response\ChangePasswordResponse;
+use WebAppId\User\Response\UserSearchResponse;
 use WebAppId\User\Services\Params\ChangePasswordParam;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserRoleParam;
+use WebAppId\User\Services\Params\UserSearchParam;
 
 /**
  * Class UserService
@@ -102,22 +105,87 @@ class UserService
     }
     
     /**
-     * @param ChangePasswordParam $changePasswordParam
+     * @param UserSearchParam $userSearchParam
      * @param UserRepository $userRepository
-     * @param ChangePasswordResponse $changePasswordResponse
-     * @return ChangePasswordResponse
+     * @param UserSearchResponse $userSearchResponse
+     * @return UserSearchResponse|null
      */
-    public function changePasswordByAdmin(ChangePasswordParam $changePasswordParam, UserRepository $userRepository, ChangePasswordResponse $changePasswordResponse): ChangePasswordResponse
+    public function showUserList(UserSearchParam $userSearchParam, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
     {
-        $changePasswordResult = $this->container->call([$userRepository, 'setUpdatePassword'], ['email' => $changePasswordParam->getEmail(), 'password' => $changePasswordParam->getPassword()]);
-        if ($changePasswordResult == null) {
-            $changePasswordResponse->setStatus(false);
-            $changePasswordResponse->setMessage("Update Password Failed, please contact your admin");
+        $recordTotal = $this->container->call([$userRepository, 'getCountAllUser']);
+        $userSearchResponse->setRecordsTotal($recordTotal);
+        if ($recordTotal == 0) {
+            $userSearchResponse->setStatus(false);
+            $userSearchResponse->setMessage('No data found');
         } else {
-            $changePasswordResponse->setStatus(true);
-            $changePasswordResponse->setMessage("Update Password Success");
+            $userSearchResponse->setStatus(true);
+            $userSearchResponse->setMessage('Data found');
         }
         
-        return $changePasswordResponse;
+        $recordFiltered = $this->container->call([$userRepository, 'getUserSearchCount'], ['userSearchParam' => $userSearchParam]);
+        $userSearchResponse->setRecordsFiltered($recordFiltered);
+        
+        $data = $this->container->call([$userRepository, 'getUserSearch'], ['userSearchParam' => $userSearchParam]);
+        $userSearchResponse->setData($data);
+        
+        return $userSearchResponse;
+    }
+    
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserSearchResponse $userSearchResponse
+     * @return UserSearchResponse|null
+     */
+    public function searchUserByEmail(string $email, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
+    {
+        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $email]);
+        
+        if ($result == null) {
+            $userSearchResponse->setStatus(false);
+            $userSearchResponse->setMessage('Invalid User');
+        } else {
+            $userSearchResponse->setStatus(true);
+            $userSearchResponse->setMessage('Update success');
+            $userSearchResponse->setData($result);
+        }
+        return $userSearchResponse;
+    }
+    
+    /**
+     * @param string $email
+     * @param int $status
+     * @param UserRepository $userRepository
+     * @param UserSearchResponse $userSearchResponse
+     * @return UserSearchResponse|null
+     */
+    public function updateUserStatus(string $email, int $status, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
+    {
+        $result = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $email, 'status' => $status]);
+        
+        if ($result == null) {
+            $userSearchResponse->setStatus(false);
+            $userSearchResponse->setMessage('Invalid User');
+        } else {
+            $userSearchResponse->setStatus(true);
+            $userSearchResponse->setMessage('Update success');
+            $userSearchResponse->setData($result);
+        }
+        return $userSearchResponse;
+    }
+    
+    public function updateUserName(string $email, string $name, UserRepository $userRepository, UserSearchResponse $userSearchResponse): ?UserSearchResponse
+    {
+        $result = $this->container->call([$userRepository, 'setUpdateName'], ['email' => $email, 'name' => $name]);
+        
+        if ($result == null) {
+            $userSearchResponse->setStatus(false);
+            $userSearchResponse->setMessage('Invalid User');
+        } else {
+            $userSearchResponse->setStatus(true);
+            $userSearchResponse->setMessage('Update success');
+            $userSearchResponse->setData($result);
+        }
+        return $userSearchResponse;
     }
 }

@@ -16,6 +16,7 @@ use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserRoleParam;
+use WebAppId\User\Services\Params\UserSearchParam;
 use WebAppId\User\Tests\TestCase;
 
 class UserRepositoryTest extends TestCase
@@ -180,7 +181,7 @@ class UserRepositoryTest extends TestCase
         }
     }
     
-    public function testActivationUser()
+    public function testActivationUser(): void
     {
         $result = $this->testAddUser();
         if ($result != null) {
@@ -198,7 +199,7 @@ class UserRepositoryTest extends TestCase
         
     }
     
-    public function testInvalidKey()
+    public function testInvalidKey(): void
     {
         $result = $this->testAddUser();
         
@@ -213,7 +214,7 @@ class UserRepositoryTest extends TestCase
         }
     }
     
-    public function testActiveAlreadyUsed()
+    public function testActiveAlreadyUsed(): void
     {
         $result = $this->testAddUser();
         if ($result != null) {
@@ -230,7 +231,7 @@ class UserRepositoryTest extends TestCase
         
     }
     
-    public function testUserCountAll()
+    public function testUserCountAll(): void
     {
         $randomNumber = $this->getFaker()->numberBetween(1, 20);
         for ($i = 0; $i < $randomNumber; $i++) {
@@ -242,11 +243,11 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($randomNumber, $count);
     }
     
-    public function testUserSearchCount()
+    public function testUserSearchCount(): void
     {
         $randomNumber = $this->getFaker()->numberBetween(5, 20);
         
-        $picNumber = $this->getFaker()->numberBetween(5, $randomNumber);
+        $picNumber = $this->getFaker()->numberBetween(0, $randomNumber);
         
         for ($i = 0; $i < $randomNumber; $i++) {
             if ($picNumber != $i) {
@@ -256,18 +257,18 @@ class UserRepositoryTest extends TestCase
             }
         }
         
-        $request = new \StdClass;
-        $request->q = $userData->name;
+        $request = new UserSearchParam();
+        $request->setQ($userData->name);
         
-        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['userSearchParam' => $request]);
         $this->assertEquals(1, $count);
         
-        $request->q = $this->getFaker()->password();
-        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $request->setQ($this->getFaker()->password());
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['userSearchParam' => $request]);
         $this->assertEquals(0, $count);
     }
     
-    public function testUserSearchPaging()
+    public function testUserSearchPaging(): void
     {
         $paging = 12;
         
@@ -279,15 +280,47 @@ class UserRepositoryTest extends TestCase
             $result[] = $this->testAddUser();
         }
         
-        $request = new \StdClass;
-        $request->q = '';
+        $request = new UserSearchParam();
+        $request->setQ('');
         
-        $resultSearch = $this->getContainer()->call([$this->userRepository(), 'getUserSearch'], ['request' => $request, 'paginate' => $paging]);
+        $resultSearch = $this->getContainer()->call([$this->userRepository(), 'getUserSearch'], ['userSearchParam' => $request, 'paginate' => $paging]);
         $this->assertEquals($paging, count($resultSearch));
         
-        $request->q = $this->getFaker()->password();
-        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $request->setQ($this->getFaker()->password());
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['userSearchParam' => $request]);
         $this->assertEquals(0, $count);
+    }
+    
+    public function testUpdateUserName(): void
+    {
+        $result = $this->testAddUser();
+        
+        $newName = $this->getFaker()->name;
+        
+        $resultNew = $this->getContainer()->call([$this->userRepository(), 'setUpdateName'], ['name' => $newName, 'email' => $result->email]);
+        
+        $this->assertNotEquals($result->name, $resultNew->name);
+    }
+    
+    public function testDeleteUserByEmail()
+    {
+        $randomNumber = $this->getFaker()->numberBetween(5, 20);
+        
+        $result = [];
+        
+        for ($i = 0; $i < $randomNumber; $i++) {
+            $result[] = $this->testAddUser();
+        }
+        
+        $picNumber = $this->getFaker()->numberBetween(0, $randomNumber);
+        
+        $deleteResult = $this->getContainer()->call([$this->userRepository(), 'deleteUserByEmail'], ['email' => $result[$picNumber]->email]);
+        
+        self::assertEquals(true, $deleteResult);
+        
+        $resultUserData = $this->getContainer()->call([$this->userRepository(), 'getUserByEmail'], ['email' => $result[$picNumber]->email]);
+        
+        self::assertEquals(null, $resultUserData);
     }
     
 }
