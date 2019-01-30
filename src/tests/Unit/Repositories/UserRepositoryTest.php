@@ -8,11 +8,14 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
+use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
+use WebAppId\User\Services\Params\UserParam;
+use WebAppId\User\Services\Params\UserRoleParam;
 use WebAppId\User\Tests\TestCase;
 
 class UserRepositoryTest extends TestCase
@@ -24,41 +27,43 @@ class UserRepositoryTest extends TestCase
         
     }
     
-    private function userRepository()
+    public function userRepository(): UserRepository
     {
         return $this->getContainer()->make(UserRepository::class);
     }
     
-    private function userStatusRepository()
+    private function userStatusRepository(): UserStatusRepository
     {
         return $this->getContainer()->make(UserStatusRepository::class);
     }
     
-    private function activationRepository()
+    private function activationRepository(): ActivationRepository
     {
         return $this->getContainer()->make(ActivationRepository::class);
     }
     
-    private function userRoleRepository(){
+    private function userRoleRepository(): UserRoleRepository
+    {
         return $this->getContainer()->make(UserRoleRepository::class);
     }
     
-    private function roleRepository(){
+    private function roleRepository(): RoleRepository
+    {
         return $this->getContainer()->make(RoleRepository::class);
     }
     
-    public function getDummyUser()
+    public function getDummyUser(): ?UserParam
     {
-        $objUser = new \StdClass();
+        $objUser = new UserParam();
         
-        $objUser->name = $this->getFaker()->name;
-        $objUser->email = $this->getFaker()->email;
-        $objUser->status_id = '1';
-        $objUser->password = $this->getFaker()->password;
+        $objUser->setName($this->getFaker()->name);
+        $objUser->setEmail($this->getFaker()->email);
+        $objUser->setStatusId(1);
+        $objUser->setPassword($this->getFaker()->password);
         return $objUser;
     }
     
-    public function createDummy($dummy)
+    public function createDummy($dummy): ?User
     {
         return $this->getContainer()->call([$this->userRepository(), 'addUser'], ['request' => $dummy]);
     }
@@ -71,31 +76,35 @@ class UserRepositoryTest extends TestCase
         return $this->getContainer()->call([$this->activationRepository(), 'addActivation'], ['request' => $activation]);
     }
     
-    public function testAddUser()
+    public function testAddUser(): ?User
     {
         $dummy = $this->getDummyUser();
         $result = $this->createDummy($dummy);
-        $resultStatus = $this->getContainer()->call([$this->userStatusRepository(), 'getStatusById'], ['id' => $dummy->status_id]);
+        $resultFailed = $this->createDummy($dummy);
+        if ($resultFailed == null) {
+            $this->assertTrue(true);
+        }
+        $resultStatus = $this->getContainer()->call([$this->userStatusRepository(), 'getStatusById'], ['id' => $dummy->getStatusId()]);
         
         if ($result != null) {
             
-            $objUserRole = new \StdClass();
-            $objUserRole->user_id = $result->id;
-            $objUserRole->role_id = $this->getFaker()->numberBetween(1,3);
+            $objUserRole = new UserRoleParam();
+            $objUserRole->setUserId($result->id);
+            $objUserRole->setRoleId($this->getFaker()->numberBetween(1, 2));
             
-            $resultUserRole = $this->getContainer()->call([$this->userRoleRepository(),'addUserRole'],['request' => $objUserRole]);
+            $resultUserRole = $this->getContainer()->call([$this->userRoleRepository(), 'addUserRole'], ['request' => $objUserRole]);
             
-            if($resultUserRole==null){
+            if ($resultUserRole == null) {
                 self::assertTrue(false);
-            }else{
+            } else {
                 self::assertTrue(true);
-                self::assertEquals($objUserRole->user_id, $resultUserRole->user_id);
-                self::assertEquals($objUserRole->role_id, $resultUserRole->role_id);
+                self::assertEquals($objUserRole->getUserId(), $resultUserRole->user_id);
+                self::assertEquals($objUserRole->getRoleId(), $resultUserRole->role_id);
                 
-                $roleResult = $this->getContainer()->call([$this->roleRepository(),'getRoleById'],['id' => $objUserRole->role_id]);
-                if($roleResult==null){
+                $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getRoleById'], ['id' => $objUserRole->getRoleId()]);
+                if ($roleResult == null) {
                     self::assertTrue(false);
-                }else{
+                } else {
                     self::assertTrue(true);
                     self::assertEquals($result->roles[0]->name, $roleResult->name);
                 }
@@ -109,7 +118,7 @@ class UserRepositoryTest extends TestCase
             }
             
             $this->assertTrue(true);
-            $this->assertEquals($dummy->status_id, $result->status_id);
+            $this->assertEquals($dummy->getStatusId(), $result->status_id);
             $this->assertEquals($resultStatus->name, $result->status->name);
             
             return $result;
@@ -119,7 +128,7 @@ class UserRepositoryTest extends TestCase
         }
     }
     
-    public function testGetUserByEmail()
+    public function testGetUserByEmail(): void
     {
         $result = $this->createDummy($this->getDummyUser());
         
@@ -133,7 +142,7 @@ class UserRepositoryTest extends TestCase
         }
     }
     
-    public function testUpdateUserPassword()
+    public function testUpdateUserPassword(): void
     {
         $result = $this->testAddUser();
         if ($result != null) {
@@ -152,7 +161,7 @@ class UserRepositoryTest extends TestCase
         }
     }
     
-    public function testUpdateUserStatus()
+    public function testUpdateUserStatus(): void
     {
         $result = $this->testAddUser();
         if ($result != null) {
@@ -219,6 +228,66 @@ class UserRepositoryTest extends TestCase
             }
         }
         
+    }
+    
+    public function testUserCountAll()
+    {
+        $randomNumber = $this->getFaker()->numberBetween(1, 20);
+        for ($i = 0; $i < $randomNumber; $i++) {
+            $this->testAddUser();
+        }
+        
+        $count = $this->getContainer()->call([$this->userRepository(), 'getCountAllUser']);
+        
+        $this->assertEquals($randomNumber, $count);
+    }
+    
+    public function testUserSearchCount()
+    {
+        $randomNumber = $this->getFaker()->numberBetween(5, 20);
+        
+        $picNumber = $this->getFaker()->numberBetween(5, $randomNumber);
+        
+        for ($i = 0; $i < $randomNumber; $i++) {
+            if ($picNumber != $i) {
+                $this->testAddUser();
+            } else {
+                $userData = $this->testAddUser();
+            }
+        }
+        
+        $request = new \StdClass;
+        $request->q = $userData->name;
+        
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $this->assertEquals(1, $count);
+        
+        $request->q = $this->getFaker()->password();
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $this->assertEquals(0, $count);
+    }
+    
+    public function testUserSearchPaging()
+    {
+        $paging = 12;
+        
+        $randomNumber = $this->getFaker()->numberBetween($paging, 20);
+        
+        $result = [];
+        
+        for ($i = 0; $i < $randomNumber; $i++) {
+            $result[] = $this->testAddUser();
+        }
+        
+        $request = new \StdClass;
+        $request->q = '';
+        
+        $resultSearch = $this->getContainer()->call([$this->userRepository(), 'getUserSearch'], ['request' => $request, 'paginate' => $paging]);
+        $this->assertEquals($paging, count($resultSearch));
+        
+        $request->q = $this->getFaker()->password();
+        $count = $this->getContainer()->call([$this->userRepository(), 'getUserSearchCount'], ['request' => $request]);
+        $this->assertEquals(0, $count);
     }
     
 }

@@ -10,6 +10,7 @@ namespace WebAppId\User\Repositories;
 
 use WebAppId\User\Models\Role;
 use Illuminate\Database\QueryException;
+use WebAppId\User\Services\Params\RoleParam;
 
 class RoleRepository
 {
@@ -18,11 +19,11 @@ class RoleRepository
      * @param Role $role
      * @return Role|null
      */
-    public function addRole($request, Role $role)
+    public function addRole(RoleParam $request, Role $role): ?Role
     {
         try {
-            $role->name = $request->name;
-            $role->description = $request->description;
+            $role->name = $request->getName();
+            $role->description = $request->getDescription();
             $role->save();
             return $role;
         } catch (QueryException $queryException) {
@@ -36,7 +37,8 @@ class RoleRepository
      * @param Role $role
      * @return mixed
      */
-    public function getRoleByName($name, Role $role){
+    public function getRoleByName(string $name, Role $role): ?Role
+    {
         return $role->where('name', $name)->first();
     }
     
@@ -44,7 +46,8 @@ class RoleRepository
      * @param Role $role
      * @return Role[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getAllRole(Role $role){
+    public function getAllRole(Role $role): ?object
+    {
         return $role->get();
     }
     
@@ -53,7 +56,8 @@ class RoleRepository
      * @param Role $role
      * @return mixed
      */
-    public function getRoleById($id, Role $role){
+    public function getRoleById(int $id, Role $role): ?Role
+    {
         return $role->find($id);
     }
 }

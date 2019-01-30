@@ -4,6 +4,7 @@ namespace WebAppId\User\Seeds;
 
 use Illuminate\Database\Seeder;
 use WebAppId\User\Repositories\RoleRepository;
+use WebAppId\User\Services\Params\RoleParam;
 
 class RoleTableSeeder extends Seeder
 {
@@ -16,30 +17,21 @@ class RoleTableSeeder extends Seeder
     {
         $roleRepository = $this->container->make(RoleRepository::class);
         
-        $objRole = new \StdClass();
-        $objRole->name = 'admin';
-        $objRole->description = 'Role For Admin Step Place Admin';
+        $objRole = new RoleParam();
+        $objRole->setName('admin');
+        $objRole->setDescription('Role For Admin System');
         
-        $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->name]);
+        $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->getName()]);
        
         if ($result == null) {
             $this->container->call([$roleRepository, 'addRole'], ['request' => $objRole]);
         }
         
-        $objRole = new \StdClass();
-        $objRole->name = 'member';
-        $objRole->description = 'Role For Step Place Member';
+        $objRole = new RoleParam();
+        $objRole->setName('member');
+        $objRole->setDescription('Role For Member');
         
-        $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->name]);
-        if ($result == null) {
-            $this->container->call([$roleRepository, 'addRole'], ['request' => $objRole]);
-        }
-        
-        $objRole = new \StdClass();
-        $objRole->name = 'partner';
-        $objRole->description = 'Role For Step Place Partner';
-        
-        $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->name]);
+        $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->getName()]);
         if ($result == null) {
             $this->container->call([$roleRepository, 'addRole'], ['request' => $objRole]);
         }

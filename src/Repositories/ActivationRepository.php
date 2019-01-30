@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class ActivationRepository
- * @package WebAppId\User\Repositories
+ * @package WebAppId\UserParam\Repositories
  */
 class ActivationRepository
 {

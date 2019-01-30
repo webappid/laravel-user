@@ -10,6 +10,7 @@ namespace WebAppId\User\Tests\Unit\Repositories;
 
 
 use WebAppId\User\Repositories\RoleRepository;
+use WebAppId\User\Services\Params\RoleParam;
 use WebAppId\User\Tests\TestCase;
 
 class RoleRepositoryTest extends TestCase
@@ -27,9 +28,9 @@ class RoleRepositoryTest extends TestCase
     public function getDummy()
     {
         $faker = $this->getFaker();
-        $objRole = new \StdClass();
-        $objRole->name = $faker->name;
-        $objRole->description = $faker->text(190);
+        $objRole = new RoleParam();
+        $objRole->setName($faker->name);
+        $objRole->setDescription($faker->text(190));
         return $objRole;
     }
     
@@ -46,8 +47,8 @@ class RoleRepositoryTest extends TestCase
             self::assertTrue(false);
         } else {
             self::assertTrue(true);
-            self::assertEquals($dummy->name, $result->name);
-            self::assertEquals($dummy->description, $result->description);
+            self::assertEquals($dummy->getName(), $result->name);
+            self::assertEquals($dummy->getDescription(), $result->description);
         }
     }
     

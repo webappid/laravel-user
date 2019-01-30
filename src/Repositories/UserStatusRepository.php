@@ -17,7 +17,7 @@ class UserStatusRepository
      * @param UserStatus $userStatus
      * @return UserStatus|null
      */
-    public function addUserStatus($request, UserStatus $userStatus)
+    public function addUserStatus($request, UserStatus $userStatus): ?UserStatus
     {
         try {
             $userStatus->name = $request->name;
@@ -33,7 +33,8 @@ class UserStatusRepository
      * @param UserStatus $userStatus
      * @return UserStatus[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getAll(UserStatus $userStatus){
+    public function getAll(UserStatus $userStatus): ?object
+    {
         return $userStatus->all();
     }
     
@@ -42,8 +43,9 @@ class UserStatusRepository
      * @param UserStatus $userStatus
      * @return mixed
      */
-    public function getByName($name, UserStatus $userStatus){
-        return $userStatus->where('name',$name)->first();
+    public function getByName($name, UserStatus $userStatus): ?UserStatus
+    {
+        return $userStatus->where('name', $name)->first();
     }
     
     /**
@@ -51,7 +53,8 @@ class UserStatusRepository
      * @param UserStatus $userStatus
      * @return mixed
      */
-    public function getStatusById($id, UserStatus $userStatus){
+    public function getStatusById($id, UserStatus $userStatus): ?UserStatus
+    {
         return $userStatus->find($id);
     }
 }

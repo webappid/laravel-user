@@ -11,6 +11,7 @@ namespace WebAppId\User\Services;
 
 use Illuminate\Container\Container;
 use WebAppId\User\Repositories\RoleRepository;
+use WebAppId\User\Response\GetRoleResponse;
 
 /**
  * Class RoleService
@@ -29,7 +30,8 @@ class RoleService
         $this->container = $container;
     }
     
-    public function getAllRole(RoleRepository $roleRepository){
+    public function getAllRole(RoleRepository $roleRepository): ?object
+    {
         return $this->container->call([$roleRepository, 'getAllRole']);
     }
 }

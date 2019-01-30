@@ -19,13 +19,13 @@ class UsersTableSeeder extends Seeder
         
         $randomPassword = Faker::create()->password;
         $userRepository = $this->container->make(UserRepository::class);
-        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => 'root@stepplace.com']);
+        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => 'root@noname.com']);
         
         if ($result == null) {
             $objUser = new \StdClass;
             $objUser->status_id = '2';
-            $objUser->name = 'user root step place';
-            $objUser->email = 'root@stepplace.com';
+            $objUser->name = 'user root system';
+            $objUser->email = 'root@noname.com';
             $objUser->password = $randomPassword;
             $objUser->provider = '';
             $result = $this->container->call([$userRepository, 'addUser'], ['request' => $objUser]);

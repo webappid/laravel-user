@@ -26,8 +26,8 @@ class UserStatusService
      * @param UserStatusRepository $userStatusRepository
      * @return mixed
      */
-    public function getAll(UserStatusRepository $userStatusRepository){
+    public function getAll(UserStatusRepository $userStatusRepository): ?object
+    {
         return $this->container->call([$userStatusRepository, 'getAll']);
     }
-
 }
