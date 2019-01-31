@@ -16,7 +16,7 @@ class AdminResetPasswordTableSeeder extends Seeder
     public function run()
     {
         $userRepository = $this->container->make(UserRepository::class);
-        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => 'root@stepplace.com']);
+        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => 'root@noname.com']);
         if ($result != null) {
             $randomPassword = Faker::create()->password;
             $result = $this->container->call([$userRepository, 'setUpdatePassword'], ['email' => $result->email, 'password' => $randomPassword]);
