@@ -39,7 +39,7 @@ class UsersTableSeeder extends Seeder
                 $objUserRole->setRoleId(1);
                 $result = $this->container->call([$userRole, 'addUserRole'], ['request' => $objUserRole]);
                 if ($result != null) {
-                    error_log("Default admin password : " . $randomPassword);
+                    error_log("Default admin password : " . $randomPassword.'. run php artisan db:seed --class=AdminResetPasswordTableSeeder to reset default pass root user');
                 }
             }
         }
