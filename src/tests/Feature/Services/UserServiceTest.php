@@ -193,6 +193,10 @@ class UserServiceTest extends TestCase
         $resultUser = $this->testAddUser();
         
         $randomStatusId = $this->uniqueRandomNotIn($resultUser->getStatusId());
+    
+        $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $this->getFaker()->email, 'status' => $randomStatusId]);
+        
+        self::assertEquals(null, $result);
         
         $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $resultUser->getEmail(), 'status' => $randomStatusId]);
     

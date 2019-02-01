@@ -186,7 +186,7 @@ class UserService
      * @param UserRepository $userRepository
      * @return User
      */
-    public function updateUserStatus(string $email, int $status, UserRepository $userRepository): User
+    public function updateUserStatus(string $email, int $status, UserRepository $userRepository): ?User
     {
         return $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $email, 'status' => $status]);
     }

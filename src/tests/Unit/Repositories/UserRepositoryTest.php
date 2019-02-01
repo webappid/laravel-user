@@ -150,6 +150,8 @@ class UserRepositoryTest extends TestCase
             $result = $this->getContainer()->call([$this->userRepository(), 'getUserByEmail'], ['email' => $result->email]);
             if ($result != null) {
                 $result->status_id = $this->getFaker()->numberBetween(1, 4);
+                $resultFailed = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $this->getFaker()->email, 'status' => $result->status_id]);
+                self::assertEquals(null, $resultFailed);
                 $resultUpdate = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $result->email, 'status' => $result->status_id]);
                 self::assertNotEquals(null, $resultUpdate);
             } else {
