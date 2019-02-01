@@ -160,7 +160,7 @@ class UserServiceTest extends TestCase
         $userSearchParam->setQ($char[$this->getFaker()->numberBetween(0, 4)]);
         
         $result = $this->getContainer()->call([$this->userService(), 'showUserList'], ['userSearchParam' => $userSearchParam]);
-        $this->assertEquals($randomNumber, $result->getRecordsTotal());
+        $this->assertEquals($randomNumber+1, $result->getRecordsTotal());
         $this->assertLessThanOrEqual($randomNumber, $result->getRecordsFiltered());
     }
     

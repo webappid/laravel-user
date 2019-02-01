@@ -212,7 +212,7 @@ class UserRepositoryTest extends TestCase
         
         $count = $this->getContainer()->call([$this->userRepository(), 'getCountAllUser']);
         
-        $this->assertEquals($randomNumber, $count);
+        $this->assertEquals($randomNumber+1, $count);
     }
     
     public function testUserSearchCount(): void
