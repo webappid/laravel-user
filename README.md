@@ -11,6 +11,8 @@ This package required laravel auth.
 3. run `composer require webappid/laravel-user`.
 4. run `php artisan migrate` one more time.
 5. run `webappid:user:seed` to create default data. This seeder always insert new data only without wipe the old data.
+6. run `php artisan db:seed --class='WebAppId\User\Seeds\AdminResetPasswordTableSeeder'` to reset admin use.
+7. default root / admin email is root@noname.com
 
 If you have any question about this package, please don't hesitate to drop me an email at dyan.galih@gmail.com
 
