@@ -47,6 +47,7 @@ class UserStatusRepositoryTest extends TestCase
     {
         $dummy = $this->getUserStatusDummy();
         $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['request' => $dummy]);
+        
         if ($result != null) {
             $result = $this->getContainer()->call([$this->userStatusRepository(), 'getAll']);
             

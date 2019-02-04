@@ -57,6 +57,7 @@ class RoleRepositoryTest extends TestCase
     public function testGetAllRole(): void
     {
         $result = $this->getContainer()->call([$this->roleRepository(), 'getAllRole']);
+        
         if (count($result) > 0) {
             self::assertTrue(true);
         } else {

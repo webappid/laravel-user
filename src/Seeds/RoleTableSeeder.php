@@ -22,7 +22,6 @@ class RoleTableSeeder extends Seeder
         $objRole->setDescription('Role For Admin System');
         
         $result = $this->container->call([$roleRepository, 'getRoleByName'], ['name' => $objRole->getName()]);
-       
         if ($result == null) {
             $this->container->call([$roleRepository, 'addRole'], ['request' => $objRole]);
         }

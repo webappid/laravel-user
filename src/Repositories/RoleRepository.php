@@ -14,25 +14,18 @@ use WebAppId\User\Services\Params\RoleParam;
 
 class RoleRepository
 {
-    private $role;
-    
-    public function __construct(Role $role)
-    {
-        $this->role = $role;
-    }
-    
     /**
+     * @param Role $role
      * @param RoleParam $request
      * @return Role|null
      */
-    public function addRole(RoleParam $request): ?Role
+    public function addRole(Role $role, RoleParam $request): ?Role
     {
         try {
-            $role = $this->role->newInstance();
-            $this->role->name = $request->getName();
-            $this->role->description = $request->getDescription();
-            $this->role->save();
-            return $this->role;
+            $role->name = $request->getName();
+            $role->description = $request->getDescription();
+            $role->save();
+            return $role;
         } catch (QueryException $queryException) {
             report($queryException);
             return null;
@@ -50,11 +43,12 @@ class RoleRepository
     }
     
     /**
+     * @param Role $role
      * @return Role[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getAllRole(): ?object
+    public function getAllRole(Role $role): ?object
     {
-        return $this->role->get();
+        return $role->get();
     }
     
     /**
