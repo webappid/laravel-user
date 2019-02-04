@@ -79,7 +79,13 @@ class ActivationTest extends TestCase
          *  test success activate user
          */
         $resultActivation = $this->getContainer()->call([$this->activationService(),'activate'],['activationKey' => $activationKey]);
+        
         self::assertEquals(true, $resultActivation->getStatus());
+        
+        if($resultActivation->getStatus()){
+            $resultUser = $this->getContainer()->call([$this->userService(), 'getUserByEmail'], ['email' => $dummyUser->getEmail()]);
+            self::assertEquals(2, $resultUser->getData()['status_id']);
+        }
     
         /**
          *  test double activation
