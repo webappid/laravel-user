@@ -28,11 +28,12 @@ class RoleCheck
         $access = false;
         
         $userRoles = explode('|', $userRole);
-        
-        foreach ($roles as $role) {
-            foreach ($userRoles as $userRole) {
-                if (strtolower($role->name) == $userRole) {
-                    $access = true;
+        if ($roles != null) {
+            foreach ($roles as $role) {
+                foreach ($userRoles as $userRole) {
+                    if (strtolower($role->name) == $userRole) {
+                        $access = true;
+                    }
                 }
             }
         }
