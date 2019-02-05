@@ -14,6 +14,18 @@ use WebAppId\User\Services\Params\UserSearchParam;
  */
 class UserRepository
 {
+    private function getColumn(User $user)
+    {
+        return $user->select(
+            'users.id AS id',
+            'users.name AS name',
+            'users.email AS email',
+            'users.status_id AS status_id',
+            'users.password AS password',
+            'user_statuses.name AS status')
+            ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id');
+    }
+    
     /**
      * @param $request
      * @param User $user
@@ -41,7 +53,9 @@ class UserRepository
      */
     public function getUserByEmail($email, User $user): ?User
     {
-        return $user->where('email', $email)->first();
+        return $this->getColumn($user)
+            ->where('email', $email)
+            ->first();
     }
     
     /**
@@ -51,10 +65,11 @@ class UserRepository
      */
     public function getUserQuery(User $user, $search)
     {
-        return $user->where(function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('email', $search);
-        });
+        return $this->getColumn($user)
+            ->where(function ($query) use ($search) {
+                $query->where('users.name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', $search);
+            });
     }
     
     /**
