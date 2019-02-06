@@ -51,7 +51,7 @@ class UserRepository
      * @param User $user
      * @return User|null
      */
-    public function getUserByEmail($email, User $user): ?User
+    public function getUserByEmail(string $email, User $user): ?User
     {
         return $this->getColumn($user)
             ->where('email', $email)
@@ -108,7 +108,7 @@ class UserRepository
      * @param User $user
      * @return User|null
      */
-    public function setUpdatePassword($email, $password, User $user): ?User
+    public function setUpdatePassword(string $email, string $password, User $user): ?User
     {
         $user = $this->getUserByEmail($email, $user);
         if ($user != null) {

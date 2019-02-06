@@ -160,7 +160,7 @@ class UserServiceTest extends TestCase
         $userSearchParam->setQ($char[$this->getFaker()->numberBetween(0, 4)]);
         
         $result = $this->getContainer()->call([$this->userService(), 'showUserList'], ['userSearchParam' => $userSearchParam]);
-        $this->assertEquals($randomNumber+1, $result->getRecordsTotal());
+        $this->assertEquals($randomNumber + 1, $result->getRecordsTotal());
         $this->assertLessThanOrEqual($randomNumber, $result->getRecordsFiltered());
     }
     
@@ -180,7 +180,7 @@ class UserServiceTest extends TestCase
     
     private function uniqueRandomNotIn($number): int
     {
-        $newNumber = $this->getFaker()->numberBetween(0, 3);
+        $newNumber = $this->getFaker()->numberBetween(1, 4);
         if ($newNumber == $number) {
             return $this->uniqueRandomNotIn($number);
         } else {
@@ -193,13 +193,13 @@ class UserServiceTest extends TestCase
         $resultUser = $this->testAddUser();
         
         $randomStatusId = $this->uniqueRandomNotIn($resultUser->getStatusId());
-    
+        
         $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $this->getFaker()->email, 'status' => $randomStatusId]);
         
         self::assertEquals(null, $result);
         
         $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $resultUser->getEmail(), 'status' => $randomStatusId]);
-    
+        
         $this->assertNotEquals(null, $result);
         
         $this->assertNotEquals($resultUser->getStatusId(), $result->status_id);
@@ -212,7 +212,7 @@ class UserServiceTest extends TestCase
         $name = $this->getFaker()->name;
         
         $result = $this->getContainer()->call([$this->userService(), 'updateUserName'], ['email' => $resultUser->getEmail(), 'name' => $name]);
-    
+        
         self::assertNotEquals(null, $result);
         
         $this->assertNotEquals($resultUser->getName(), $result->name);
@@ -235,4 +235,28 @@ class UserServiceTest extends TestCase
         self::assertEquals(null, $resultSearch->getData());
     }
     
+    public function testUpdateUser(): void
+    {
+        $user = $this->testAddUser();
+        
+        $userParam = new UserParam();
+        
+        $userParam->setName($this->getFaker()->name);
+        
+        $userParam->setEmail($user->getEmail());
+        
+        $userParam->setStatusId($this->uniqueRandomNotIn($user->getStatusId()));
+        
+        if ($user->getRoles()[0] == 1) {
+            $user->getRoles()[0] = 2;
+        } else {
+            $user->getRoles()[0] = 1;
+        }
+        
+        $userParam->setRoles($user->getRoles());
+        
+        $updatedUser = $this->getContainer()->call([$this->userService(), 'updateUser'], ['userParam' => $userParam]);
+        
+        self::assertNotEquals(null, $updatedUser);
+    }
 }

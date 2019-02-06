@@ -58,12 +58,7 @@ class UserService
             return $addUserResponse;
         } else {
             $resultUserRole = null;
-            for ($i = 0; $i < count($request->getRoles()); $i++) {
-                $userRoleParam->setUserId($resultUser->id);
-                $userRoleParam->setRoleId($request->getRoles()[$i]);
-                
-                $resultUserRole = $this->container->call([$userRoleRepository, 'addUserRole'], ['request' => $userRoleParam]);
-            }
+            $resultUserRole = $this->addUserRoles($resultUser->id, $request, $userRoleParam, $userRoleRepository);
             if ($resultUserRole == null) {
                 DB::rollback();
                 $addUserResponse->setStatus(false);
@@ -87,6 +82,28 @@ class UserService
                 return $addUserResponse;
             }
         }
+    }
+    
+    /**
+     * @param string $userId
+     * @param UserParam $request
+     * @param UserRoleParam $userRoleParam
+     * @param UserRoleRepository $userRoleRepository
+     * @return mixed|null
+     */
+    private function addUserRoles(string $userId,
+                                  UserParam $request,
+                                  UserRoleParam $userRoleParam,
+                                  UserRoleRepository $userRoleRepository)
+    {
+        $resultUserRole = null;
+        for ($i = 0; $i < count($request->getRoles()); $i++) {
+            $userRoleParam->setUserId($userId);
+            $userRoleParam->setRoleId($request->getRoles()[$i]);
+            
+            $resultUserRole = $this->container->call([$userRoleRepository, 'addUserRole'], ['request' => $userRoleParam]);
+        }
+        return $resultUserRole;
     }
     
     /**
@@ -210,5 +227,38 @@ class UserService
     public function deleteUserByEmail(string $email, UserRepository $userRepository): ?bool
     {
         return $this->container->call([$userRepository, 'deleteUserByEmail'], ['email' => $email]);
+    }
+    
+    /**
+     * @param UserParam $userParam
+     * @param UserRepository $userRepository
+     * @param UserRoleParam $userRoleParam
+     * @param UserRoleRepository $userRoleRepository
+     * @return User|null
+     */
+    public function updateUser(UserParam $userParam,
+                               UserRepository $userRepository,
+                               UserRoleParam $userRoleParam,
+                               UserRoleRepository $userRoleRepository): ?User
+    {
+        DB::beginTransaction();
+        
+        $user = $this->container->call([$userRepository, 'setUpdateName'], ['email' => $userParam->getEmail(), 'name' => $userParam->getName()]);
+        
+        $userStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $userParam->getEmail(), 'status' => $userParam->getStatusId()]);
+        
+        $deleteRoleByUserId = $this->container->call([$userRoleRepository, 'deleteUserRoleByUserId'], ['userId' => $user->id]);
+        
+        $resultUserRole = $this->addUserRoles($user->id, $userParam, $userRoleParam, $userRoleRepository);
+        
+        $userUpdated = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $userParam->getEmail()]);
+        
+        if ($user == null || $resultUserRole == null || $userStatus == null || !$deleteRoleByUserId || $userUpdated == null) {
+            DB::rollBack();
+            return null;
+        } else {
+            DB::commit();
+            return $userUpdated;
+        }
     }
 }

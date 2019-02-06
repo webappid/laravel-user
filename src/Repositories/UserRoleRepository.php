@@ -36,4 +36,20 @@ class UserRoleRepository
             return null;
         }
     }
+    
+    /**
+     * @param string $userId
+     * @param UserRole $userRole
+     * @return bool|null
+     */
+    public function deleteUserRoleByUserId(string $userId,
+                                           UserRole $userRole): ?bool
+    {
+        try {
+            return $userRole->where('user_id', $userId)->delete();
+        } catch (QueryException $queryException) {
+            report($queryException);
+            return false;
+        }
+    }
 }

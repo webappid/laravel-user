@@ -214,7 +214,7 @@ class UserRepositoryTest extends TestCase
         
         $count = $this->getContainer()->call([$this->userRepository(), 'getCountAllUser']);
         
-        $this->assertEquals($randomNumber+1, $count);
+        $this->assertEquals($randomNumber + 1, $count);
     }
     
     public function testUserSearchCount(): void
@@ -297,4 +297,14 @@ class UserRepositoryTest extends TestCase
         self::assertEquals(null, $resultUserData);
     }
     
+    public function testDeleteRole(): void
+    {
+        $user = $this->testAddUser();
+        $status = $this->getContainer()->call([$this->userRoleRepository(), 'deleteUserRoleByUserId'], ['userId' => $user->id]);
+        if ($status) {
+            self::assertTrue(true);
+        } else {
+            self::assertTrue(false);
+        }
+    }
 }
