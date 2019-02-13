@@ -14,7 +14,7 @@ class UserSearchParam
     private $q;
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getQ(): ?string
     {
@@ -22,9 +22,9 @@ class UserSearchParam
     }
     
     /**
-     * @param mixed $q
+     * @param string $q
      */
-    public function setQ($q): void
+    public function setQ(string $q): void
     {
         $this->q = $q;
     }

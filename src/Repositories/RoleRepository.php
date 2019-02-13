@@ -33,9 +33,9 @@ class RoleRepository
     }
     
     /**
-     * @param $name
+     * @param string $name
      * @param Role $role
-     * @return mixed
+     * @return Role|null
      */
     public function getRoleByName(string $name, Role $role): ?Role
     {
@@ -44,7 +44,7 @@ class RoleRepository
     
     /**
      * @param Role $role
-     * @return Role[]|\Illuminate\Database\Eloquent\Collection
+     * @return object|null
      */
     public function getAllRole(Role $role): ?object
     {
@@ -52,9 +52,9 @@ class RoleRepository
     }
     
     /**
-     * @param $id
+     * @param int $id
      * @param Role $role
-     * @return mixed
+     * @return Role|null
      */
     public function getRoleById(int $id, Role $role): ?Role
     {

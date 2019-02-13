@@ -18,7 +18,7 @@ class AddUserResponse extends AbstractResponse
     private $activation;
     
     /**
-     * @return mixed
+     * @return User|null
      */
     public function getUser(): ?User
     {
@@ -26,7 +26,7 @@ class AddUserResponse extends AbstractResponse
     }
     
     /**
-     * @param mixed $user
+     * @param User $user
      */
     public function setUser(User $user): void
     {
@@ -34,7 +34,7 @@ class AddUserResponse extends AbstractResponse
     }
     
     /**
-     * @return mixed
+     * @return object|null
      */
     public function getRoles(): ?object
     {
@@ -42,7 +42,7 @@ class AddUserResponse extends AbstractResponse
     }
     
     /**
-     * @param mixed $roles
+     * @param object $roles
      */
     public function setRoles(object $roles): void
     {
@@ -50,7 +50,7 @@ class AddUserResponse extends AbstractResponse
     }
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getActivation(): ?string
     {
@@ -58,7 +58,7 @@ class AddUserResponse extends AbstractResponse
     }
     
     /**
-     * @param mixed $activation
+     * @param string $activation
      */
     public function setActivation(string $activation): void
     {

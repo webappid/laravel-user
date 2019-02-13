@@ -9,7 +9,6 @@
 namespace WebAppId\User\Repositories;
 
 use WebAppId\User\Models\Activation;
-use Faker\Factory as Faker;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Webpatser\Uuid\Uuid;
@@ -42,11 +41,11 @@ class ActivationRepository
     }
     
     /**
-     * @param $key
+     * @param string $key
      * @param Activation $activation
-     * @return mixed
+     * @return Activation|null
      */
-    public function getActivationByKey($key, Activation $activation): ?Activation
+    public function getActivationByKey(string $key, Activation $activation): ?Activation
     {
         return $activation
             ->selectRaw(
@@ -57,11 +56,11 @@ class ActivationRepository
     
     
     /**
-     * @param $key
+     * @param string $key
      * @param Activation $activation
      * @return Activation|null
      */
-    public function setActivate($key, Activation $activation): ?Activation
+    public function setActivate(string $key, Activation $activation): ?Activation
     {
         try {
             $resultActivation = $this->getActivationByKey($key, $activation);

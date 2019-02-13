@@ -17,23 +17,23 @@ class ChangePasswordParam
     private $retypePassword;
     
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEmail()
+    public function getEmail():string
     {
         return $this->email;
     }
     
     /**
-     * @param mixed $email
+     * @param string $email
      */
-    public function setEmail($email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getPassword(): ?string
     {
@@ -41,15 +41,15 @@ class ChangePasswordParam
     }
     
     /**
-     * @param mixed $password
+     * @param string $password
      */
-    public function setPassword($password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getOldPassword(): ?string
     {
@@ -57,9 +57,9 @@ class ChangePasswordParam
     }
     
     /**
-     * @param mixed $oldPassword
+     * @param string $oldPassword
      */
-    public function setOldPassword($oldPassword): void
+    public function setOldPassword(string $oldPassword): void
     {
         $this->oldPassword = $oldPassword;
     }
@@ -73,9 +73,9 @@ class ChangePasswordParam
     }
     
     /**
-     * @param mixed $retypePassword
+     * @param string $retypePassword
      */
-    public function setRetypePassword($retypePassword): void
+    public function setRetypePassword(string $retypePassword): void
     {
         $this->retypePassword = $retypePassword;
     }

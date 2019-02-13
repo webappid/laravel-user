@@ -10,6 +10,7 @@ namespace WebAppId\User\Tests\Unit\Repositories;
 
 use WebAppId\User\Models\UserStatus;
 use WebAppId\User\Repositories\UserStatusRepository;
+use WebAppId\User\Services\Params\UserStatusParam;
 use WebAppId\User\Tests\TestCase;
 
 class UserStatusRepositoryTest extends TestCase
@@ -25,16 +26,16 @@ class UserStatusRepositoryTest extends TestCase
         return $this->getContainer()->make(UserStatusRepository::class);
     }
     
-    public function getUserStatusDummy()
+    public function getUserStatusDummy(): UserStatusParam
     {
-        $objUserStatus = new \StdClass();
-        $objUserStatus->name = $this->getFaker()->name;
+        $objUserStatus = new UserStatusParam();
+        $objUserStatus->setName($this->getFaker()->name);
         return $objUserStatus;
     }
     
     public function createDummy(): UserStatus
     {
-        return $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['request' => $this->getUserStatusDummy()]);
+        return $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $this->getUserStatusDummy()]);
     }
     
     public function testAddUserStatus()
@@ -46,7 +47,7 @@ class UserStatusRepositoryTest extends TestCase
     public function testGetAllUserStatus(): void
     {
         $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['request' => $dummy]);
+        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
         
         if ($result != null) {
             $result = $this->getContainer()->call([$this->userStatusRepository(), 'getAll']);
@@ -54,7 +55,7 @@ class UserStatusRepositoryTest extends TestCase
             if (count($result) == 0) {
                 $this->assertTrue(false);
             } else {
-                $this->assertEquals($dummy->name, $result[count($result) - 1]->name);
+                $this->assertEquals($dummy->getName(), $result[count($result) - 1]->name);
             }
         } else {
             $this->assertTrue(false);
@@ -64,9 +65,9 @@ class UserStatusRepositoryTest extends TestCase
     public function testGetUserStatusByName(): void
     {
         $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['request' => $dummy]);
+        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
         if ($result != null) {
-            $result = $this->getContainer()->call([$this->userStatusRepository(), 'getByName'], ['name' => $dummy->name]);
+            $result = $this->getContainer()->call([$this->userStatusRepository(), 'getByName'], ['name' => $dummy->getName()]);
             self::assertNotEquals(null, $result);
         }
     }
@@ -74,7 +75,7 @@ class UserStatusRepositoryTest extends TestCase
     public function testUserStatusById(): void
     {
         $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['request' => $dummy]);
+        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
         if ($result != null) {
             $result = $this->getContainer()->call([$this->userStatusRepository(), 'getStatusById'], ['id' => $result->id]);
             self::assertNotEquals(null, $result);

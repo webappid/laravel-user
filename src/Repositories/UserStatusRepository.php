@@ -4,6 +4,7 @@ namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\QueryException;
 use WebAppId\User\Models\UserStatus;
+use WebAppId\User\Services\Params\UserStatusParam;
 
 
 /**
@@ -13,14 +14,14 @@ use WebAppId\User\Models\UserStatus;
 class UserStatusRepository
 {
     /**
-     * @param $request
+     * @param UserStatusParam $userStatusParam
      * @param UserStatus $userStatus
      * @return UserStatus|null
      */
-    public function addUserStatus($request, UserStatus $userStatus): ?UserStatus
+    public function addUserStatus(UserStatusParam $userStatusParam, UserStatus $userStatus): ?UserStatus
     {
         try {
-            $userStatus->name = $request->name;
+            $userStatus->name = $userStatusParam->getName();
             $userStatus->save();
             return $userStatus;
         } catch (QueryException $e) {
@@ -39,21 +40,21 @@ class UserStatusRepository
     }
     
     /**
-     * @param $name
+     * @param string $name
      * @param UserStatus $userStatus
-     * @return mixed
+     * @return UserStatus|null
      */
-    public function getByName($name, UserStatus $userStatus): ?UserStatus
+    public function getByName(string $name, UserStatus $userStatus): ?UserStatus
     {
         return $userStatus->where('name', $name)->first();
     }
     
     /**
-     * @param $id
+     * @param int $id
      * @param UserStatus $userStatus
-     * @return mixed
+     * @return UserStatus|null
      */
-    public function getStatusById($id, UserStatus $userStatus): ?UserStatus
+    public function getStatusById(int $id, UserStatus $userStatus): ?UserStatus
     {
         return $userStatus->find($id);
     }

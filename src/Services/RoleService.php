@@ -30,6 +30,10 @@ class RoleService
         $this->container = $container;
     }
     
+    /**
+     * @param RoleRepository $roleRepository
+     * @return object|null
+     */
     public function getAllRole(RoleRepository $roleRepository): ?object
     {
         return $this->container->call([$roleRepository, 'getAllRole']);

@@ -14,9 +14,9 @@ class UserSearchResponse extends AbstractDataTableResponse
     private $data;
     
     /**
-     * @return mixed
+     * @return object|null
      */
-    public function getData()
+    public function getData():?object
     {
         return $this->data;
     }

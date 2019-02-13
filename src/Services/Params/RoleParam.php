@@ -18,7 +18,7 @@ class RoleParam
     private $description;
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getName(): ?string
     {
@@ -26,15 +26,15 @@ class RoleParam
     }
     
     /**
-     * @param mixed $name
+     * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
     
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -42,9 +42,9 @@ class RoleParam
     }
     
     /**
-     * @param mixed $description
+     * @param string $description
      */
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }

@@ -34,7 +34,10 @@ class ActivationService
      * @param ActivateResponse $activateResponse
      * @return ActivateResponse
      */
-    public function activate(string $activationKey, ActivationRepository $activationRepository, UserRepository $userRepository, ActivateResponse $activateResponse): ActivateResponse
+    public function activate(string $activationKey,
+                             ActivationRepository $activationRepository,
+                             UserRepository $userRepository,
+                             ActivateResponse $activateResponse): ActivateResponse
     {
         DB::beginTransaction();
         $result = $this->container->call([$activationRepository, 'getActivationByKey'], ['key' => $activationKey]);

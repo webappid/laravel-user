@@ -21,7 +21,7 @@ class UserParam
     private $roles;
     
     /**
-     * @return mixed
+     * @return string
      */
     public function getName(): string
     {
@@ -29,15 +29,15 @@ class UserParam
     }
     
     /**
-     * @param mixed $name
+     * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
     
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail(): string
     {
@@ -45,15 +45,15 @@ class UserParam
     }
     
     /**
-     * @param mixed $email
+     * @param string $email
      */
-    public function setEmail($email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
     
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword(): string
     {
@@ -61,17 +61,17 @@ class UserParam
     }
     
     /**
-     * @param mixed $password
+     * @param string $password
      */
-    public function setPassword($password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
     
     /**
-     * @return mixed
+     * @return int
      */
-    public function getStatusId(): string
+    public function getStatusId(): int
     {
         return $this->status_id;
     }
@@ -79,13 +79,13 @@ class UserParam
     /**
      * @param mixed $status_id
      */
-    public function setStatusId($status_id): void
+    public function setStatusId(int $status_id): void
     {
         $this->status_id = $status_id;
     }
     
     /**
-     * @return mixed
+     * @return array
      */
     public function getRoles(): array
     {

@@ -24,7 +24,8 @@ class UserRoleRepository
      * @param UserRole $userRole
      * @return UserRole|null
      */
-    public function addUserRole(UserRoleParam $request, UserRole $userRole): ?UserRole
+    public function addUserRole(UserRoleParam $request,
+                                UserRole $userRole): ?UserRole
     {
         try {
             $userRole->user_id = $request->getUserId();

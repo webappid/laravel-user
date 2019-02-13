@@ -63,7 +63,7 @@ class UserRepository
      * @param $search
      * @return mixed
      */
-    public function getUserQuery(User $user, $search)
+    public function getUserQuery(User $user, string $search)
     {
         return $this->getColumn($user)
             ->where(function ($query) use ($search) {

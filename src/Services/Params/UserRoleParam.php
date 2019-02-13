@@ -18,7 +18,7 @@ class UserRoleParam
     private $role_id;
     
     /**
-     * @return mixed
+     * @return int
      */
     public function getUserId(): int
     {
@@ -26,15 +26,15 @@ class UserRoleParam
     }
     
     /**
-     * @param mixed $user_id
+     * @param int $user_id
      */
-    public function setUserId($user_id): void
+    public function setUserId(int $user_id): void
     {
         $this->user_id = $user_id;
     }
     
     /**
-     * @return mixed
+     * @return int
      */
     public function getRoleId(): int
     {
@@ -42,9 +42,9 @@ class UserRoleParam
     }
     
     /**
-     * @param mixed $role_id
+     * @param int $role_id
      */
-    public function setRoleId($role_id): void
+    public function setRoleId(int $role_id): void
     {
         $this->role_id = $role_id;
     }

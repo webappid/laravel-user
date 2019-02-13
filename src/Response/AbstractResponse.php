@@ -15,7 +15,7 @@ abstract class AbstractResponse
     private $message;
     
     /**
-     * @return mixed
+     * @return bool|null
      */
     public function getStatus(): ?bool
     {
@@ -23,25 +23,25 @@ abstract class AbstractResponse
     }
     
     /**
-     * @param mixed $status
+     * @param bool $status
      */
-    public function setStatus($status): void
+    public function setStatus(bool $status): void
     {
         $this->status = $status;
     }
     
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
     
     /**
-     * @param mixed $message
+     * @param string $message
      */
-    public function setMessage($message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
