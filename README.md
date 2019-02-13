@@ -1,6 +1,6 @@
 # content
 
-this package is the core of content management system based on laravel.
+this package is the core of user management based on laravel.
 
 This package required laravel auth. 
 
