@@ -68,6 +68,16 @@ class RolePermissionRepository
         }
     }
 
+    public function deleteByRoleIdPermissionId(int $role_id, int $permission_id, RolePermission $rolePermission): ?bool
+    {
+        try {
+            return $rolePermission->where('role_id', $role_id)->where('permission_id', $permission_id)->delete();
+        } catch (QueryException $queryException) {
+            report($queryException);
+            return false;
+        }
+    }
+
     /**
      * @param int $id
      * @param RolePermission $rolePermission
