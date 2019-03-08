@@ -38,30 +38,6 @@ class RolePermissionRepository
 
     /**
      * @param int $id
-     * @param RolePermissionParam $rolePermissionParam
-     * @param RolePermission $rolePermission
-     * @return RolePermission|null
-     */
-    public function update(int $id, RolePermissionParam $rolePermissionParam, RolePermission $rolePermission): ?RolePermission
-    {
-        $result = $this->getById($id, $rolePermission);
-        if ($result != null) {
-            try {
-                $result->role_id = $rolePermissionParam->getRoleId();
-                $result->permission_id = $rolePermissionParam->getPermissionId();
-                $result->save();
-                return $result;
-            } catch (QueryException $e) {
-                report($e);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param int $id
      * @param RolePermission $rolePermission
      * @return bool
      * @throws \Exception
@@ -82,24 +58,14 @@ class RolePermissionRepository
         }
     }
 
-    /**
-     * @param int $role_id
-     * @param RolePermission $rolePermission
-     * @return object|null
-     */
-    public function getPermissionsByRoleId(int $role_id, RolePermission $rolePermission): ?object
+    public function deleteByRoleId(int $role_id, RolePermission $rolePermission): ?bool
     {
-        return $rolePermission->where('role_id', $role_id)->get();
-    }
-
-    /**
-     * @param int $permission_id
-     * @param RolePermission $rolePermission
-     * @return object|null
-     */
-    public function getRolesByPermissionId(int $permission_id, RolePermission $rolePermission): ?object
-    {
-        return $rolePermission->where('permission_id', $permission_id)->get();
+        try {
+            return $rolePermission->where('role_id', $role_id)->delete();
+        } catch (QueryException $queryException) {
+            report($queryException);
+            return false;
+        }
     }
 
     /**
