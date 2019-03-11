@@ -20,7 +20,7 @@ class UserRoleParam
     /**
      * @return int
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->user_id;
     }
@@ -36,7 +36,7 @@ class UserRoleParam
     /**
      * @return int
      */
-    public function getRoleId(): int
+    public function getRoleId(): ?int
     {
         return $this->role_id;
     }
