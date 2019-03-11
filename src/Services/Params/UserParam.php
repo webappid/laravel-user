@@ -23,7 +23,7 @@ class UserParam
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -39,7 +39,7 @@ class UserParam
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -55,7 +55,7 @@ class UserParam
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -71,7 +71,7 @@ class UserParam
     /**
      * @return int
      */
-    public function getStatusId(): int
+    public function getStatusId(): ?int
     {
         return $this->status_id;
     }
@@ -87,7 +87,7 @@ class UserParam
     /**
      * @return array
      */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
         return $this->roles;
     }
