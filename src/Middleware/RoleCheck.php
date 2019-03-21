@@ -10,6 +10,7 @@ namespace WebAppId\User\Middleware;
 
 
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 
 class RoleCheck
@@ -17,10 +18,11 @@ class RoleCheck
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param $request
+     * @param Closure $next
      * @param string $userRole
-     * @return mixed
+     * @return mixed|void
+     * @throws AuthenticationException
      */
     public function handle($request, Closure $next, $userRole = "member")
     {
@@ -40,7 +42,15 @@ class RoleCheck
         if ($access) {
             return $next($request);
         } else {
-            return abort(403);
+            $guards = [];
+            $acceptRequest = $request->headers->get('accept');
+            if ($acceptRequest == 'application/json') {
+                throw new AuthenticationException(
+                    'Unauthenticated.', $guards
+                );
+            } else {
+                return abort(403);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
 namespace WebAppId\User\Middleware;
 
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 
 class PermissionCheck
@@ -16,10 +17,11 @@ class PermissionCheck
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param $request
+     * @param Closure $next
      * @param string $rolePermission
-     * @return mixed
+     * @return mixed|void
+     * @throws AuthenticationException
      */
     public function handle($request, Closure $next, $rolePermission = "allaccess")
     {
@@ -32,7 +34,7 @@ class PermissionCheck
             if ($permissions != null) {
                 foreach ($permissions as $permission) {
                     foreach ($rolePermissions as $rolePermission) {
-                        if (strtolower($permission->name) == $rolePermission) {
+                        if (strtolower($permission->name) == strtolower($rolePermission)) {
                             $access = true;
                         }
                     }
@@ -42,7 +44,15 @@ class PermissionCheck
         if ($access) {
             return $next($request);
         } else {
-            return abort(403);
+            $guards = [];
+            $acceptRequest = $request->headers->get('accept');
+            if ($acceptRequest == 'application/json') {
+                throw new AuthenticationException(
+                    'Unauthenticated.', $guards
+                );
+            } else {
+                return abort(403);
+            }
         }
     }
 }
