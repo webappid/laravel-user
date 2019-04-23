@@ -59,7 +59,7 @@ class UserRepositoryTest extends TestCase
         $objUser = new UserParam();
         
         $objUser->setName($this->getFaker()->name);
-        $objUser->setEmail($this->getFaker()->email);
+        $objUser->setEmail($this->getFaker()->safeEmail);
         $objUser->setStatusId(1);
         $objUser->setPassword($this->getFaker()->password);
         return $objUser;
@@ -150,7 +150,7 @@ class UserRepositoryTest extends TestCase
             $result = $this->getContainer()->call([$this->userRepository(), 'getUserByEmail'], ['email' => $result->email]);
             if ($result != null) {
                 $result->status_id = $this->getFaker()->numberBetween(1, 4);
-                $resultFailed = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $this->getFaker()->email, 'status' => $result->status_id]);
+                $resultFailed = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $this->getFaker()->safeEmail, 'status' => $result->status_id]);
                 self::assertEquals(null, $resultFailed);
                 $resultUpdate = $this->getContainer()->call([$this->userRepository(), 'setUpdateStatusUser'], ['email' => $result->email, 'status' => $result->status_id]);
                 self::assertNotEquals(null, $resultUpdate);

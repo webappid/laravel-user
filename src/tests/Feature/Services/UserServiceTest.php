@@ -99,7 +99,7 @@ class UserServiceTest extends TestCase
          * check not found user
          */
         
-        $changePasswordParam->setEmail($this->getFaker()->email);
+        $changePasswordParam->setEmail($this->getFaker()->safeEmail);
         $resultResetPassword = $this->getContainer()->call([$this->userService(), 'changePassword'], ['changePasswordParam' => $changePasswordParam]);
         $this->assertEquals($resultResetPassword->getStatus(), false);
         
@@ -194,7 +194,7 @@ class UserServiceTest extends TestCase
         
         $randomStatusId = $this->uniqueRandomNotIn($resultUser->getStatusId());
         
-        $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $this->getFaker()->email, 'status' => $randomStatusId]);
+        $result = $this->getContainer()->call([$this->userService(), 'updateUserStatus'], ['email' => $this->getFaker()->safeEmail, 'status' => $randomStatusId]);
         
         self::assertEquals(null, $result);
         
