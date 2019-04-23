@@ -31,6 +31,52 @@ class RoleRepository
             return null;
         }
     }
+
+    /**
+     * @param int $id
+     * @param RoleParam $request
+     * @param Role $role
+     * @return Role|null
+     */
+    public function updateRole(int $id, RoleParam $request, Role $role): ?Role
+    {
+        $result = $this->getRoleById($id, $role);
+        if ($result != null) {
+            try {
+                $result->name = $request->getName();
+                $result->description = $request->getDescription();
+                $result->save();
+                return $result;
+            } catch (QueryException $e) {
+                report($e);
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param Role $role
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteRole(int $id, Role $role): bool
+    {
+        $result = $this->getRoleById($id, $role);
+        if ($result != null) {
+            try {
+                $result->delete();
+                return true;
+            } catch (QueryException $e) {
+                report($e);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     
     /**
      * @param string $name

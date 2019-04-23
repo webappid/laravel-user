@@ -1,40 +1,42 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: dyangalih
- * Date: 2019-01-30
- * Time: 15:49
+ * User: Fadlika_N
+ * Date: 3/8/2019
+ * Time: 9:10 AM
  */
 
 namespace WebAppId\User\Middleware;
-
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 
-class RoleCheck
+class PermissionCheck
 {
     /**
      * Handle an incoming request.
      *
      * @param $request
      * @param Closure $next
-     * @param string $userRole
+     * @param string $rolePermission
      * @return mixed|void
      * @throws AuthenticationException
      */
-    public function handle($request, Closure $next, $userRole = "member")
+    public function handle($request, Closure $next, $rolePermission = "allaccess")
     {
         $roles = Auth::user()->roles;
         $access = false;
-        
-        $userRoles = explode('|', $userRole);
-        if ($roles != null) {
-            foreach ($roles as $role) {
-                foreach ($userRoles as $userRole) {
-                    if (strtolower($role->name) == $userRole) {
-                        $access = true;
+
+        foreach($roles as $role) {
+            $permissions = $role->permissions;
+            $rolePermissions = explode('|', $rolePermission);
+            if ($permissions != null) {
+                foreach ($permissions as $permission) {
+                    foreach ($rolePermissions as $rolePermission) {
+                        if (strtolower($permission->name) == strtolower($rolePermission)) {
+                            $access = true;
+                        }
                     }
                 }
             }
