@@ -3,6 +3,7 @@
 namespace WebAppId\User\Services;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
@@ -11,6 +12,7 @@ use WebAppId\User\Repositories\UserRoleRepository;
 use WebAppId\User\Response\AddUserResponse;
 use WebAppId\User\Response\ChangePasswordResponse;
 use WebAppId\User\Response\UserSearchResponse;
+use WebAppId\User\Response\ResetPasswordResponse;
 use WebAppId\User\Services\Params\ChangePasswordParam;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserRoleParam;
@@ -23,7 +25,7 @@ use WebAppId\User\Services\Params\UserSearchParam;
 class UserService
 {
     private $container;
-    
+
     /**
      * UserService constructor.
      * @param Container $container
@@ -32,7 +34,7 @@ class UserService
     {
         $this->container = $container;
     }
-    
+
     /**
      * @param UserParam $request
      * @param UserRepository $userRepository
@@ -78,12 +80,12 @@ class UserService
                     $addUserResponse->setRoles($resultUser->roles);
                     DB::commit();
                 }
-                
+
                 return $addUserResponse;
             }
         }
     }
-    
+
     /**
      * @param string $userId
      * @param UserParam $request
@@ -100,12 +102,12 @@ class UserService
         for ($i = 0; $i < count($request->getRoles()); $i++) {
             $userRoleParam->setUserId($userId);
             $userRoleParam->setRoleId($request->getRoles()[$i]);
-            
+
             $resultUserRole = $this->container->call([$userRoleRepository, 'addUserRole'], ['request' => $userRoleParam]);
         }
         return $resultUserRole;
     }
-    
+
     /**
      * @param ChangePasswordParam $changePasswordParam
      * @param UserRepository $userRepository
@@ -118,7 +120,7 @@ class UserService
                                    ChangePasswordResponse $changePasswordResponse,
                                    $force = false): ChangePasswordResponse
     {
-        
+
         $userResult = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $changePasswordParam->getEmail()]);
         if ($userResult != null) {
             if ($changePasswordParam->getPassword() !== $changePasswordParam->getRetypePassword() && !$force) {
@@ -141,10 +143,10 @@ class UserService
             $changePasswordResponse->setStatus(false);
             $changePasswordResponse->setMessage("User not found");
         }
-        
+
         return $changePasswordResponse;
     }
-    
+
     /**
      * @param UserSearchParam $userSearchParam
      * @param UserRepository $userRepository
@@ -164,16 +166,16 @@ class UserService
             $userSearchResponse->setStatus(true);
             $userSearchResponse->setMessage('Data found');
         }
-        
+
         $recordFiltered = $this->container->call([$userRepository, 'getUserSearchCount'], ['userSearchParam' => $userSearchParam]);
         $userSearchResponse->setRecordsFiltered($recordFiltered);
-        
+
         $data = $this->container->call([$userRepository, 'getUserSearch'], ['userSearchParam' => $userSearchParam]);
         $userSearchResponse->setData($data);
-        
+
         return $userSearchResponse;
     }
-    
+
     /**
      * @param string $email
      * @param UserRepository $userRepository
@@ -185,7 +187,7 @@ class UserService
                                    UserSearchResponse $userSearchResponse): ?UserSearchResponse
     {
         $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $email]);
-        
+
         if ($result == null) {
             $userSearchResponse->setStatus(false);
             $userSearchResponse->setMessage('Invalid User');
@@ -196,7 +198,7 @@ class UserService
         }
         return $userSearchResponse;
     }
-    
+
     /**
      * @param string $email
      * @param int $status
@@ -207,7 +209,7 @@ class UserService
     {
         return $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $email, 'status' => $status]);
     }
-    
+
     /**
      * @param string $email
      * @param string $name
@@ -218,7 +220,7 @@ class UserService
     {
         return $this->container->call([$userRepository, 'setUpdateName'], ['email' => $email, 'name' => $name]);
     }
-    
+
     /**
      * @param string $email
      * @param UserRepository $userRepository
@@ -228,7 +230,7 @@ class UserService
     {
         return $this->container->call([$userRepository, 'deleteUserByEmail'], ['email' => $email]);
     }
-    
+
     /**
      * @param UserParam $userParam
      * @param UserRepository $userRepository
@@ -242,17 +244,17 @@ class UserService
                                UserRoleRepository $userRoleRepository): ?User
     {
         DB::beginTransaction();
-        
+
         $user = $this->container->call([$userRepository, 'setUpdateName'], ['email' => $userParam->getEmail(), 'name' => $userParam->getName()]);
-        
+
         $userStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $userParam->getEmail(), 'status' => $userParam->getStatusId()]);
-        
+
         $deleteRoleByUserId = $this->container->call([$userRoleRepository, 'deleteUserRoleByUserId'], ['userId' => $user->id]);
-        
+
         $resultUserRole = $this->addUserRoles($user->id, $userParam, $userRoleParam, $userRoleRepository);
-        
+
         $userUpdated = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $userParam->getEmail()]);
-        
+
         if ($user == null || $resultUserRole == null || $userStatus == null || !$deleteRoleByUserId || $userUpdated == null) {
             DB::rollBack();
             return null;
@@ -260,5 +262,43 @@ class UserService
             DB::commit();
             return $userUpdated;
         }
+    }
+
+    /**
+     * @param array $credential
+     * @param UserRepository $userRepository
+     * @param ResetPasswordResponse $resetPasswordResponse
+     * @return ResetPasswordResponse
+     */
+    public function sendForgotPasswordLink(array $credential, UserRepository $userRepository, ResetPasswordResponse $resetPasswordResponse): ResetPasswordResponse
+    {
+        $token = $this->container->call([$userRepository, 'setResetPasswordTokenByEmail'], ['email' => $credential['email']]);
+        if ($token != null) {
+            $resetPasswordResponse->status = true;
+            $resetPasswordResponse->message = "token created";
+            $resetPasswordResponse->token = $token;
+        } else {
+            $resetPasswordResponse->status = false;
+            $resetPasswordResponse->message = "generate token failed";
+        }
+
+        return $resetPasswordResponse;
+    }
+
+    /**
+     * @param string $token
+     * @param ChangePasswordResponse $changePasswordResponse
+     * @return ChangePasswordResponse
+     */
+    public function getEmailByResetToken(string $token, ChangePasswordResponse $changePasswordResponse): ChangePasswordResponse
+    {
+        $email = Cache::pull($token);
+        if($email!=null){
+            $changePasswordResponse->email = $email;
+            $changePasswordResponse->setStatus(true);
+        }else{
+            $changePasswordResponse->setStatus(false);
+        }
+        return $changePasswordResponse;
     }
 }

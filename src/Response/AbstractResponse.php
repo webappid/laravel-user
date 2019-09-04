@@ -8,11 +8,17 @@
 
 namespace WebAppId\User\Response;
 
-
+/**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 04/09/19
+ * Time: 18.37
+ * Class AbstractResponse
+ * @package WebAppId\User\Response
+ */
 abstract class AbstractResponse
 {
-    private $status;
-    private $message;
+    public $status;
+    public $message;
     
     /**
      * @return bool|null

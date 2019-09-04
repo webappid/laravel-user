@@ -2,8 +2,15 @@
 
 namespace WebAppId\User\Repositories;
 
-
+use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use Illuminate\Auth\Passwords\TokenRepositoryInterface;
+use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Authenticatable;
+use InvalidArgumentException;
 use WebAppId\User\Models\User;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserSearchParam;
@@ -25,7 +32,7 @@ class UserRepository
             'user_statuses.name AS status')
             ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id');
     }
-    
+
     /**
      * @param $request
      * @param User $user
@@ -45,7 +52,7 @@ class UserRepository
             return null;
         }
     }
-    
+
     /**
      * @param $email
      * @param User $user
@@ -57,7 +64,7 @@ class UserRepository
             ->where('email', $email)
             ->first();
     }
-    
+
     /**
      * @param User $user
      * @param $search
@@ -71,7 +78,7 @@ class UserRepository
                     ->orWhere('email', $search);
             });
     }
-    
+
     /**
      * @param UserSearchParam $userSearchParam
      * @param User $user
@@ -81,7 +88,7 @@ class UserRepository
     {
         return $this->getUserQuery($user, $userSearchParam->getQ())->count();
     }
-    
+
     /**
      * @param User $user
      * @return int|null
@@ -90,7 +97,7 @@ class UserRepository
     {
         return $user->count();
     }
-    
+
     /**
      * @param UserSearchParam $userSearchParam
      * @param User $user
@@ -101,7 +108,7 @@ class UserRepository
     {
         return $this->getUserQuery($user, $userSearchParam->getQ())->paginate($paginate);
     }
-    
+
     /**
      * @param $email
      * @param $password
@@ -124,8 +131,8 @@ class UserRepository
             return null;
         }
     }
-    
-    
+
+
     /**
      * @param $email
      * @param $status
@@ -148,7 +155,7 @@ class UserRepository
             return null;
         }
     }
-    
+
     /**
      * @param string $email
      * @param string $name
@@ -171,7 +178,7 @@ class UserRepository
             return null;
         }
     }
-    
+
     /**
      * @param string $email
      * @param User $user
@@ -187,5 +194,47 @@ class UserRepository
             report($queryException);
             return false;
         }
+    }
+
+    /**
+     * @param string $email
+     * @param Application $application
+     * @param User $user
+     * @return string
+     */
+    public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): string
+    {
+        $user = $this->getUserByEmail($email, $user);
+
+        $key = env('APP_KEY');
+
+        if (Str::startsWith($key, 'base64:')) {
+            $key = base64_decode(substr($key, 7));
+        }
+
+        $name = "users";
+
+        $config = $application['config']["auth.passwords.{$name}"];
+
+        if (is_null($config)) {
+            throw new InvalidArgumentException("Password resetter [{$name}] is not defined.");
+        }
+
+        $connection = $config['connection'] ?? null;
+        $tokens = new DatabaseTokenRepository(
+            $application['db']->connection($connection),
+            $application['hash'],
+            $config['table'],
+            $key,
+            $config['expire']
+        );
+
+        if ($user != null) {
+            $token = $tokens->createNewToken();
+            Cache::put($token, $user->email, $config['expire']);
+            $user->sendPasswordResetNotification($token);
+        }
+
+        return $token;
     }
 }

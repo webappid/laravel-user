@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dyangalih
- * Date: 2019-01-30
- * Time: 01:00
- */
+
 
 namespace WebAppId\User\Response;
 
@@ -12,13 +7,13 @@ namespace WebAppId\User\Response;
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 04/09/19
  * Time: 18.36
- * Class ChangePasswordResponse
+ * Class ResetPasswordResponse
  * @package WebAppId\User\Response
  */
-class ChangePasswordResponse extends AbstractResponse
+class ResetPasswordResponse extends AbstractResponse
 {
     /**
      * @var string
      */
-    public $email;
+    public $token;
 }
