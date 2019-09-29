@@ -29,7 +29,8 @@ class UserRepository
             'users.email AS email',
             'users.status_id AS status_id',
             'users.password AS password',
-            'user_statuses.name AS status')
+            'user_statuses.name AS status',
+            'users.remember_token AS remember_token')
             ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id');
     }
 
