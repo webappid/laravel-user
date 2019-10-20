@@ -17,8 +17,8 @@ class CreateRolePermissionsTable extends Migration
             $table->increments('id');
             $table->integer('role_id')->unsigned()->nullable(true);
             $table->integer('permission_id')->unsigned()->nullable(true);
-            $table->integer('created_by')->unsigned()->nullable(true);
-            $table->integer('updated_by')->unsigned()->nullable(true);
+            $table->unsignedBigInteger('created_by')->nullable(true);
+            $table->unsignedBigInteger('updated_by')->nullable(true);
             $table->timestamps();
 
             /**

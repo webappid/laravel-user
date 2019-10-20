@@ -17,8 +17,8 @@ class CreatePermissionsTable extends Migration
             $table->increments('id');
             $table->string('name', 100)->nullable(true);
             $table->text('description')->nullable(true);
-            $table->integer('created_by')->unsigned()->nullable(true);
-            $table->integer('updated_by')->unsigned()->nullable(true);
+            $table->unsignedBigInteger('created_by')->nullable(true);
+            $table->unsignedBigInteger('updated_by')->nullable(true);
             $table->timestamps();
 
             /**
