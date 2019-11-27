@@ -21,7 +21,7 @@ use WebAppId\User\Services\Params\UserSearchParam;
  */
 class UserRepository
 {
-    private function getColumn(User $user)
+    protected function getColumn(User $user)
     {
         return $user->select(
             'users.id AS id',
