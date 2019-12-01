@@ -15,7 +15,8 @@ class CreateActivationsTable extends Migration
     {
         Schema::create('activations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')
+                ->unsigned();
             $table->string('key')
                 ->index();
             $table->enum('status',['unused','used'])
@@ -23,10 +24,11 @@ class CreateActivationsTable extends Migration
                 ->default('unused');
             $table->dateTime('valid_until');
             $table->timestamps();
-
+            
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onUpdate('cascade');
         });
     }
 
