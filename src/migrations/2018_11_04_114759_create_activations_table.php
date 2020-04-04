@@ -14,7 +14,7 @@ class CreateActivationsTable extends Migration
     public function up()
     {
         Schema::create('activations', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')
                 ->unsigned();
             $table->string('key')
@@ -24,7 +24,7 @@ class CreateActivationsTable extends Migration
                 ->default('unused');
             $table->dateTime('valid_until');
             $table->timestamps();
-            
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
