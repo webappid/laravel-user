@@ -1,10 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * UserParam: dyangalih
- * Date: 2019-01-26
- * Time: 13:18
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
+
 
 namespace WebAppId\User\Tests\Feature\Services;
 

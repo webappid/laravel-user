@@ -9,23 +9,25 @@
 namespace WebAppId\User\Repositories;
 
 use WebAppId\User\Models\Activation;
+use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
+use WebAppId\User\Repositories\Requests\ActivationRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Webpatser\Uuid\Uuid;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 18/04/20
+ * Time: 22.21
  * Class ActivationRepository
- * @package WebAppId\UserParam\Repositories
+ * @package WebAppId\User\Repositories
  */
-class ActivationRepository
+class ActivationRepository implements ActivationRepositoryContract
 {
     /**
-     * @param int $userId
-     * @param Activation $activation
-     * @return Activation|null
-     * @throws \Exception
+     * @inheritDoc
      */
-    public function addActivation(int $userId, Activation $activation): ?Activation
+    public function store(int $userId, Activation $activation): ?Activation
     {
         try {
             $activation->status = 'unused';
@@ -39,13 +41,11 @@ class ActivationRepository
             return null;
         }
     }
-    
+
     /**
-     * @param string $key
-     * @param Activation $activation
-     * @return Activation|null
+     * @inheritDoc
      */
-    public function getActivationByKey(string $key, Activation $activation): ?Activation
+    public function getByKey(string $key, Activation $activation): ?Activation
     {
         return $activation
             ->selectRaw(
@@ -53,17 +53,14 @@ class ActivationRepository
             )
             ->where('key', $key)->first();
     }
-    
-    
+
     /**
-     * @param string $key
-     * @param Activation $activation
-     * @return Activation|null
+     * @inheritDoc
      */
     public function setActivate(string $key, Activation $activation): ?Activation
     {
         try {
-            $resultActivation = $this->getActivationByKey($key, $activation);
+            $resultActivation = $this->getByKey($key, $activation);
             if ($resultActivation == null) {
                 return null;
             } else {
@@ -74,7 +71,7 @@ class ActivationRepository
                 } else {
                     $resultActivation->status = 'already used';
                 }
-                
+
                 return $resultActivation;
             }
         } catch (QueryException $queryException) {

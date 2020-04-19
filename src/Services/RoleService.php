@@ -9,30 +9,150 @@
 namespace WebAppId\User\Services;
 
 
+use WebAppId\User\Services\Contracts\RoleServiceContract;
+use WebAppId\User\Services\Requests\RoleServiceRequest;
+use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
+use WebAppId\User\Services\Responses\RoleServiceResponse;
+use WebAppId\User\Services\Responses\RoleServiceResponseList;
 use Illuminate\Container\Container;
+use WebAppId\DDD\Services\BaseService;
+use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Response\GetRoleResponse;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 18/04/20
+ * Time: 18.51
  * Class RoleService
- * @package App\Http\Services
+ * @package WebAppId\User\Services
  */
-class RoleService
+class RoleService extends BaseService implements RoleServiceContract
 {
-    private $container;
-    
     /**
-     * RoleService constructor.
-     * @param Container $container
+     * @inheritDoc
      */
-    public function __construct(Container $container)
+    public function store(RoleServiceRequest $roleServiceRequest, RoleRepositoryRequest $roleRepositoryRequest, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse
     {
-        $this->container = $container;
+        $roleRepositoryRequest = Lazy::copy($roleServiceRequest, $roleRepositoryRequest);
+
+        $result = $this->container->call([$roleRepository, 'store'], ['roleRepositoryRequest' => $roleRepositoryRequest]);
+        if ($result != null) {
+            $roleServiceResponse->setStatus(true);
+            $roleServiceResponse->setMessage('Store Data Success');
+            $roleServiceResponse->role = $result;
+        } else {
+            $roleServiceResponse->setStatus(false);
+            $roleServiceResponse->setMessage('Store Data Failed');
+        }
+
+        return $roleServiceResponse;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function update(int $id, RoleServiceRequest $roleServiceRequest, RoleRepositoryRequest $roleRepositoryRequest, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse
+    {
+        $roleRepositoryRequest = Lazy::copy($roleServiceRequest, $roleRepositoryRequest);
+
+        $result = $this->container->call([$roleRepository, 'update'], ['id' => $id, 'roleRepositoryRequest' => $roleRepositoryRequest]);
+        if ($result != null) {
+            $roleServiceResponse->setStatus(true);
+            $roleServiceResponse->setMessage('Update Data Success');
+            $roleServiceResponse->role = $result;
+        } else {
+            $roleServiceResponse->setStatus(false);
+            $roleServiceResponse->setMessage('Update Data Failed');
+        }
+
+        return $roleServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getById(int $id, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse
+    {
+        $result = $this->container->call([$roleRepository, 'getById'], ['id' => $id]);
+        if ($result != null) {
+            $roleServiceResponse->setStatus(true);
+            $roleServiceResponse->setMessage('Data Found');
+            $roleServiceResponse->role = $result;
+        } else {
+            $roleServiceResponse->setStatus(false);
+            $roleServiceResponse->setMessage('Data Not Found');
+        }
+
+        return $roleServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(int $id, RoleRepository $roleRepository): bool
+    {
+        return $this->container->call([$roleRepository, 'delete'], ['id' => $id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList, int $length = 12): RoleServiceResponseList
+    {
+        $result = $this->container->call([$roleRepository, 'get']);
+
+        if (count($result) > 0) {
+            $roleServiceResponseList->setStatus(true);
+            $roleServiceResponseList->setMessage('Data Found');
+            $roleServiceResponseList->role = $result;
+            $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
+        } else {
+            $roleServiceResponseList->setStatus(false);
+            $roleServiceResponseList->setMessage('Data Not Found');
+        }
+
+        return $roleServiceResponseList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCount(RoleRepository $roleRepository): int
+    {
+        return $this->container->call([$roleRepository, 'getCount']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWhere(string $q, RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList, int $length = 12): RoleServiceResponseList
+    {
+        $result = $this->container->call([$roleRepository, 'getWhere'], ['q' => $q]);
+        if (count($result) > 0) {
+            $roleServiceResponseList->setStatus(true);
+            $roleServiceResponseList->setMessage('Data Found');
+            $roleServiceResponseList->roleList = $result;
+            $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
+            $roleServiceResponseList->countWhere = $this->container->call([$roleRepository, 'getWhereCount'], ['q' => $q]);
+        } else {
+            $roleServiceResponseList->setStatus(false);
+            $roleServiceResponseList->setMessage('Data Not Found');
+        }
+        return $roleServiceResponseList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWhereCount(string $q, RoleRepository $roleRepository): int
+    {
+        return $this->container->call([$roleRepository, 'getWhereCount'], ['q' => $q]);
+    }
     /**
      * @param RoleRepository $roleRepository
      * @return object|null
+     * @deprecated
      */
     public function getAllRole(RoleRepository $roleRepository): ?object
     {

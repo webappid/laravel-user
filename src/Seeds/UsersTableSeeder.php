@@ -4,6 +4,8 @@ namespace WebAppId\User\Seeds;
 
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
+use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
 use WebAppId\User\Services\Params\UserParam;
@@ -16,28 +18,24 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(UserRepository $userRepository, UserRoleRepository $userRoleRepository)
     {
-        
         $randomPassword = Faker::create()->password;
-        $userRepository = $this->container->make(UserRepository::class);
-        $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => 'root@noname.com']);
-        
+        $result = $this->container->call([$userRepository, 'getByEmail'], ['email' => 'root@noname.com']);
+
         if ($result == null) {
-            $objUser = new UserParam();
-            $objUser->setStatusId(2);
-            $objUser->setName('user root system');
-            $objUser->setEmail('root@noname.com');
-            $objUser->setPassword($randomPassword);
-            $objUser->provider = '';
-            $result = $this->container->call([$userRepository, 'addUser'], ['request' => $objUser]);
-            
+            $userRepositoryRequest = $this->container->make(UserRepositoryRequest::class);
+            $userRepositoryRequest->status_id = 2;
+            $userRepositoryRequest->name = "user root system";
+            $userRepositoryRequest->email = "root@noname.com";
+            $userRepositoryRequest->password = $randomPassword;
+            $result = $this->container->call([$userRepository, 'store'], compact('userRepositoryRequest'));
+
             if ($result != null) {
-                $userRole = $this->container->make(UserRoleRepository::class);
-                $objUserRole = new UserRoleParam();
-                $objUserRole->setUserId($result->id);
-                $objUserRole->setRoleId(1);
-                $result = $this->container->call([$userRole, 'addUserRole'], ['request' => $objUserRole]);
+                $userRoleRepositoryRequest = $this->container->make(UserRoleRepositoryRequest::class);
+                $userRoleRepositoryRequest->user_id = $result->id;
+                $userRoleRepositoryRequest->role_id = 1;
+                $result = $this->container->call([$userRoleRepository, 'store'], compact('userRoleRepositoryRequest'));
                 if ($result != null) {
                     error_log('Default admin password : ' . $randomPassword . '. run php artisan db:seed --class=\'\WebAppId\User\Seeds\AdminResetPasswordTableSeeder\' to reset default pass root user');
                 }

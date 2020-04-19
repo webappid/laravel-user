@@ -12,6 +12,8 @@ namespace WebAppId\User\Seeds;
 use Illuminate\Database\Seeder;
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\PermissionRepository;
+use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
+use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 use WebAppId\User\Repositories\RolePermissionRepository;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Services\Params\PermissionParam;
@@ -24,36 +26,25 @@ class RolePermissionTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(PermissionRepository $permissionRepository, RoleRepository $roleRepository, RolePermissionRepository $rolePermissionRepository)
     {
-        // Add sample permission
-        $permissionRepository = $this->container->make(PermissionRepository::class);
+        $permissionRepositoryRequest = $this->container->make(PermissionRepositoryRequest::class);
+        $permissionRepositoryRequest->name = 'allaccess';
+        $permissionRepositoryRequest->description = 'Permission All Access';
+        $permissionRepositoryRequest->created_by = 1;
+        $permissionRepositoryRequest->updated_by = 1;
 
-        $objPermission = new PermissionParam();
-        $objPermission->setName('allaccess');
-        $objPermission->setDescription('Permission All Access');
-
-        $result = $this->container->call([$permissionRepository, 'getByName'], ['name' => $objPermission->getName()]);
+        $result = $this->container->call([$permissionRepository, 'getByName'], ['name' => $permissionRepositoryRequest->name]);
         if ($result == null) {
-            $resultPermission = $this->container->call([$permissionRepository, 'add'], ['permissionParam' => $objPermission]);
-        } else {
-            $resultPermission = null;
-        }
-
-        // Set Permission to existing Role
-        $roleRepository = $this->container->make(RoleRepository::class);
-        $rolePermissionRepository = $this->container->make(RolePermissionRepository::class);
-        $role = $this->container->call([$roleRepository, 'getRoleById'], ['id' => 1]);
-        if ($role != null && $resultPermission != null) {
-            $objRolePermission = new RolePermissionParam();
-            $objRolePermission->setRoleId($role->id);
-            $objRolePermission->setPermissionId($resultPermission->id);
-
-            $rolePermission = $this->container->call([$rolePermissionRepository, 'add'], ['rolePermissionParam' => $objRolePermission]);
+            $resultPermission = $this->container->call([$permissionRepository, 'store'], compact('permissionRepositoryRequest'));
+            $role = $this->container->call([$roleRepository, 'getById'], ['id' => 1]);
+            $rolePermissionRepositoryRequest = $this->container->make(RolePermissionRepositoryRequest::class);
+            $rolePermissionRepositoryRequest->role_id = $role->id;
+            $rolePermissionRepositoryRequest->permission_id = $resultPermission->id;
+            $rolePermission = $this->container->call([$rolePermissionRepository, 'store'], compact('rolePermissionRepositoryRequest'));
             if ($rolePermission != null) {
                 error_log('Default Role Permission is already set');
             }
         }
-
     }
 }

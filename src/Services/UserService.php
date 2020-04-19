@@ -67,7 +67,7 @@ class UserService
                 $addUserResponse->setMessage('add user role failed');
                 return null;
             } else {
-                $resultActivation = $this->container->call([$activationRepository, 'addActivation'], ['userId' => $resultUser->id]);
+                $resultActivation = $this->container->call([$activationRepository, 'store'], ['userId' => $resultUser->id]);
                 if ($resultActivation == null) {
                     DB::rollback();
                     $addUserResponse->setStatus(false);
@@ -249,7 +249,7 @@ class UserService
 
         $userStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $userParam->getEmail(), 'status' => $userParam->getStatusId()]);
 
-        $deleteRoleByUserId = $this->container->call([$userRoleRepository, 'deleteUserRoleByUserId'], ['userId' => $user->id]);
+        $deleteRoleByUserId = $this->container->call([$userRoleRepository, 'deleteUserRoleByUserId'], ['user_id' => $user->id]);
 
         $resultUserRole = $this->addUserRoles($user->id, $userParam, $userRoleParam, $userRoleRepository);
 

@@ -40,7 +40,7 @@ class ActivationService
                              ActivateResponse $activateResponse): ActivateResponse
     {
         DB::beginTransaction();
-        $result = $this->container->call([$activationRepository, 'getActivationByKey'], ['key' => $activationKey]);
+        $result = $this->container->call([$activationRepository, 'getByKey'], ['key' => $activationKey]);
         if ($result == null) {
             $activateResponse->setStatus(false);
             $activateResponse->setMessage('Activation key not found');

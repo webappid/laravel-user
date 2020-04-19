@@ -10,10 +10,16 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     private $faker;
-    
+
     protected $prefix_route = "/test";
-    
-    private $container;
+
+    protected $container;
+
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        $this->container = new Container();
+        parent::__construct($name, $data, $dataName);
+    }
     
     /**
      * Set up the test
@@ -21,36 +27,36 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->loadMigrationsFrom([
             '--realpath' => realpath(__DIR__ . '/../src/migrations'),
         ]);
         $this->artisan('webappid:user:seed');
-        
+
     }
-    
+
     protected function getFaker()
     {
         if ($this->faker == null) {
             $this->faker = new Faker;
         }
-        
+
         return $this->faker->create('id_ID');
     }
-    
+
     protected function getPackageProviders($app)
     {
         return [
             \WebAppId\User\ServiceProvider::class
         ];
     }
-    
+
     public function tearDown():void
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
     }
-    
+
     protected function getContainer()
     {
         if ($this->container == null) {
@@ -58,7 +64,7 @@ abstract class TestCase extends BaseTestCase
         }
         return $this->container;
     }
-    
+
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'sqlite');
