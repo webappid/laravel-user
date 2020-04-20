@@ -11,6 +11,7 @@ class AdminResetPasswordTableSeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * @param UserRepository $userRepository
      * @return void
      */
     public function run(UserRepository $userRepository)

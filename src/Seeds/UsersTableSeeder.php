@@ -3,6 +3,7 @@
 namespace WebAppId\User\Seeds;
 
 use Faker\Factory as Faker;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Seeder;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
@@ -16,7 +17,10 @@ class UsersTableSeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * @param UserRepository $userRepository
+     * @param UserRoleRepository $userRoleRepository
      * @return void
+     * @throws BindingResolutionException
      */
     public function run(UserRepository $userRepository, UserRoleRepository $userRoleRepository)
     {
@@ -30,7 +34,6 @@ class UsersTableSeeder extends Seeder
             $userRepositoryRequest->email = "root@noname.com";
             $userRepositoryRequest->password = $randomPassword;
             $result = $this->container->call([$userRepository, 'store'], compact('userRepositoryRequest'));
-
             if ($result != null) {
                 $userRoleRepositoryRequest = $this->container->make(UserRoleRepositoryRequest::class);
                 $userRoleRepositoryRequest->user_id = $result->id;

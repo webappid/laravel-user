@@ -29,6 +29,7 @@ class UserRepository implements UserRepositoryContract
     {
         try {
             $user = Lazy::copy($userRepositoryRequest, $user);
+            $user->password = bcrypt($userRepositoryRequest->password);
             $user->save();
             return $user;
         } catch (QueryException $queryException) {
@@ -46,6 +47,7 @@ class UserRepository implements UserRepositoryContract
         if ($user != null) {
             try {
                 $user = Lazy::copy($userRepositoryRequest, $user);
+                $user->password = bcrypt($userRepositoryRequest->password);
                 $user->save();
                 return $user;
             } catch (QueryException $queryException) {
