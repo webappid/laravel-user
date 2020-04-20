@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Fadlika_N
- * Date: 3/8/2019
- * Time: 9:46 AM
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
 namespace WebAppId\User\Tests\Feature\Services;

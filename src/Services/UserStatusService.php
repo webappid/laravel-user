@@ -1,4 +1,7 @@
 <?php
+/**
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
+ */
 
 namespace WebAppId\User\Services;
 
@@ -30,12 +33,12 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
 
         $result = $this->container->call([$userStatusRepository, 'store'], ['userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
         if ($result != null) {
-            $userStatusServiceResponse->setStatus(true);
-            $userStatusServiceResponse->setMessage('Store Data Success');
+            $userStatusServiceResponse->status = true;
+            $userStatusServiceResponse->message = 'Store Data Success';
             $userStatusServiceResponse->userStatus = $result;
         } else {
-            $userStatusServiceResponse->setStatus(false);
-            $userStatusServiceResponse->setMessage('Store Data Failed');
+            $userStatusServiceResponse->status = false;
+            $userStatusServiceResponse->message = 'Store Data Failed';
         }
 
         return $userStatusServiceResponse;
@@ -50,12 +53,12 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
 
         $result = $this->container->call([$userStatusRepository, 'update'], ['id' => $id, 'userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
         if ($result != null) {
-            $userStatusServiceResponse->setStatus(true);
-            $userStatusServiceResponse->setMessage('Update Data Success');
+            $userStatusServiceResponse->status = true;
+            $userStatusServiceResponse->message = 'Update Data Success';
             $userStatusServiceResponse->userStatus = $result;
         } else {
-            $userStatusServiceResponse->setStatus(false);
-            $userStatusServiceResponse->setMessage('Update Data Failed');
+            $userStatusServiceResponse->status = false;
+            $userStatusServiceResponse->message = 'Update Data Failed';
         }
 
         return $userStatusServiceResponse;
@@ -68,12 +71,12 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
     {
         $result = $this->container->call([$userStatusRepository, 'getById'], ['id' => $id]);
         if ($result != null) {
-            $userStatusServiceResponse->setStatus(true);
-            $userStatusServiceResponse->setMessage('Data Found');
+            $userStatusServiceResponse->status = true;
+            $userStatusServiceResponse->message = 'Data Found';
             $userStatusServiceResponse->userStatus = $result;
         } else {
-            $userStatusServiceResponse->setStatus(false);
-            $userStatusServiceResponse->setMessage('Data Not Found');
+            $userStatusServiceResponse->status = false;
+            $userStatusServiceResponse->message = 'Data Not Found';
         }
 
         return $userStatusServiceResponse;
@@ -95,13 +98,13 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
         $result = $this->container->call([$userStatusRepository, 'get']);
 
         if (count($result) > 0) {
-            $userStatusServiceResponseList->setStatus(true);
-            $userStatusServiceResponseList->setMessage('Data Found');
+            $userStatusServiceResponseList->status = true;
+            $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatus = $result;
             $userStatusServiceResponseList->countAll = $this->container->call([$userStatusRepository, 'getCount']);
         } else {
-            $userStatusServiceResponseList->setStatus(false);
-            $userStatusServiceResponseList->setMessage('Data Not Found');
+            $userStatusServiceResponseList->status = false;
+            $userStatusServiceResponseList->message = 'Data Not Found';
         }
 
         return $userStatusServiceResponseList;
@@ -122,14 +125,14 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
     {
         $result = $this->container->call([$userStatusRepository, 'getWhere'], ['q' => $q]);
         if (count($result) > 0) {
-            $userStatusServiceResponseList->setStatus(true);
-            $userStatusServiceResponseList->setMessage('Data Found');
+            $userStatusServiceResponseList->status = true;
+            $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatusList = $result;
             $userStatusServiceResponseList->countAll = $this->container->call([$userStatusRepository, 'getCount']);
             $userStatusServiceResponseList->countWhere = $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
         } else {
-            $userStatusServiceResponseList->setStatus(false);
-            $userStatusServiceResponseList->setMessage('Data Not Found');
+            $userStatusServiceResponseList->status = false;
+            $userStatusServiceResponseList->message = 'Data Not Found';
         }
         return $userStatusServiceResponseList;
     }

@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * Users: dyangalih
- * Date: 05/11/18
- * Time: 16.43
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
 namespace WebAppId\User\Services;
@@ -38,12 +35,12 @@ class RoleService extends BaseService implements RoleServiceContract
 
         $result = $this->container->call([$roleRepository, 'store'], ['roleRepositoryRequest' => $roleRepositoryRequest]);
         if ($result != null) {
-            $roleServiceResponse->setStatus(true);
-            $roleServiceResponse->setMessage('Store Data Success');
+            $roleServiceResponse->status = true;
+            $roleServiceResponse->message = 'Store Data Success';
             $roleServiceResponse->role = $result;
         } else {
-            $roleServiceResponse->setStatus(false);
-            $roleServiceResponse->setMessage('Store Data Failed');
+            $roleServiceResponse->status = false;
+            $roleServiceResponse->message = 'Store Data Failed';
         }
 
         return $roleServiceResponse;
@@ -58,12 +55,12 @@ class RoleService extends BaseService implements RoleServiceContract
 
         $result = $this->container->call([$roleRepository, 'update'], ['id' => $id, 'roleRepositoryRequest' => $roleRepositoryRequest]);
         if ($result != null) {
-            $roleServiceResponse->setStatus(true);
-            $roleServiceResponse->setMessage('Update Data Success');
+            $roleServiceResponse->status = true;
+            $roleServiceResponse->message = 'Update Data Success';
             $roleServiceResponse->role = $result;
         } else {
-            $roleServiceResponse->setStatus(false);
-            $roleServiceResponse->setMessage('Update Data Failed');
+            $roleServiceResponse->status = false;
+            $roleServiceResponse->message = 'Update Data Failed';
         }
 
         return $roleServiceResponse;
@@ -76,12 +73,12 @@ class RoleService extends BaseService implements RoleServiceContract
     {
         $result = $this->container->call([$roleRepository, 'getById'], ['id' => $id]);
         if ($result != null) {
-            $roleServiceResponse->setStatus(true);
-            $roleServiceResponse->setMessage('Data Found');
+            $roleServiceResponse->status = true;
+            $roleServiceResponse->message = 'Data Found';
             $roleServiceResponse->role = $result;
         } else {
-            $roleServiceResponse->setStatus(false);
-            $roleServiceResponse->setMessage('Data Not Found');
+            $roleServiceResponse->status = false;
+            $roleServiceResponse->message = 'Data Not Found';
         }
 
         return $roleServiceResponse;
@@ -103,13 +100,13 @@ class RoleService extends BaseService implements RoleServiceContract
         $result = $this->container->call([$roleRepository, 'get']);
 
         if (count($result) > 0) {
-            $roleServiceResponseList->setStatus(true);
-            $roleServiceResponseList->setMessage('Data Found');
+            $roleServiceResponseList->status = true;
+            $roleServiceResponseList->message = 'Data Found';
             $roleServiceResponseList->role = $result;
             $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
         } else {
-            $roleServiceResponseList->setStatus(false);
-            $roleServiceResponseList->setMessage('Data Not Found');
+            $roleServiceResponseList->status = false;
+            $roleServiceResponseList->message = 'Data Not Found';
         }
 
         return $roleServiceResponseList;
@@ -130,14 +127,14 @@ class RoleService extends BaseService implements RoleServiceContract
     {
         $result = $this->container->call([$roleRepository, 'getWhere'], ['q' => $q]);
         if (count($result) > 0) {
-            $roleServiceResponseList->setStatus(true);
-            $roleServiceResponseList->setMessage('Data Found');
+            $roleServiceResponseList->status = true;
+            $roleServiceResponseList->message = 'Data Found';
             $roleServiceResponseList->roleList = $result;
             $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
             $roleServiceResponseList->countWhere = $this->container->call([$roleRepository, 'getWhereCount'], ['q' => $q]);
         } else {
-            $roleServiceResponseList->setStatus(false);
-            $roleServiceResponseList->setMessage('Data Not Found');
+            $roleServiceResponseList->status = false;
+            $roleServiceResponseList->message = 'Data Not Found';
         }
         return $roleServiceResponseList;
     }

@@ -1,11 +1,20 @@
 <?php
+/**
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
+ */
 
 namespace WebAppId\User\Services;
 
-use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
+use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
+use WebAppId\User\Services\Requests\UserServiceRequest;
+use WebAppId\User\Services\Responses\UserServiceResponse;
+use WebAppId\User\Services\Responses\UserServiceResponseList;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use WebAppId\User\Models\User;
+use WebAppId\DDD\Services\BaseService;
+use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
@@ -13,26 +22,214 @@ use WebAppId\User\Response\AddUserResponse;
 use WebAppId\User\Response\ChangePasswordResponse;
 use WebAppId\User\Response\UserSearchResponse;
 use WebAppId\User\Response\ResetPasswordResponse;
+use WebAppId\User\Services\Contracts\UserServiceContract;
 use WebAppId\User\Services\Params\ChangePasswordParam;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserRoleParam;
 use WebAppId\User\Services\Params\UserSearchParam;
+use WebAppId\User\Models\User;
 
 /**
  * Class UserService
- * @package App\Http\Services
+ * @package WebAppId\User\Http\Services
  */
-class UserService
+class UserService extends BaseService implements UserServiceContract
 {
-    private $container;
+    /**
+     * @inheritDoc
+     * @throws BindingResolutionException
+     */
+    public function store(
+        UserServiceRequest $userServiceRequest,
+        UserRepositoryRequest $userRepositoryRequest,
+        UserRepository $userRepository,
+        array $userRoleList,
+        UserRoleRepositoryRequest $userRoleRepositoryRequest,
+        UserRoleRepository $userRoleRepository,
+        ActivationRepository $activationRepository,
+        UserServiceResponse $userServiceResponse): UserServiceResponse
+    {
+        $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
+
+        DB::beginTransaction();
+        $result = $this->container->call([$userRepository, 'store'], ['userRepositoryRequest' => $userRepositoryRequest]);
+
+        $roles = $this->storeUserRoles($userRoleList, $result->id, $userRoleRepository);
+
+        if ($roles == null) {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'Store User Role Failed';
+            return null;
+        }
+
+        $resultActivation = $this->container->call([$activationRepository, 'store'], ['userId' => $result->id]);
+
+        if ($resultActivation == null) {
+            DB::rollback();
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'User Activation Failed';
+        }
+
+        if ($result != null) {
+            DB::commit();
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = 'Store Data Success';
+            $userServiceResponse->user = $result;
+            $userServiceResponse->activationKey = $resultActivation->key;
+            $userServiceResponse->roleList = $roles;
+        } else {
+            Db::rollBack();
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'Store Data Failed';
+        }
+
+        return $userServiceResponse;
+    }
+
+    private function storeUserRoles(array $userRoleList, int $userId, UserRoleRepository $userRoleRepository): ?array
+    {
+        $roles = [];
+        foreach ($userRoleList as $userRole) {
+            $userRoleRepositoryRequest = $this->container->make(UserRoleRepositoryRequest::class);
+            $userRoleRepositoryRequest->role_id = $userRole;
+            $userRoleRepositoryRequest->user_id = $userId;
+
+            $userRoleResult = $this->container->call([$userRoleRepository, 'store'], compact('userRoleRepositoryRequest'));
+
+            if ($userRoleResult == null) {
+                Db::rollBack();
+                return null;
+            }
+            $roles[] = $userRoleResult;
+        }
+        return $roles;
+    }
 
     /**
-     * UserService constructor.
-     * @param Container $container
+     * @inheritDoc
      */
-    public function __construct(Container $container)
+    public function update(int $id,
+                           UserServiceRequest $userServiceRequest,
+                           UserRepositoryRequest $userRepositoryRequest,
+                           UserRepository $userRepository,
+                           array $userRoleList,
+                           UserRoleRepositoryRequest $userRoleRepositoryRequest,
+                           UserRoleRepository $userRoleRepository,
+                           UserServiceResponse $userServiceResponse): UserServiceResponse
     {
-        $this->container = $container;
+        $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
+
+        DB::beginTransaction();
+        $result = $this->container->call([$userRepository, 'update'], compact('id', 'userRepositoryRequest'));
+
+        $removeUserRole = $this->container->call([$userRoleRepository, 'deleteByUserId'], ['user_id' => $id]);
+
+        $roles = [];
+
+        if ($removeUserRole) {
+            $roles = $this->storeUserRoles($userRoleList, $result->id, $userRoleRepository);
+            if ($roles == null) {
+                $userServiceResponse->status = false;
+                $userServiceResponse->message = 'Store User Role Failed';
+                return null;
+            }
+        }
+
+        if ($result != null) {
+            DB::commit();
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = 'Update Data Success';
+            $userServiceResponse->user = $result;
+            $userServiceResponse->roleList = $roles;
+        } else {
+            DB::rollBack();
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'Update Data Failed';
+        }
+
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getById(int $id, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository, 'getById'], ['id' => $id]);
+
+        if ($result != null) {
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = 'Data Found';
+            $userServiceResponse->user = $result;
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'Data Not Found';
+        }
+
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(int $id, UserRepository $userRepository): bool
+    {
+        return $this->container->call([$userRepository, 'delete'], ['id' => $id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(UserRepository $userRepository, UserServiceResponseList $userServiceResponseList, int $length = 12): UserServiceResponseList
+    {
+        $result = $this->container->call([$userRepository, 'get']);
+
+        if (count($result) > 0) {
+            $userServiceResponseList->status = true;
+            $userServiceResponseList->message = 'Data Found';
+            $userServiceResponseList->user = $result;
+            $userServiceResponseList->countAll = $this->container->call([$userRepository, 'getCount']);
+        } else {
+            $userServiceResponseList->status = false;
+            $userServiceResponseList->message = 'Data Not Found';
+        }
+
+        return $userServiceResponseList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCount(UserRepository $userRepository): int
+    {
+        return $this->container->call([$userRepository, 'getCount']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWhere(string $q, UserRepository $userRepository, UserServiceResponseList $userServiceResponseList, int $length = 12): UserServiceResponseList
+    {
+        $result = $this->container->call([$userRepository, 'getWhere'], ['q' => $q]);
+        if (count($result) > 0) {
+            $userServiceResponseList->status = true;
+            $userServiceResponseList->message = 'Data Found';
+            $userServiceResponseList->userList = $result;
+            $userServiceResponseList->countAll = $this->container->call([$userRepository, 'getCount']);
+            $userServiceResponseList->countWhere = $this->container->call([$userRepository, 'getWhereCount'], ['q' => $q]);
+        } else {
+            $userServiceResponseList->status = false;
+            $userServiceResponseList->message = 'Data Not Found';
+        }
+        return $userServiceResponseList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWhereCount(string $q, UserRepository $userRepository): int
+    {
+        return $this->container->call([$userRepository, 'getWhereCount'], ['q' => $q]);
     }
 
     /**
@@ -293,10 +490,10 @@ class UserService
     public function getEmailByResetToken(string $token, ChangePasswordResponse $changePasswordResponse): ChangePasswordResponse
     {
         $email = Cache::pull($token);
-        if($email!=null){
+        if ($email != null) {
             $changePasswordResponse->email = $email;
             $changePasswordResponse->setStatus(true);
-        }else{
+        } else {
             $changePasswordResponse->setStatus(false);
         }
         return $changePasswordResponse;

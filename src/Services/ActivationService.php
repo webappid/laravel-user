@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dyangalih
- * Date: 2019-01-30
- * Time: 21:03
+ * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
 namespace WebAppId\User\Services;
@@ -21,12 +18,12 @@ use WebAppId\User\Response\ActivateResponse;
 class ActivationService
 {
     private $container;
-    
+
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
-    
+
     /**
      * @param string $activationKey
      * @param ActivationRepository $activationRepository
@@ -42,35 +39,35 @@ class ActivationService
         DB::beginTransaction();
         $result = $this->container->call([$activationRepository, 'getByKey'], ['key' => $activationKey]);
         if ($result == null) {
-            $activateResponse->setStatus(false);
-            $activateResponse->setMessage('Activation key not found');
+            $activateResponse->status = false;
+            $activateResponse->message = 'Activation key not found';
             DB::rollBack();
         } elseif ($result->status != 'unused') {
-            $activateResponse->setStatus(false);
-            $activateResponse->setMessage('User is active');
+            $activateResponse->status = false;
+            $activateResponse->message = 'User is active';
             DB::rollBack();
         } elseif ($result->isValid != 'valid') {
-            $activateResponse->setStatus(false);
-            $activateResponse->setMessage('Key Not Valid');
+            $activateResponse->status = false;
+            $activateResponse->message = 'Key Not Valid';
             DB::rollBack();
         } else {
             $resultActivate = $this->container->call([$activationRepository, 'setActivate'], ['key' => $activationKey]);
             if ($resultActivate->status == 'used') {
                 $resultStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'],['email' => $resultActivate->user->email, 'status' => 2]);
                 if($resultStatus != null) {
-                    $activateResponse->setStatus(true);
-                    $activateResponse->setMessage('User Active');
+                    $activateResponse->status = true;
+                    $activateResponse->message = 'User Active';
                     DB::commit();
                 }else{
                     DB::rollBack();
                 }
             } else {
-                $activateResponse->setStatus(false);
-                $activateResponse->setMessage('Activation Failed, Please Contact Administrator');
+                $activateResponse->status = false;
+                $activateResponse->message = 'Activation Failed, Please Contact Administrator';
                 DB::rollBack();
             }
         }
-        
+
         return $activateResponse;
     }
 }

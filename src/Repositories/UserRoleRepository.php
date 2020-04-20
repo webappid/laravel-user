@@ -119,12 +119,9 @@ class UserRoleRepository implements UserRoleRepositoryContract
     public function deleteByUserId(int $user_id, UserRole $userRole): bool
     {
         try {
-            $result = $userRole->get();
-            dd($result);
-            return $result;
+            return $userRole->where('user_id', $user_id)->delete();
         } catch (QueryException $queryException) {
             report($queryException);
-            dd($queryException);
             return false;
         }
     }
