@@ -10,7 +10,7 @@ namespace WebAppId\User\Services\Requests;
  * Date: 07:58:10
  * Time: 2020/04/20
  * Class UserServiceRequest
- * @package App\Services\Requests
+ * @package WebAppId\User\Services\Requests
  */
 class UserServiceRequest
 {

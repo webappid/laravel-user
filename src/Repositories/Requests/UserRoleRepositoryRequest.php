@@ -10,19 +10,19 @@ namespace WebAppId\User\Repositories\Requests;
  * Date: 00:50:26
  * Time: 2020/04/19
  * Class UserRoleRepositoryRequest
- * @package App\Repositories\Requests
+ * @package WebAppId\User\Repositories\Requests
  */
 class UserRoleRepositoryRequest
 {
-    
+
     /**
      * @var int
      */
     public $user_id;
-                
+
     /**
      * @var int
      */
     public $role_id;
-                
+
 }

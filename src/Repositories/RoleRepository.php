@@ -19,7 +19,7 @@ use WebAppId\User\Services\Params\RoleParam;
  * Date: 17:14:01
  * Time: 2020/04/18
  * Class RoleRepository
- * @package App\Repositories
+ * @package WebAppId\User\Repositories
  */
 class RoleRepository implements RoleRepositoryContract
 {

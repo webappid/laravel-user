@@ -13,7 +13,7 @@ use WebAppId\DDD\Responses\AbstractResponse;
  * Date: 07:58:10
  * Time: 2020/04/20
  * Class UserServiceResponseList
- * @package App\Services\Responses
+ * @package WebAppId\User\Services\Responses
  */
 class UserServiceResponseList extends AbstractResponse
 {

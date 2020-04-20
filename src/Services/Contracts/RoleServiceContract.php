@@ -16,7 +16,7 @@ use WebAppId\User\Services\Responses\RoleServiceResponseList;
  * Date: 17:14:01
  * Time: 2020/04/18
  * Class RoleServiceContract
- * @package App\Services\Contracts
+ * @package WebAppId\User\Services\Contracts
  */
 interface RoleServiceContract
 {

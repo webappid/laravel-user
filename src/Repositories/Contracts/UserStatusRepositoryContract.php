@@ -14,7 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * Date: 21:27:23
  * Time: 2020/04/18
  * Class UserStatusRepositoryContract
- * @package App\Repositories\Contracts
+ * @package WebAppId\User\Repositories\Contracts
  */
 interface UserStatusRepositoryContract
 {

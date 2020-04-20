@@ -20,7 +20,7 @@ use WebAppId\User\Services\Responses\UserServiceResponseList;
  * Date: 07:58:10
  * Time: 2020/04/20
  * Class UserServiceContract
- * @package App\Services\Contracts
+ * @package WebAppId\User\Services\Contracts
  */
 interface UserServiceContract
 {

@@ -18,7 +18,7 @@ use Illuminate\Database\QueryException;
 
 /**
  * Class PermissionRepository
- * @package App\Http\Repositories
+ * @package WebAppId\User\Http\Repositories
  */
 class PermissionRepository implements PermissionRepositoryContract
 {

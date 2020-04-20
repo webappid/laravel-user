@@ -10,14 +10,14 @@ namespace WebAppId\User\Repositories\Requests;
  * Date: 21:27:23
  * Time: 2020/04/18
  * Class UserStatusRepositoryRequest
- * @package App\Repositories\Requests
+ * @package WebAppId\User\Repositories\Requests
  */
 class UserStatusRepositoryRequest
 {
-    
+
     /**
      * @var string
      */
     public $name;
-                
+
 }

@@ -10,29 +10,29 @@ namespace WebAppId\User\Repositories\Requests;
  * Date: 11:32:27
  * Time: 2020/04/19
  * Class ActivationRepositoryRequest
- * @package App\Repositories\Requests
+ * @package WebAppId\User\Repositories\Requests
  */
 class ActivationRepositoryRequest
 {
-    
+
     /**
      * @var int
      */
     public $user_id;
-                
+
     /**
      * @var string
      */
     public $key;
-                
+
     /**
      * @var string
      */
     public $status;
-                
+
     /**
      * @var string
      */
     public $valid_until;
-                
+
 }

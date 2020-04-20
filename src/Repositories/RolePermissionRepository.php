@@ -18,7 +18,7 @@ use Illuminate\Database\QueryException;
 
 /**
  * Class RolePermissionRepository
- * @package App\Http\Repositories\Contract
+ * @package WebAppId\User\Http\Repositories\Contract
  */
 class RolePermissionRepository implements RolePermissionRepositoryContract
 {
@@ -115,12 +115,12 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
     {
         return $rolePermission->count();
     }
-    
+
     /**
      * @param RolePermissionParam $rolePermissionParam
      * @param RolePermission $rolePermission
      * @return RolePermission|null
-     * @deprecated 
+     * @deprecated
      */
     public function add(RolePermissionParam $rolePermissionParam, RolePermission $rolePermission): ?RolePermission
     {
@@ -169,7 +169,7 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
     /**
      * @param RolePermission $rolePermission
      * @return object|null
-     * @deprecated 
+     * @deprecated
      */
     public function getAllRolePermission(RolePermission $rolePermission): ?object
     {

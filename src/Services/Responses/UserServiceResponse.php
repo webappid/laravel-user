@@ -6,14 +6,14 @@
 namespace WebAppId\User\Services\Responses;
 
 use WebAppId\DDD\Responses\AbstractResponse;
-use App\Models\User;
+use WebAppId\User\Models\User;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 07:58:10
  * Time: 2020/04/20
  * Class UserServiceResponse
- * @package App\Services\Responses
+ * @package WebAppId\User\Services\Responses
  */
 class UserServiceResponse extends AbstractResponse
 {

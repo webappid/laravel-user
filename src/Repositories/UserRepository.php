@@ -4,14 +4,11 @@ namespace WebAppId\User\Repositories;
 
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
-use Illuminate\Auth\Passwords\TokenRepositoryInterface;
-use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Illuminate\Auth\Authenticatable;
 use InvalidArgumentException;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\User;
@@ -21,7 +18,7 @@ use WebAppId\User\Services\Params\UserSearchParam;
 
 /**
  * Class UserRepository
- * @package App\Http\Repositories
+ * @package WebAppId\User\Http\Repositories
  */
 class UserRepository implements UserRepositoryContract
 {
@@ -36,7 +33,6 @@ class UserRepository implements UserRepositoryContract
             return $user;
         } catch (QueryException $queryException) {
             report($queryException);
-            dd($queryException);
             return null;
         }
     }

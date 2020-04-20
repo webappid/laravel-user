@@ -14,7 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * Date: 17:14:01
  * Time: 2020/04/18
  * Class RoleRepositoryContract
- * @package App\Repositories\Contracts
+ * @package WebAppId\User\Repositories\Contracts
  */
 interface RoleRepositoryContract
 {
