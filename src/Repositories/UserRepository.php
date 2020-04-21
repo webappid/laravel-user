@@ -46,8 +46,13 @@ class UserRepository implements UserRepositoryContract
         $user = $this->getById($id, $user);
         if ($user != null) {
             try {
+                if ($userRepositoryRequest->password != null) {
+                    $userRepositoryRequest->password = $user->password;
+                } else {
+                    $userRepositoryRequest->password = bcrypt($userRepositoryRequest->password);
+                }
                 $user = Lazy::copy($userRepositoryRequest, $user);
-                $user->password = bcrypt($userRepositoryRequest->password);
+
                 $user->save();
                 return $user;
             } catch (QueryException $queryException) {
