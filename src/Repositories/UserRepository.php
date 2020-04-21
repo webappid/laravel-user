@@ -46,6 +46,7 @@ class UserRepository implements UserRepositoryContract
         $user = $this->getById($id, $user);
         if ($user != null) {
             try {
+                $userRepositoryRequest->remember_token = $user->remember_token;
                 if ($userRepositoryRequest->password != null) {
                     $userRepositoryRequest->password = $user->password;
                 } else {
