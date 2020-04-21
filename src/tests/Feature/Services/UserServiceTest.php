@@ -91,6 +91,7 @@ class UserServiceTest extends TestCase
     {
         $contentServiceResponse = $this->testStore();
         $userServiceRequest = $this->getDummy();
+        $userServiceRequest->password = null;
         $userRoleList[] = $this->container->call([$this->roleRepositoryTest, 'testStore']);
         $result = $this->container->call([$this->userService, 'update'], ['id' => $contentServiceResponse->user->id, 'userServiceRequest' => $userServiceRequest, 'userRoleList' => $userRoleList]);
         self::assertNotEquals(null, $result);
@@ -151,7 +152,7 @@ class UserServiceTest extends TestCase
         } else {
             self::assertTrue(true);
 
-            $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getRoleById'], ['id' => $resultUser->getRoles()[0]->id]);
+            $roleResult = $this->getContainer()->call([$this->roleRepository(), 'getById'], ['id' => $resultUser->getRoles()[0]->id]);
 
             self::assertEquals($dummy->getName(), $resultUser->getUser()->name);
             self::assertEquals($dummy->getEmail(), $resultUser->getUser()->email);
@@ -244,12 +245,10 @@ class UserServiceTest extends TestCase
 
         $char = ['a', 'i', 'u', 'e', 'o'];
 
-        $userSearchParam = new UserSearchParam();
-        $userSearchParam->setQ($char[$this->getFaker()->numberBetween(0, 4)]);
+        $result = $this->getContainer()->call([$this->userService, 'getWhere'], ['q' => $char[$this->getFaker()->numberBetween(0, 4)]]);
 
-        $result = $this->getContainer()->call([$this->userService, 'showUserList'], ['userSearchParam' => $userSearchParam]);
-        $this->assertEquals($randomNumber + 1, $result->getRecordsTotal());
-        $this->assertLessThanOrEqual($randomNumber, $result->getRecordsFiltered());
+        $this->assertEquals($randomNumber + 1, $result->countAll);
+        $this->assertLessThanOrEqual($randomNumber, $result->countWhere);
     }
 
     public function testSearchByEmail(): void
@@ -260,10 +259,10 @@ class UserServiceTest extends TestCase
 
         $randomUser = $randomUserList[$randomNumber];
 
-        $userResult = $this->getContainer()->call([$this->userService, 'getUserByEmail'], ['email' => $randomUser->getEmail()]);
+        $userResult = $this->getContainer()->call([$this->userService, 'getByEmail'], ['email' => $randomUser->getEmail()]);
 
-        $this->assertEquals($randomUser->getName(), $userResult->getData()->name);
-        $this->assertEquals($randomUser->getEmail(), $userResult->getData()->email);
+        $this->assertEquals($randomUser->getName(), $userResult->user->name);
+        $this->assertEquals($randomUser->getEmail(), $userResult->user->email);
     }
 
     private function uniqueRandomNotIn($number): int

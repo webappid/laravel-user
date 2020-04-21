@@ -5,6 +5,8 @@
 
 namespace WebAppId\User\Services\Contracts;
 
+use Illuminate\Foundation\Application;
+use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
@@ -109,4 +111,45 @@ interface UserServiceContract
      * @return int
      */
     public function getWhereCount(string $q, UserRepository $userRepository): int;
+
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return User|null
+     */
+    public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse;
+
+    /**
+     * @param string $email
+     * @param int $status
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return User|null
+     */
+    public function setUpdateStatusUser(string $email, int $status, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse;
+
+    /**
+     * @param string $email
+     * @param string $name
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return User|null
+     */
+    public function setUpdateName(string $email, string $name, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse;
+
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @return bool
+     */
+    public function deleteByEmail(string $email, UserRepository $userRepository): bool;
+
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
+     */
+    public function setResetPasswordTokenByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse;
 }

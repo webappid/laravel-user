@@ -154,7 +154,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setUpdatePassword(string $email, string $password, User $user): ?User
     {
-        $user = $this->getUserByEmail($email, $user);
+        $user = $this->getByEmail($email, $user);
         if ($user != null) {
             try {
                 $user->password = bcrypt($password);
@@ -174,7 +174,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setUpdateStatusUser(string $email, int $status, User $user): ?User
     {
-        $user = $this->getUserByEmail($email, $user);
+        $user = $this->getByEmail($email, $user);
         if ($user != null) {
             try {
                 $user->status_id = $status;
@@ -214,7 +214,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function deleteByEmail(string $email, User $user): bool
     {
-        $user = $this->getUserByEmail($email, $user);
+        $user = $this->getByEmail($email, $user);
         try {
             return $user->delete();
         } catch (QueryException $queryException) {
@@ -228,7 +228,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): string
     {
-        $user = $this->getUserByEmail($email, $user);
+        $user = $this->getByEmail($email, $user);
 
         $key = env('APP_KEY');
 
@@ -352,7 +352,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function deleteUserByEmail(string $email, User $user): bool
     {
-        $user = $this->getUserByEmail($email, $user);
+        $user = $this->getByEmail($email, $user);
         try {
             return $user->delete();
         } catch (QueryException $queryException) {

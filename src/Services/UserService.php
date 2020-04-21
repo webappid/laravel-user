@@ -6,6 +6,8 @@
 namespace WebAppId\User\Services;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Foundation\Application;
+use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Services\Requests\UserServiceRequest;
@@ -27,7 +29,6 @@ use WebAppId\User\Services\Params\ChangePasswordParam;
 use WebAppId\User\Services\Params\UserParam;
 use WebAppId\User\Services\Params\UserRoleParam;
 use WebAppId\User\Services\Params\UserSearchParam;
-use WebAppId\User\Models\User;
 
 /**
  * Class UserService
@@ -37,7 +38,6 @@ class UserService extends BaseService implements UserServiceContract
 {
     /**
      * @inheritDoc
-     * @throws BindingResolutionException
      */
     public function store(
         UserServiceRequest $userServiceRequest,
@@ -251,8 +251,8 @@ class UserService extends BaseService implements UserServiceContract
         DB::beginTransaction();
         $resultUser = $this->container->call([$userRepository, 'addUser'], ['request' => $request]);
         if ($resultUser == null) {
-            $addUserResponse->setStatus(false);
-            $addUserResponse->setMessage('add user failed');
+            $addUserResponse->status = false;
+            $addUserResponse->message = 'add user failed';
             DB::rollback();
             return $addUserResponse;
         } else {
@@ -260,18 +260,18 @@ class UserService extends BaseService implements UserServiceContract
             $resultUserRole = $this->addUserRoles($resultUser->id, $request, $userRoleParam, $userRoleRepository);
             if ($resultUserRole == null) {
                 DB::rollback();
-                $addUserResponse->setStatus(false);
-                $addUserResponse->setMessage('add user role failed');
+                $addUserResponse->status = false;
+                $addUserResponse->message = 'add user role failed';
                 return null;
             } else {
                 $resultActivation = $this->container->call([$activationRepository, 'store'], ['userId' => $resultUser->id]);
                 if ($resultActivation == null) {
                     DB::rollback();
-                    $addUserResponse->setStatus(false);
-                    $addUserResponse->setMessage('Add Activation Failed');
+                    $addUserResponse->status = false;
+                    $addUserResponse->message = 'Add Activation Failed';
                 } else {
-                    $addUserResponse->setStatus(true);
-                    $addUserResponse->setMessage('Add User Success');
+                    $addUserResponse->status = true;
+                    $addUserResponse->message = 'Add User Success';
                     $addUserResponse->setActivation($resultActivation->key);
                     $addUserResponse->setUser($resultUser);
                     $addUserResponse->setRoles($resultUser->roles);
@@ -318,27 +318,27 @@ class UserService extends BaseService implements UserServiceContract
                                    $force = false): ChangePasswordResponse
     {
 
-        $userResult = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $changePasswordParam->getEmail()]);
+        $userResult = $this->container->call([$userRepository, 'getByEmail'], ['email' => $changePasswordParam->getEmail()]);
         if ($userResult != null) {
             if ($changePasswordParam->getPassword() !== $changePasswordParam->getRetypePassword() && !$force) {
-                $changePasswordResponse->setStatus(false);
-                $changePasswordResponse->setMessage("New password and retype password not match");
+                $changePasswordResponse->status = false;
+                $changePasswordResponse->message = "New password and retype password not match";
             } elseif (!password_verify($changePasswordParam->getOldPassword(), $userResult->password) && !$force) {
-                $changePasswordResponse->setStatus(false);
-                $changePasswordResponse->setMessage("Old password not match");
+                $changePasswordResponse->status = false;
+                $changePasswordResponse->message = "Old password not match";
             } else {
                 $changePasswordResult = $this->container->call([$userRepository, 'setUpdatePassword'], ['email' => $changePasswordParam->getEmail(), 'password' => $changePasswordParam->getPassword()]);
                 if ($changePasswordResult == null) {
-                    $changePasswordResponse->setStatus(false);
-                    $changePasswordResponse->setMessage("Update Password Failed, please contact your admin");
+                    $changePasswordResponse->status = false;
+                    $changePasswordResponse->message = "Update Password Failed, please contact your admin";
                 } else {
-                    $changePasswordResponse->setStatus(true);
-                    $changePasswordResponse->setMessage("Update Password Success");
+                    $changePasswordResponse->status = true;
+                    $changePasswordResponse->message = "Update Password Success";
                 }
             }
         } else {
-            $changePasswordResponse->setStatus(false);
-            $changePasswordResponse->setMessage("User not found");
+            $changePasswordResponse->status = false;
+            $changePasswordResponse->message = "User not found";
         }
 
         return $changePasswordResponse;
@@ -357,11 +357,11 @@ class UserService extends BaseService implements UserServiceContract
         $recordTotal = $this->container->call([$userRepository, 'getCountAllUser']);
         $userSearchResponse->setRecordsTotal($recordTotal);
         if ($recordTotal == 0) {
-            $userSearchResponse->setStatus(false);
-            $userSearchResponse->setMessage('No data found');
+            $userSearchResponse->status = false;
+            $userSearchResponse->message = 'No data found';
         } else {
-            $userSearchResponse->setStatus(true);
-            $userSearchResponse->setMessage('Data found');
+            $userSearchResponse->status = true;
+            $userSearchResponse->message = 'Data found';
         }
 
         $recordFiltered = $this->container->call([$userRepository, 'getUserSearchCount'], ['userSearchParam' => $userSearchParam]);
@@ -386,11 +386,11 @@ class UserService extends BaseService implements UserServiceContract
         $result = $this->container->call([$userRepository, 'getUserByEmail'], ['email' => $email]);
 
         if ($result == null) {
-            $userSearchResponse->setStatus(false);
-            $userSearchResponse->setMessage('Invalid User');
+            $userSearchResponse->status = false;
+            $userSearchResponse->message = 'Invalid User';
         } else {
-            $userSearchResponse->setStatus(true);
-            $userSearchResponse->setMessage('Get User By Email success');
+            $userSearchResponse->status = true;
+            $userSearchResponse->message = 'Get User By Email success';
             $userSearchResponse->setData($result);
         }
         return $userSearchResponse;
@@ -492,10 +492,87 @@ class UserService extends BaseService implements UserServiceContract
         $email = Cache::pull($token);
         if ($email != null) {
             $changePasswordResponse->email = $email;
-            $changePasswordResponse->setStatus(true);
+            $changePasswordResponse->status = true;
         } else {
-            $changePasswordResponse->setStatus(false);
+            $changePasswordResponse->status = false;
         }
         return $changePasswordResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository, 'getByEmail'], compact('email'));
+        if ($result != null) {
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Data Found";
+            $userServiceResponse->user = $result;
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Data Not Found";
+        }
+
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUpdateStatusUser(string $email, int $status, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository, 'setUpdateStatusUser'], compact('email', 'status'));
+        if ($result != false) {
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Update Status Success";
+            $userServiceResponse->user = $result;
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Update Status Failed";
+        }
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUpdateName(string $email, string $name, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository, 'setUpdateName'], compact('email', 'name'));
+        if ($result != null) {
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Update Name Success";
+            $userServiceResponse->user = $result;
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Update Name Failed";
+        }
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteByEmail(string $email, UserRepository $userRepository): bool
+    {
+        return $this->container->call([$userRepository, 'deleteByEmail'], compact('email'));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setResetPasswordTokenByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository, 'setResetPasswordTokenByEmail'], compact('email'));
+        if ($result != null) {
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Reset Password Token By Email Success";
+            $userServiceResponse->user = $result;
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Reset Password Token By Email Failed";
+        }
+        return $userServiceResponse;
     }
 }
