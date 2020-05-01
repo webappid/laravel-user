@@ -100,7 +100,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
         if (count($result) > 0) {
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
-            $userStatusServiceResponseList->userStatus = $result;
+            $userStatusServiceResponseList->userStatusList = $result;
             $userStatusServiceResponseList->count = $this->container->call([$userStatusRepository, 'getCount']);
         } else {
             $userStatusServiceResponseList->status = false;
@@ -123,7 +123,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getWhere(string $q, UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList
     {
-        $result = $this->container->call([$userStatusRepository, 'getWhere'], ['q' => $q]);
+        $result = $this->container->call([$userStatusRepository, 'get'], ['q' => $q]);
         if (count($result) > 0) {
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
@@ -142,7 +142,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getWhereCount(string $q, UserStatusRepository $userStatusRepository): int
     {
-        return $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
+        return $this->container->call([$userStatusRepository, 'getCount'], ['q' => $q]);
     }
 
 }
