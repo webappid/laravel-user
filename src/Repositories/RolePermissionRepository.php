@@ -8,17 +8,20 @@
 
 namespace WebAppId\User\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
-use WebAppId\User\Services\Params\RolePermissionParam;
 use Illuminate\Database\QueryException;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 28/04/2020
+ * Time: 22.38
  * Class RolePermissionRepository
- * @package WebAppId\User\Http\Repositories\Contract
+ * @package WebAppId\User\Repositories
  */
 class RolePermissionRepository implements RolePermissionRepositoryContract
 {
@@ -37,7 +40,7 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
         }
     }
 
-    protected function getColumn($content)
+    protected function getColumn($content): Builder
     {
         return $content
             ->select
@@ -115,66 +118,4 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
     {
         return $rolePermission->count();
     }
-
-    /**
-     * @param RolePermissionParam $rolePermissionParam
-     * @param RolePermission $rolePermission
-     * @return RolePermission|null
-     * @deprecated
-     */
-    public function add(RolePermissionParam $rolePermissionParam, RolePermission $rolePermission): ?RolePermission
-    {
-        try {
-            $rolePermission->role_id = $rolePermissionParam->getRoleId();
-            $rolePermission->permission_id = $rolePermissionParam->getPermissionId();
-            $rolePermission->save();
-            return $rolePermission;
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return null;
-        }
-    }
-
-    /**
-     * @param int $role_id
-     * @param RolePermission $rolePermission
-     * @return bool|null
-     */
-    public function deleteByRoleId(int $role_id, RolePermission $rolePermission): ?bool
-    {
-        try {
-            return $rolePermission->where('role_id', $role_id)->delete();
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return false;
-        }
-    }
-
-    /**
-     * @param int $role_id
-     * @param int $permission_id
-     * @param RolePermission $rolePermission
-     * @return bool|null
-     */
-    public function deleteByRoleIdPermissionId(int $role_id, int $permission_id, RolePermission $rolePermission): ?bool
-    {
-        try {
-            return $rolePermission->where('role_id', $role_id)->where('permission_id', $permission_id)->delete();
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return false;
-        }
-    }
-
-    /**
-     * @param RolePermission $rolePermission
-     * @return object|null
-     * @deprecated
-     */
-    public function getAllRolePermission(RolePermission $rolePermission): ?object
-    {
-        return $rolePermission->get();
-    }
-
-
 }

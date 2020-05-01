@@ -44,7 +44,7 @@ class RoleServiceTest extends TestCase
         $contentServiceResponse = $this->testStore();
         $roleServiceRequest = $this->getDummy();
         $result = $this->container->call([$this->roleService, 'getById'], ['id' => $contentServiceResponse->role->id, 'roleServiceRequest' => $roleServiceRequest]);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     private function getDummy(int $number = 0): RoleServiceRequest
@@ -54,7 +54,6 @@ class RoleServiceTest extends TestCase
         try {
             $roleServiceRequest = $this->container->make(RoleServiceRequest::class);
         } catch (BindingResolutionException $e) {
-            dd($e);
             report($e);
         }
         return Lazy::copy($roleRepositoryRequest, $roleServiceRequest);
@@ -64,7 +63,7 @@ class RoleServiceTest extends TestCase
     {
         $roleServiceRequest = $this->getDummy($number);
         $result = $this->container->call([$this->roleService, 'store'], compact('roleServiceRequest'));
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
         return $result;
     }
 
@@ -74,7 +73,7 @@ class RoleServiceTest extends TestCase
             $this->testStore($i);
         }
         $result = $this->container->call([$this->roleService, 'get']);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     public function testUpdate()
@@ -99,8 +98,8 @@ class RoleServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->roleService, 'getWhere'], ['q' => $q]);
-        self::assertTrue($result->isStatus());
+        $result = $this->container->call([$this->roleService, 'get'], ['q' => $q]);
+        self::assertTrue($result->status);
     }
 
     public function testGetWhereCount()
@@ -110,32 +109,7 @@ class RoleServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->roleService, 'getWhereCount'], ['q' => $q]);
+        $result = $this->container->call([$this->roleService, 'getCount'], ['q' => $q]);
         self::assertGreaterThanOrEqual(1, $result);
     }
-
-    /**
-     * @return mixed|RoleService
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    protected function roleService()
-    {
-        return $this->getContainer()->make(RoleService::class);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testGetAllRole()
-    {
-        $result = $this->getContainer()->call([$this->roleService(), 'getAllRole']);
-        if ($result == null) {
-            self::assertTrue(false);
-        }else{
-            self::assertTrue(true);
-        }
-    }
-
 }

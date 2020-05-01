@@ -9,7 +9,6 @@ use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\Permission;
 use WebAppId\User\Repositories\PermissionRepository;
-use WebAppId\User\Services\Params\PermissionParam;
 use WebAppId\User\Tests\TestCase;
 
 /**
@@ -97,90 +96,5 @@ class PermissionRepositoryTest extends TestCase
         $permissionRepositoryRequest = $this->getDummy(1);
         $result = $this->container->call([$this->permissionRepository, 'update'], ['id' => $permission->id, 'permissionRepositoryRequest' => $permissionRepositoryRequest]);
         self::assertNotEquals(null, $result);
-    }
-
-    public function permissionRepository(): PermissionRepository
-    {
-        return $this->getContainer()->make(PermissionRepository::class);
-    }
-
-    /**
-     * @return PermissionParam
-     * @deprecated
-     */
-    public function getDummyData(): PermissionParam
-    {
-        $faker = $this->getFaker();
-        $objPermission = new PermissionParam();
-        $objPermission->setName($faker->name);
-        $objPermission->setDescription($faker->text(190));
-        return $objPermission;
-    }
-
-    /**
-     * @param $dummy
-     * @return Permission
-     * @deprecated
-     */
-    public function createDummy($dummy): Permission
-    {
-        return $this->getContainer()->call([$this->permissionRepository(), 'add'], ['permissionParam' => $dummy]);
-    }
-
-    /**
-     * @return Permission
-     * @deprecated
-     */
-    public function testAddPermission(): Permission
-    {
-        $dummy = $this->getDummyData();
-        $result = $this->createDummy($dummy);
-        if ($result == null) {
-            self::assertTrue(false);
-        } else {
-            self::assertTrue(true);
-            self::assertEquals($dummy->getName(), $result->name);
-            self::assertEquals($dummy->getDescription(), $result->description);
-        }
-        return $result;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function testGetAllPermission(): void
-    {
-        $result = $this->getContainer()->call([$this->permissionRepository(), 'getAll']);
-
-        if (count($result) > 0) {
-            self::assertTrue(true);
-        } else {
-            self::assertTrue(false);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    public function testGetPermissionByName(): void
-    {
-        $result = $this->testAddPermission();
-
-        $resultSearch = $this->getContainer()->call([$this->permissionRepository(), 'getByName'], ['name' => $result->name]);
-        self::assertEquals($result->name, $resultSearch->name);
-        self::assertEquals($result->description, $resultSearch->description);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function testGetPermissionById(): void
-    {
-        $result = $this->testAddPermission();
-
-        $permissionResult = $this->getContainer()->call([$this->permissionRepository(), 'getDataById'], ['id' => $result->id]);
-        $this->assertNotEquals(null, $permissionResult);
-        self::assertEquals($result->name, $permissionResult->name);
-        self::assertEquals($result->description, $permissionResult->description);
     }
 }

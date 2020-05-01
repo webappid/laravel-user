@@ -2,6 +2,7 @@
 
 namespace WebAppId\User\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Database\QueryException;
@@ -13,8 +14,6 @@ use InvalidArgumentException;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Contracts\UserRepositoryContract;
-use WebAppId\User\Services\Params\UserParam;
-use WebAppId\User\Services\Params\UserSearchParam;
 
 /**
  * Class UserRepository
@@ -47,7 +46,7 @@ class UserRepository implements UserRepositoryContract
         if ($user != null) {
             try {
                 $userRepositoryRequest->remember_token = $user->remember_token;
-                if ($userRepositoryRequest->password != null) {
+                if ($userRepositoryRequest->password == null) {
                     $userRepositoryRequest->password = $user->password;
                 } else {
                     $userRepositoryRequest->password = bcrypt($userRepositoryRequest->password);
@@ -87,47 +86,25 @@ class UserRepository implements UserRepositoryContract
     /**
      * @inheritDoc
      */
-    public function get(User $user, int $length = 12): LengthAwarePaginator
+    public function get(User $user, int $length = 12, string $q = null): LengthAwarePaginator
     {
-        return $this->getColumn($user)->paginate($length);
+        return $this->getColumn($user, $q)->paginate($length);
     }
 
     /**
      * @inheritDoc
      */
-    public function getCount(User $user): int
+    public function getCount(User $user, string $q = null): int
     {
-        return $user->count();
-    }
-
-    private function getQueryWhere(string $q, User $user)
-    {
-        return $this->getColumn($user)
-            ->where('users.name', 'LIKE', '%' . $q . '%')
-            ->orWhere('users.email', $q);
+        return $this->getColumn($user, $q)->count();
     }
 
     /**
-     * @inheritDoc
+     * @param User $user
+     * @param string|null $q
+     * @return Builder
      */
-    public function getWhere(string $q, User $user, int $length = 12): LengthAwarePaginator
-    {
-        return $this
-            ->getQueryWhere($q, $user)
-            ->paginate($length);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getWhereCount(string $q, User $user, int $length = 12): int
-    {
-        return $this
-            ->getQueryWhere($q, $user)
-            ->count();
-    }
-
-    protected function getColumn(User $user)
+    protected function getColumn(User $user, string $q = null): Builder
     {
         return $user->select(
             'users.id AS id',
@@ -137,7 +114,12 @@ class UserRepository implements UserRepositoryContract
             'users.password AS password',
             'user_statuses.name AS status',
             'users.remember_token AS remember_token')
-            ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id');
+            ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id')
+            ->when($q != null, function ($query) use ($q) {
+                return $query
+                    ->where('users.name', 'LIKE', '%' . $q . '%')
+                    ->orWhere('users.email', $q);
+            });
     }
 
     /**
@@ -227,7 +209,7 @@ class UserRepository implements UserRepositoryContract
     /**
      * @inheritDoc
      */
-    public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): string
+    public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): ?string
     {
         $user = $this->getByEmail($email, $user);
 
@@ -254,6 +236,8 @@ class UserRepository implements UserRepositoryContract
             $config['expire']
         );
 
+        $token = null;
+
         if ($user != null) {
             $token = $tokens->createNewToken();
             Cache::put($token, $user->email, $config['expire']);
@@ -261,104 +245,5 @@ class UserRepository implements UserRepositoryContract
         }
 
         return $token;
-    }
-
-    /**
-     * @param $email
-     * @param User $user
-     * @return User|null
-     * @deprecated
-     */
-    public function getUserByEmail(string $email, User $user): ?User
-    {
-        return $this->getColumn($user)
-            ->where('email', $email)
-            ->first();
-    }
-
-    /**
-     * @param $request
-     * @param User $user
-     * @return User|null
-     * @deprecated
-     */
-    public function addUser(UserParam $request, User $user): ?User
-    {
-        try {
-            $user->name = $request->getName();
-            $user->email = $request->getEmail();
-            $user->status_id = $request->getStatusId();
-            $user->password = bcrypt($request->getPassword());
-            $user->save();
-            return $user;
-        } catch (QueryException $e) {
-            report($e);
-            return null;
-        }
-    }
-
-    /**
-     * @param User $user
-     * @param $search
-     * @return mixed
-     */
-    private function getUserQuery(User $user, string $search)
-    {
-        return $this->getColumn($user)
-            ->where(function ($query) use ($search) {
-                $query->where('users.name', 'LIKE', '%' . $search . '%')
-                    ->orWhere('email', $search);
-            });
-    }
-
-    /**
-     * @param UserSearchParam $userSearchParam
-     * @param User $user
-     * @return int|null
-     * @deprecated
-     */
-    public function getUserSearchCount(UserSearchParam $userSearchParam, User $user): ?int
-    {
-        return $this->getUserQuery($user, $userSearchParam->getQ())->count();
-    }
-
-    /**
-     * @param User $user
-     * @return int|null
-     * @deprecated
-     */
-    public function getCountAllUser(User $user): ?int
-    {
-        return $user->count();
-    }
-
-    /**
-     * @param UserSearchParam $userSearchParam
-     * @param User $user
-     * @param $paginate
-     * @return object|null
-     * @deprecated
-     */
-    public function getUserSearch(UserSearchParam $userSearchParam, User $user, $paginate = '12'): ?object
-    {
-        return $this->getUserQuery($user, $userSearchParam->getQ())->paginate($paginate);
-    }
-
-    /**
-     * @param string $email
-     * @param User $user
-     * @return bool
-     * @throws \Exception
-     * @deprecated
-     */
-    public function deleteUserByEmail(string $email, User $user): bool
-    {
-        $user = $this->getByEmail($email, $user);
-        try {
-            return $user->delete();
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return false;
-        }
     }
 }

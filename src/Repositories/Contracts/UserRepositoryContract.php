@@ -62,22 +62,6 @@ interface UserRepositoryContract
     public function getCount(User $user): int;
 
     /**
-     * @param string $q
-     * @param User $user
-     * @param int $length
-     * @return LengthAwarePaginator
-     */
-    public function getWhere(string $q, User $user, int $length = 12): LengthAwarePaginator;
-
-    /**
-     * @param string $q
-     * @param User $user
-     * @param int $length
-     * @return int
-     */
-    public function getWhereCount(string $q, User $user, int $length = 12): int;
-
-    /**
      * @param string $email
      * @param User $user
      * @return User|null
@@ -121,5 +105,5 @@ interface UserRepositoryContract
      * @param User $user
      * @return string
      */
-    public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): string;
+    public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): ?string;
 }

@@ -6,13 +6,13 @@
 
 namespace WebAppId\User\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
 use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\UserStatus;
-use WebAppId\User\Services\Params\UserStatusParam;
 
 
 /**
@@ -39,13 +39,15 @@ class UserStatusRepository implements UserStatusRepositoryContract
         }
     }
 
-    protected function getColumn($content)
+    protected function getColumn($content, string $q = null): Builder
     {
         return $content
             ->select
             (
                 'user_statuses.name'
-            );
+            )->when($q!=null, function($query) use ($q){
+                return $query->where('name', 'LIKE', '%' . $q . '%');
+            });
     }
 
     /**
@@ -90,85 +92,24 @@ class UserStatusRepository implements UserStatusRepositoryContract
     /**
      * @inheritDoc
      */
-    public function get(UserStatus $userStatus, int $length = 12): LengthAwarePaginator
+    public function get(UserStatus $userStatus, int $length = 12, string $q = null): LengthAwarePaginator
     {
-        return $this->getColumn($userStatus)->paginate($length);
+        return $this->getColumn($userStatus, $q)->paginate($length);
     }
 
     /**
      * @inheritDoc
      */
-    public function getCount(UserStatus $userStatus): int
+    public function getCount(UserStatus $userStatus, string $q = null): int
     {
-        return $userStatus->count();
+        return $this->getColumn($userStatus, $q)->count();
     }
-
+    
     /**
      * @inheritDoc
-     */
-    public function getWhere(string $q, UserStatus $userStatus, int $length = 12): LengthAwarePaginator
-    {
-        return $this->getColumn($userStatus)
-            ->where('name', 'LIKE', '%' . $q . '%')
-            ->paginate($length);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getWhereCount(string $q, UserStatus $userStatus, int $length = 12): int
-    {
-        return $userStatus
-            ->where('name', 'LIKE', '%' . $q . '%')
-            ->count();
-    }
-    
-    /**
-     * @param UserStatusParam $userStatusParam
-     * @param UserStatus $userStatus
-     * @return UserStatus|null
-     * @deprecated 
-     */
-    public function addUserStatus(UserStatusParam $userStatusParam, UserStatus $userStatus): ?UserStatus
-    {
-        try {
-            $userStatus->name = $userStatusParam->getName();
-            $userStatus->save();
-            return $userStatus;
-        } catch (QueryException $e) {
-            report($e);
-            return null;
-        }
-    }
-    
-    /**
-     * @param UserStatus $userStatus
-     * @return UserStatus[]|\Illuminate\Database\Eloquent\Collection
-     * @deprecated 
-     */
-    public function getAll(UserStatus $userStatus): ?object
-    {
-        return $userStatus->all();
-    }
-    
-    /**
-     * @param string $name
-     * @param UserStatus $userStatus
-     * @return UserStatus|null
      */
     public function getByName(string $name, UserStatus $userStatus): ?UserStatus
     {
         return $userStatus->where('name', $name)->first();
-    }
-    
-    /**
-     * @param int $id
-     * @param UserStatus $userStatus
-     * @return UserStatus|null
-     * @deprecated 
-     */
-    public function getStatusById(int $id, UserStatus $userStatus): ?UserStatus
-    {
-        return $userStatus->find($id);
     }
 }

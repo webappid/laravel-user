@@ -101,7 +101,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatus = $result;
-            $userStatusServiceResponseList->countAll = $this->container->call([$userStatusRepository, 'getCount']);
+            $userStatusServiceResponseList->count = $this->container->call([$userStatusRepository, 'getCount']);
         } else {
             $userStatusServiceResponseList->status = false;
             $userStatusServiceResponseList->message = 'Data Not Found';
@@ -128,8 +128,8 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatusList = $result;
-            $userStatusServiceResponseList->countAll = $this->container->call([$userStatusRepository, 'getCount']);
-            $userStatusServiceResponseList->countWhere = $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
+            $userStatusServiceResponseList->count = $this->container->call([$userStatusRepository, 'getCount']);
+            $userStatusServiceResponseList->countFiltered = $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
         } else {
             $userStatusServiceResponseList->status = false;
             $userStatusServiceResponseList->message = 'Data Not Found';
@@ -145,13 +145,4 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
         return $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
     }
 
-    /**
-     * @param UserStatusRepository $userStatusRepository
-     * @return mixed
-     * @deprecated
-     */
-    public function getAll(UserStatusRepository $userStatusRepository): ?object
-    {
-        return $this->container->call([$userStatusRepository, 'getAll']);
-    }
 }

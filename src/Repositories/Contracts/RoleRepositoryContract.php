@@ -50,31 +50,18 @@ interface RoleRepositoryContract
     /**
      * @param Role $role
      * @param int $length
+     * @param string|null $q
      * @return LengthAwarePaginator
      */
-    public function get(Role $role, int $length = 12): LengthAwarePaginator;
+    public function get(Role $role, int $length = 12, string $q = null): LengthAwarePaginator;
 
     /**
      * @param Role $role
+     * @param string|null $q
      * @return int
      */
-    public function getCount(Role $role): int;
+    public function getCount(Role $role, string $q = null): int;
 
-    /**
-     * @param string $q
-     * @param Role $role
-     * @param int $length
-     * @return LengthAwarePaginator
-     */
-    public function getWhere(string $q, Role $role, int $length = 12): LengthAwarePaginator;
-
-    /**
-     * @param string $q
-     * @param Role $role
-     * @param int $length
-     * @return int
-     */
-    public function getWhereCount(string $q, Role $role, int $length = 12): int;
 
     /**
      * @param string $name

@@ -11,11 +11,9 @@ use WebAppId\User\Services\Requests\RoleServiceRequest;
 use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use WebAppId\User\Services\Responses\RoleServiceResponse;
 use WebAppId\User\Services\Responses\RoleServiceResponseList;
-use Illuminate\Container\Container;
 use WebAppId\DDD\Services\BaseService;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\RoleRepository;
-use WebAppId\User\Response\GetRoleResponse;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -95,64 +93,32 @@ class RoleService extends BaseService implements RoleServiceContract
     /**
      * @inheritDoc
      */
-    public function get(RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList, int $length = 12): RoleServiceResponseList
+    public function get(RoleRepository $roleRepository,
+                        RoleServiceResponseList $roleServiceResponseList,
+                        int $length = 12,
+                        string $q = null): RoleServiceResponseList
     {
-        $result = $this->container->call([$roleRepository, 'get']);
+        $result = $this->container->call([$roleRepository, 'get'], ['q' => $q]);
 
-        if (count($result) > 0) {
-            $roleServiceResponseList->status = true;
-            $roleServiceResponseList->message = 'Data Found';
-            $roleServiceResponseList->role = $result;
-            $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
-        } else {
-            $roleServiceResponseList->status = false;
-            $roleServiceResponseList->message = 'Data Not Found';
-        }
-
-        return $roleServiceResponseList;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(RoleRepository $roleRepository): int
-    {
-        return $this->container->call([$roleRepository, 'getCount']);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getWhere(string $q, RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList, int $length = 12): RoleServiceResponseList
-    {
-        $result = $this->container->call([$roleRepository, 'getWhere'], ['q' => $q]);
         if (count($result) > 0) {
             $roleServiceResponseList->status = true;
             $roleServiceResponseList->message = 'Data Found';
             $roleServiceResponseList->roleList = $result;
-            $roleServiceResponseList->countAll = $this->container->call([$roleRepository, 'getCount']);
-            $roleServiceResponseList->countWhere = $this->container->call([$roleRepository, 'getWhereCount'], ['q' => $q]);
+            $roleServiceResponseList->count = $this->container->call([$roleRepository, 'getCount']);
+            $roleServiceResponseList->countFiltered = $this->container->call([$roleRepository, 'getCount'], ['q' => $q]);
         } else {
             $roleServiceResponseList->status = false;
             $roleServiceResponseList->message = 'Data Not Found';
         }
+
         return $roleServiceResponseList;
     }
 
     /**
      * @inheritDoc
      */
-    public function getWhereCount(string $q, RoleRepository $roleRepository): int
+    public function getCount(RoleRepository $roleRepository, string $q = null): int
     {
-        return $this->container->call([$roleRepository, 'getWhereCount'], ['q' => $q]);
-    }
-    /**
-     * @param RoleRepository $roleRepository
-     * @return object|null
-     * @deprecated
-     */
-    public function getAllRole(RoleRepository $roleRepository): ?object
-    {
-        return $this->container->call([$roleRepository, 'getAllRole']);
+        return $this->container->call([$roleRepository, 'getCount'], ['q' => $q]);
     }
 }

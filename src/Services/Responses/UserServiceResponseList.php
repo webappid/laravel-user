@@ -6,7 +6,7 @@
 namespace WebAppId\User\Services\Responses;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Responses\AbstractResponse;
+use WebAppId\DDD\Responses\AbstractResponseList;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -15,20 +15,10 @@ use WebAppId\DDD\Responses\AbstractResponse;
  * Class UserServiceResponseList
  * @package WebAppId\User\Services\Responses
  */
-class UserServiceResponseList extends AbstractResponse
+class UserServiceResponseList extends AbstractResponseList
 {
     /**
      * @var LengthAwarePaginator
      */
     public $userList;
-
-    /**
-     * @var int
-     */
-    public $countWhere;
-
-    /**
-     * @var int
-     */
-    public $countAll;
 }

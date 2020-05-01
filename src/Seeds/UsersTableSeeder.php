@@ -9,8 +9,6 @@ use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
-use WebAppId\User\Services\Params\UserParam;
-use WebAppId\User\Services\Params\UserRoleParam;
 
 class UsersTableSeeder extends Seeder
 {

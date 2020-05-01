@@ -43,7 +43,7 @@ class UserStatusServiceTest extends TestCase
         $contentServiceResponse = $this->testStore();
         $userStatusServiceRequest = $this->getDummy();
         $result = $this->container->call([$this->userStatusService, 'getById'], ['id' => $contentServiceResponse->userStatus->id, 'userStatusServiceRequest' => $userStatusServiceRequest]);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     private function getDummy(int $number = 0): UserStatusServiceRequest
@@ -62,7 +62,7 @@ class UserStatusServiceTest extends TestCase
     {
         $userStatusServiceRequest = $this->getDummy($number);
         $result = $this->container->call([$this->userStatusService, 'store'], ['userStatusServiceRequest' => $userStatusServiceRequest]);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
         return $result;
     }
 
@@ -72,7 +72,7 @@ class UserStatusServiceTest extends TestCase
             $this->testStore($i);
         }
         $result = $this->container->call([$this->userStatusService, 'get']);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     public function testUpdate()
@@ -97,8 +97,8 @@ class UserStatusServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->userStatusService, 'getWhere'], ['q' => $q]);
-        self::assertTrue($result->isStatus());
+        $result = $this->container->call([$this->userStatusService, 'get'], ['q' => $q]);
+        self::assertTrue($result->status);
     }
 
     public function testGetWhereCount()
@@ -108,47 +108,7 @@ class UserStatusServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->userStatusService, 'getWhereCount'], ['q' => $q]);
+        $result = $this->container->call([$this->userStatusService, 'getCount'], ['q' => $q]);
         self::assertGreaterThanOrEqual(1, $result);
     }
-
-    /**
-     * @return UserStatusService|mixed
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    private function userStatusService(){
-        return $this->getContainer()->make(UserStatusService::class);
-    }
-
-    /**
-     * @return mixed
-     * @deprecated
-     */
-    private function getUserStatusDummy(){
-        $userStatusRepositoryTest = new UserStatusRepositoryTest();
-        $userStatusRepositoryTest->setUp();
-        return $userStatusRepositoryTest->createDummy();
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testGetAll()
-    {
-        $userStatusDummy = $this->getUserStatusDummy();
-        if($userStatusDummy!=null) {
-            $result = $this->getContainer()->call([$this->userStatusService(), 'getAll']);
-            if($result==null){
-                self::assertTrue(false);
-            }else{
-                self::assertEquals($result[count($result)-1]->name, $userStatusDummy->name);
-            }
-
-        }else{
-            self::assertTrue(false);
-        }
-    }
-
 }

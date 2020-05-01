@@ -42,7 +42,7 @@ class PermissionServiceTest extends TestCase
         $contentServiceResponse = $this->testStore();
         $permissionServiceRequest = $this->getDummy();
         $result = $this->container->call([$this->permissionService, 'getById'], ['id' => $contentServiceResponse->permission->id, 'permissionServiceRequest' => $permissionServiceRequest]);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     private function getDummy(int $number = 0): PermissionServiceRequest
@@ -61,7 +61,7 @@ class PermissionServiceTest extends TestCase
     {
         $permissionServiceRequest = $this->getDummy($number);
         $result = $this->container->call([$this->permissionService, 'store'], ['permissionServiceRequest' => $permissionServiceRequest]);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
         return $result;
     }
 
@@ -71,7 +71,7 @@ class PermissionServiceTest extends TestCase
             $this->testStore($i);
         }
         $result = $this->container->call([$this->permissionService, 'get']);
-        self::assertTrue($result->isStatus());
+        self::assertTrue($result->status);
     }
 
     public function testUpdate()
@@ -96,8 +96,8 @@ class PermissionServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->permissionService, 'getWhere'], ['q' => $q]);
-        self::assertTrue($result->isStatus());
+        $result = $this->container->call([$this->permissionService, 'get'], ['q' => $q]);
+        self::assertTrue($result->status);
     }
 
     public function testGetWhereCount()
@@ -107,22 +107,7 @@ class PermissionServiceTest extends TestCase
         }
         $string = 'aiueo';
         $q = $string[$this->getFaker()->numberBetween(0, strlen($string) - 1)];
-        $result = $this->container->call([$this->permissionService, 'getWhereCount'], ['q' => $q]);
+        $result = $this->container->call([$this->permissionService, 'getCount'], ['q' => $q]);
         self::assertGreaterThanOrEqual(1, $result);
-    }
-
-    protected function permissionService()
-    {
-        return $this->getContainer()->make(PermissionService::class);
-    }
-
-    public function testGetAllPermission()
-    {
-        $result = $this->getContainer()->call([$this->permissionService(), 'getAllPermission']);
-        if ($result == null) {
-            self::assertTrue(false);
-        } else {
-            self::assertTrue(true);
-        }
     }
 }

@@ -9,22 +9,24 @@
 namespace WebAppId\User\Seeds;
 
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Seeder;
-use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\PermissionRepository;
 use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 use WebAppId\User\Repositories\RolePermissionRepository;
 use WebAppId\User\Repositories\RoleRepository;
-use WebAppId\User\Services\Params\PermissionParam;
-use WebAppId\User\Services\Params\RolePermissionParam;
 
 class RolePermissionTableSeeder extends Seeder
 {
     /**
      * Run the database seeds;
      *
+     * @param PermissionRepository $permissionRepository
+     * @param RoleRepository $roleRepository
+     * @param RolePermissionRepository $rolePermissionRepository
      * @return void
+     * @throws BindingResolutionException
      */
     public function run(PermissionRepository $permissionRepository, RoleRepository $roleRepository, RolePermissionRepository $rolePermissionRepository)
     {

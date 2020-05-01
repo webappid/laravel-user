@@ -50,29 +50,22 @@ interface UserStatusRepositoryContract
     /**
      * @param UserStatus $userStatus
      * @param int $length
+     * @param string|null $q
      * @return LengthAwarePaginator
      */
-    public function get(UserStatus $userStatus, int $length = 12): LengthAwarePaginator;
+    public function get(UserStatus $userStatus, int $length = 12, string $q = null): LengthAwarePaginator;
 
     /**
      * @param UserStatus $userStatus
+     * @param string|null $q
      * @return int
      */
-    public function getCount(UserStatus $userStatus): int;
+    public function getCount(UserStatus $userStatus, string $q = null): int;
 
     /**
-     * @param string $q
+     * @param string $name
      * @param UserStatus $userStatus
-     * @param int $length
-     * @return LengthAwarePaginator
+     * @return UserStatus|null
      */
-    public function getWhere(string $q, UserStatus $userStatus, int $length = 12): LengthAwarePaginator;
-
-    /**
-     * @param string $q
-     * @param UserStatus $userStatus
-     * @param int $length
-     * @return int
-     */
-    public function getWhereCount(string $q, UserStatus $userStatus, int $length = 12): int;
+    public function getByName(string $name, UserStatus $userStatus): ?UserStatus;
 }

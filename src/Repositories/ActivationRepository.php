@@ -10,15 +10,14 @@ namespace WebAppId\User\Repositories;
 
 use WebAppId\User\Models\Activation;
 use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
-use WebAppId\User\Repositories\Requests\ActivationRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Webpatser\Uuid\Uuid;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
- * Date: 18/04/20
- * Time: 22.21
+ * Date: 28/04/2020
+ * Time: 05.14
  * Class ActivationRepository
  * @package WebAppId\User\Repositories
  */

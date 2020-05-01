@@ -15,7 +15,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\UserRole;
 use WebAppId\User\Repositories\Contracts\UserRoleRepositoryContract;
-use WebAppId\User\Services\Params\UserRoleParam;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -117,42 +116,6 @@ class UserRoleRepository implements UserRoleRepositoryContract
      * @inheritDoc
      */
     public function deleteByUserId(int $user_id, UserRole $userRole): bool
-    {
-        try {
-            return $userRole->where('user_id', $user_id)->delete();
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return false;
-        }
-    }
-
-    /**
-     * @param UserRoleParam $request
-     * @param UserRole $userRole
-     * @return UserRole|null
-     * @deprecated
-     */
-    public function addUserRole(UserRoleParam $request,
-                                UserRole $userRole): ?UserRole
-    {
-        try {
-            $userRole->user_id = $request->getUserId();
-            $userRole->role_id = $request->getRoleId();
-            $userRole->save();
-            return $userRole;
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return null;
-        }
-    }
-
-    /**
-     * @param int $user_id
-     * @param UserRole $userRole
-     * @return bool
-     * @deprecated
-     */
-    public function deleteUserRoleByUserId(int $user_id, UserRole $userRole): bool
     {
         try {
             return $userRole->where('user_id', $user_id)->delete();

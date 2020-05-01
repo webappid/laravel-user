@@ -5,31 +5,25 @@
 
 namespace WebAppId\User\Services;
 
-use Illuminate\Container\Container;
 use Illuminate\Support\Facades\DB;
+use WebAppId\DDD\Services\BaseService;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\UserRepository;
-use WebAppId\User\Response\ActivateResponse;
+use WebAppId\User\Services\Contracts\ActivationServiceContract;
+use WebAppId\User\Services\Responses\ActivateResponse;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 27/04/20
+ * Time: 11.44
  * Class ActivationService
  * @package WebAppId\User\Services
  */
-class ActivationService
+class ActivationService extends BaseService implements ActivationServiceContract
 {
-    private $container;
-
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
 
     /**
-     * @param string $activationKey
-     * @param ActivationRepository $activationRepository
-     * @param UserRepository $userRepository
-     * @param ActivateResponse $activateResponse
-     * @return ActivateResponse
+     * @inheritDoc
      */
     public function activate(string $activationKey,
                              ActivationRepository $activationRepository,

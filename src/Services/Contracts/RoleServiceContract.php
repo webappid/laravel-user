@@ -27,7 +27,10 @@ interface RoleServiceContract
      * @param RoleServiceResponse $roleServiceResponse
      * @return RoleServiceResponse
      */
-    public function store(RoleServiceRequest $roleServiceRequest, RoleRepositoryRequest $roleRepositoryRequest, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
+    public function store(RoleServiceRequest $roleServiceRequest,
+                          RoleRepositoryRequest $roleRepositoryRequest,
+                          RoleRepository $roleRepository,
+                          RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
 
     /**
      * @param int $id
@@ -37,7 +40,10 @@ interface RoleServiceContract
      * @param RoleServiceResponse $roleServiceResponse
      * @return RoleServiceResponse
      */
-    public function update(int $id, RoleServiceRequest $roleServiceRequest, RoleRepositoryRequest $roleRepositoryRequest, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
+    public function update(int $id, RoleServiceRequest $roleServiceRequest,
+                           RoleRepositoryRequest $roleRepositoryRequest,
+                           RoleRepository $roleRepository,
+                           RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
 
     /**
      * @param int $id
@@ -45,7 +51,9 @@ interface RoleServiceContract
      * @param RoleServiceResponse $roleServiceResponse
      * @return RoleServiceResponse
      */
-    public function getById(int $id, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
+    public function getById(int $id,
+                            RoleRepository $roleRepository,
+                            RoleServiceResponse $roleServiceResponse): RoleServiceResponse;
 
     /**
      * @param int $id
@@ -56,31 +64,21 @@ interface RoleServiceContract
 
     /**
      * @param RoleRepository $roleRepository
-     * @param int $length
-     * @param RoleServiceResponseList $roleServiceResponseList
-     * @return RoleServiceResponseList
-     */
-    public function get(RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList,int $length = 12): RoleServiceResponseList;
-
-    /**
-     * @param RoleRepository $roleRepository
-     * @return int
-     */
-    public function getCount(RoleRepository $roleRepository):int;
-
-    /**
-     * @param string $q
-     * @param RoleRepository $roleRepository
      * @param RoleServiceResponseList $roleServiceResponseList
      * @param int $length
+     * @param string|null $q
      * @return RoleServiceResponseList
      */
-    public function getWhere(string $q, RoleRepository $roleRepository, RoleServiceResponseList $roleServiceResponseList,int $length = 12): RoleServiceResponseList;
+    public function get(RoleRepository $roleRepository,
+                        RoleServiceResponseList $roleServiceResponseList,
+                        int $length = 12,
+                        string $q = null): RoleServiceResponseList;
 
     /**
-     * @param string $q
      * @param RoleRepository $roleRepository
+     * @param string|null $q
      * @return int
      */
-    public function getWhereCount(string $q, RoleRepository $roleRepository):int;
+    public function getCount(RoleRepository $roleRepository,
+                             string $q = null): int;
 }

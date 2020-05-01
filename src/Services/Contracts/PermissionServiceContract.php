@@ -67,20 +67,4 @@ interface PermissionServiceContract
      * @return int
      */
     public function getCount(PermissionRepository $permissionRepository):int;
-
-    /**
-     * @param string $q
-     * @param PermissionRepository $permissionRepository
-     * @param PermissionServiceResponseList $permissionServiceResponseList
-     * @param int $length
-     * @return PermissionServiceResponseList
-     */
-    public function getWhere(string $q, PermissionRepository $permissionRepository, PermissionServiceResponseList $permissionServiceResponseList,int $length = 12): PermissionServiceResponseList;
-
-    /**
-     * @param string $q
-     * @param PermissionRepository $permissionRepository
-     * @return int
-     */
-    public function getWhereCount(string $q, PermissionRepository $permissionRepository):int;
 }

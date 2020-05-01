@@ -6,6 +6,7 @@ use Faker\Factory as Faker;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use WebAppId\User\ServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -47,7 +48,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            \WebAppId\User\ServiceProvider::class
+            ServiceProvider::class
         ];
     }
 
@@ -55,14 +56,6 @@ abstract class TestCase extends BaseTestCase
     {
         Artisan::call('migrate:reset');
         parent::tearDown();
-    }
-
-    protected function getContainer()
-    {
-        if ($this->container == null) {
-            $this->container = new Container();
-        }
-        return $this->container;
     }
 
     protected function getEnvironmentSetUp($app)

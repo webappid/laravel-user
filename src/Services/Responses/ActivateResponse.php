@@ -6,8 +6,10 @@
  * Time: 22:20
  */
 
-namespace WebAppId\User\Response;
+namespace WebAppId\User\Services\Responses;
 
+
+use WebAppId\DDD\Responses\AbstractResponse;
 
 class ActivateResponse extends AbstractResponse
 {

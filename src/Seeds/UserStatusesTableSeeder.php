@@ -2,17 +2,19 @@
 
 namespace WebAppId\User\Seeds;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Seeder;
 use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use WebAppId\User\Repositories\UserStatusRepository;
-use WebAppId\User\Services\Params\UserStatusParam;
 
 class UserStatusesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
+     * @param UserStatusRepository $userStatusRepository
      * @return void
+     * @throws BindingResolutionException
      */
     public function run(UserStatusRepository $userStatusRepository)
     {

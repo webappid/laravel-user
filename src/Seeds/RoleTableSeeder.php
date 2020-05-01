@@ -5,7 +5,6 @@ namespace WebAppId\User\Seeds;
 use Illuminate\Database\Seeder;
 use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use WebAppId\User\Repositories\RoleRepository;
-use WebAppId\User\Services\Params\RoleParam;
 
 class RoleTableSeeder extends Seeder
 {

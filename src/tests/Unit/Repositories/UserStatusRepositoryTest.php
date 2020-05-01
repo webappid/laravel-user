@@ -9,7 +9,6 @@ use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\UserStatus;
 use WebAppId\User\Repositories\UserStatusRepository;
-use WebAppId\User\Services\Params\UserStatusParam;
 use WebAppId\User\Tests\TestCase;
 
 /**
@@ -88,96 +87,4 @@ class UserStatusRepositoryTest extends TestCase
         $result = $this->container->call([$this->userStatusRepository, 'update'], ['id' => $userStatus->id, 'userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
         self::assertNotEquals(null, $result);
     }
-
-    /**
-     * @return UserStatusRepository
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    protected function userStatusRepository(): UserStatusRepository
-    {
-        return $this->getContainer()->make(UserStatusRepository::class);
-    }
-
-    /**
-     * @return UserStatusParam
-     * @deprecated
-     */
-    public function getUserStatusDummy(): UserStatusParam
-    {
-        $objUserStatus = new UserStatusParam();
-        $objUserStatus->setName($this->getFaker()->name);
-        return $objUserStatus;
-    }
-
-    /**
-     * @return UserStatus
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function createDummy(): UserStatus
-    {
-        return $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $this->getUserStatusDummy()]);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testAddUserStatus()
-    {
-        $result = $this->createDummy();
-        self::assertNotEquals(null, $result);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testGetAllUserStatus(): void
-    {
-        $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
-
-        if ($result != null) {
-            $result = $this->getContainer()->call([$this->userStatusRepository(), 'getAll']);
-
-            if (count($result) == 0) {
-                $this->assertTrue(false);
-            } else {
-                $this->assertEquals($dummy->getName(), $result[count($result) - 1]->name);
-            }
-        } else {
-            $this->assertTrue(false);
-        }
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testGetUserStatusByName(): void
-    {
-        $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
-        if ($result != null) {
-            $result = $this->getContainer()->call([$this->userStatusRepository(), 'getByName'], ['name' => $dummy->getName()]);
-            self::assertNotEquals(null, $result);
-        }
-    }
-
-    /**
-     * @throws BindingResolutionException
-     * @deprecated
-     */
-    public function testUserStatusById(): void
-    {
-        $dummy = $this->getUserStatusDummy();
-        $result = $this->getContainer()->call([$this->userStatusRepository(), 'addUserStatus'], ['userStatusParam' => $dummy]);
-        if ($result != null) {
-            $result = $this->getContainer()->call([$this->userStatusRepository(), 'getStatusById'], ['id' => $result->id]);
-            self::assertNotEquals(null, $result);
-        }
-    }
-
 }

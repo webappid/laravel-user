@@ -50,31 +50,17 @@ interface PermissionRepositoryContract
     /**
      * @param Permission $permission
      * @param int $length
+     * @param string|null $q
      * @return LengthAwarePaginator
      */
-    public function get(Permission $permission, int $length = 12): LengthAwarePaginator;
+    public function get(Permission $permission, int $length = 12, string $q = null): LengthAwarePaginator;
 
     /**
      * @param Permission $permission
+     * @param string|null $q
      * @return int
      */
-    public function getCount(Permission $permission): int;
-
-    /**
-     * @param string $q
-     * @param Permission $permission
-     * @param int $length
-     * @return LengthAwarePaginator
-     */
-    public function getWhere(string $q, Permission $permission, int $length = 12): LengthAwarePaginator;
-
-    /**
-     * @param string $q
-     * @param Permission $permission
-     * @param int $length
-     * @return int
-     */
-    public function getWhereCount(string $q, Permission $permission, int $length = 12): int;
+    public function getCount(Permission $permission, string $q = null): int;
 
     /**
      * @param string $name

@@ -1,7 +1,9 @@
 <?php
 
 
-namespace WebAppId\User\Response;
+namespace WebAppId\User\Services\Responses;
+
+use WebAppId\DDD\Responses\AbstractResponse;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

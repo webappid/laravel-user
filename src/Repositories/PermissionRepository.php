@@ -8,17 +8,20 @@
 
 namespace WebAppId\User\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\Contracts\PermissionRepositoryContract;
-use WebAppId\User\Services\Params\PermissionParam;
 use WebAppId\User\Models\Permission;
 use Illuminate\Database\QueryException;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 28/04/2020
+ * Time: 22.39
  * Class PermissionRepository
- * @package WebAppId\User\Http\Repositories
+ * @package WebAppId\User\Repositories
  */
 class PermissionRepository implements PermissionRepositoryContract
 {
@@ -37,7 +40,7 @@ class PermissionRepository implements PermissionRepositoryContract
         }
     }
 
-    protected function getColumn($content)
+    protected function getColumn($content, string $q = null): Builder
     {
         return $content
             ->select
@@ -55,7 +58,10 @@ class PermissionRepository implements PermissionRepositoryContract
                 'updated_users.name AS updated_name'
             )
             ->join('users as users', 'permissions.created_by', 'users.id')
-            ->join('users as updated_users', 'permissions.updated_by', 'updated_users.id');
+            ->join('users as updated_users', 'permissions.updated_by', 'updated_users.id')
+            ->when($q != null, function ($query) use ($q) {
+                return $query->where('permissions.name', 'LIKE', '%' . $q . '%');
+            });
     }
 
     /**
@@ -64,12 +70,12 @@ class PermissionRepository implements PermissionRepositoryContract
     public function update(int $id, PermissionRepositoryRequest $permissionRepositoryRequest, Permission $permission): ?Permission
     {
         $permission = $this->getById($id, $permission);
-        if($permission!=null){
+        if ($permission != null) {
             try {
                 $permission = Lazy::copy($permissionRepositoryRequest, $permission);
                 $permission->save();
                 return $permission;
-            }catch (QueryException $queryException){
+            } catch (QueryException $queryException) {
                 report($queryException);
             }
         }
@@ -90,9 +96,9 @@ class PermissionRepository implements PermissionRepositoryContract
     public function delete(int $id, Permission $permission): bool
     {
         $permission = $this->getById($id, $permission);
-        if($permission!=null){
+        if ($permission != null) {
             return $permission->delete();
-        }else{
+        } else {
             return false;
         }
     }
@@ -100,37 +106,19 @@ class PermissionRepository implements PermissionRepositoryContract
     /**
      * @inheritDoc
      */
-    public function get(Permission $permission, int $length = 12): LengthAwarePaginator
+    public function get(Permission $permission, int $length = 12, string $q = null): LengthAwarePaginator
     {
-        return $this->getColumn($permission)->paginate($length);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(Permission $permission): int
-    {
-        return $permission->count();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getWhere(string $q, Permission $permission, int $length = 12): LengthAwarePaginator
-    {
-        return $this->getColumn($permission)
-            ->where('permissions.name', 'LIKE', '%' . $q . '%')
+        return $this
+            ->getColumn($permission, $q)
             ->paginate($length);
     }
 
     /**
      * @inheritDoc
      */
-    public function getWhereCount(string $q, Permission $permission, int $length = 12): int
+    public function getCount(Permission $permission, string $q = null): int
     {
-        return $permission
-            ->where('name', 'LIKE', '%' . $q . '%')
-            ->count();
+        return $this->getColumn($permission, $q)->count();
     }
 
     /**
@@ -139,93 +127,5 @@ class PermissionRepository implements PermissionRepositoryContract
     public function getByName(string $name, Permission $permission): ?Permission
     {
         return $permission->where('name', $name)->first();
-    }
-
-    /**
-     * @param PermissionParam $permissionParam
-     * @param Permission $permission
-     * @return Permission|null
-     * @deprecated
-     */
-    public function add(PermissionParam $permissionParam, Permission $permission): ?Permission
-    {
-        try {
-            $permission->name = $permissionParam->getName();
-            $permission->description = $permissionParam->getDescription();
-            $permission->save();
-            return $permission;
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return null;
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param PermissionParam $permissionParam
-     * @param Permission $permission
-     * @return Permission|null
-     * @deprecated
-     */
-    public function updateData(int $id, PermissionParam $permissionParam, Permission $permission): ?Permission
-    {
-        $result = $this->getById($id, $permission);
-        if ($result != null) {
-            try {
-                $result->name = $permissionParam->getName();
-                $result->description = $permissionParam->getDescription();
-                $result->save();
-                return $result;
-            } catch (QueryException $e){
-                report($e);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param Permission $permission
-     * @return bool
-     * @throws \Exception
-     * @deprecated
-     */
-    public function deleteData(int $id, Permission $permission): bool
-    {
-        $result = $this->getById($id, $permission);
-        if ($result != null) {
-            try {
-                $result->delete();
-                return true;
-            } catch (QueryException $e) {
-                report($e);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param Permission $permission
-     * @return Permission|null
-     * @deprecated
-     */
-    public function getDataById(int $id, Permission $permission): ?Permission
-    {
-        return $permission->find($id);
-    }
-
-    /**
-     * @param Permission $permission
-     * @return object|null
-     * @deprecated
-     */
-    public function getAll(Permission $permission): ?object
-    {
-        return $permission->get();
     }
 }

@@ -9,13 +9,15 @@ use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use WebAppId\User\Services\Requests\PermissionServiceRequest;
 use WebAppId\User\Services\Responses\PermissionServiceResponse;
 use WebAppId\User\Services\Responses\PermissionServiceResponseList;
-use Illuminate\Container\Container;
 use WebAppId\DDD\Services\BaseService;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\PermissionRepository;
 use WebAppId\User\Services\Contracts\PermissionServiceContract;
 
 /**
+ * @author: Dyan Galih<dyan.galih@gmail.com>
+ * Date: 28/04/2020
+ * Time: 23.39
  * Class PermissionService
  * @package WebAppId\User\Services
  */
@@ -90,60 +92,32 @@ class PermissionService extends BaseService implements PermissionServiceContract
     /**
      * @inheritDoc
      */
-    public function get(PermissionRepository $permissionRepository, PermissionServiceResponseList $permissionServiceResponseList, int $length = 12): PermissionServiceResponseList
+    public function get(PermissionRepository $permissionRepository,
+                        PermissionServiceResponseList $permissionServiceResponseList,
+                        int $length = 12,
+                        string $q = null): PermissionServiceResponseList
     {
-        $result = $this->container->call([$permissionRepository, 'get']);
+        $result = $this->container->call([$permissionRepository, 'get'], ['q' => $q]);
 
-        if (count($result) > 0) {
-            $permissionServiceResponseList->status = true;
-            $permissionServiceResponseList->message = 'Data Found';
-            $permissionServiceResponseList->permission = $result;
-            $permissionServiceResponseList->countAll = $this->container->call([$permissionRepository, 'getCount']);
-        } else {
-            $permissionServiceResponseList->status = false;
-            $permissionServiceResponseList->message = 'Data Not Found';
-        }
-
-        return $permissionServiceResponseList;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(PermissionRepository $permissionRepository): int
-    {
-        return $this->container->call([$permissionRepository, 'getCount']);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getWhere(string $q, PermissionRepository $permissionRepository, PermissionServiceResponseList $permissionServiceResponseList, int $length = 12): PermissionServiceResponseList
-    {
-        $result = $this->container->call([$permissionRepository, 'getWhere'], ['q' => $q]);
         if (count($result) > 0) {
             $permissionServiceResponseList->status = true;
             $permissionServiceResponseList->message = 'Data Found';
             $permissionServiceResponseList->permissionList = $result;
-            $permissionServiceResponseList->countAll = $this->container->call([$permissionRepository, 'getCount']);
-            $permissionServiceResponseList->countWhere = $this->container->call([$permissionRepository, 'getWhereCount'], ['q' => $q]);
+            $permissionServiceResponseList->count = $this->container->call([$permissionRepository, 'getCount']);
+            $permissionServiceResponseList->countFiltered = $this->container->call([$permissionRepository, 'getCount'], ['q' => $q]);
         } else {
             $permissionServiceResponseList->status = false;
             $permissionServiceResponseList->message = 'Data Not Found';
         }
+
         return $permissionServiceResponseList;
     }
 
     /**
      * @inheritDoc
      */
-    public function getWhereCount(string $q, PermissionRepository $permissionRepository): int
+    public function getCount(PermissionRepository $permissionRepository, string $q = null): int
     {
-        return $this->container->call([$permissionRepository, 'getWhereCount'], ['q' => $q]);
-    }
-
-    public function getAllPermission(PermissionRepository $permissionRepository): ?object
-    {
-        return $this->container->call([$permissionRepository, 'getAll']);
+        return $this->container->call([$permissionRepository, 'getCount'], ['q' => $q]);
     }
 }

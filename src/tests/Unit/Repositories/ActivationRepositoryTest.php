@@ -81,12 +81,12 @@ class ActivationRepositoryTest extends TestCase
         $result = $this->testStore();
         if ($result != null) {
             self::assertTrue(true);
-            $resultActivate = $this->getContainer()->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
+            $resultActivate = $this->container->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
             if ($resultActivate == null) {
                 self::assertTrue(false);
             } else {
                 self::assertTrue(true);
-                $resultActivate = $this->getContainer()->call([$this->activationRepository, 'getByKey'], ['key' => $result->key]);
+                $resultActivate = $this->container->call([$this->activationRepository, 'getByKey'], ['key' => $result->key]);
                 self::assertEquals($resultActivate->status, 'used');
                 self::assertEquals($resultActivate->isValid, 'valid');
             }
@@ -98,12 +98,12 @@ class ActivationRepositoryTest extends TestCase
         $result = $this->testStore();
         if ($result != null) {
             self::assertTrue(true);
-            $resultActivate = $this->getContainer()->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
+            $resultActivate = $this->container->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
             if ($resultActivate == null) {
                 self::assertTrue(false);
             } else {
                 self::assertTrue(true);
-                $resultActivate = $this->getContainer()->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
+                $resultActivate = $this->container->call([$this->activationRepository, 'setActivate'], ['key' => $result->key]);
                 self::assertEquals($resultActivate->status, 'already used');
             }
         }
