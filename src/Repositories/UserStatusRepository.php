@@ -44,7 +44,7 @@ class UserStatusRepository implements UserStatusRepositoryContract
         return $content
             ->select
             (
-                'user_statuses.name',
+                'user_statuses.id',
                 'user_statuses.name'
             )->when($q!=null, function($query) use ($q){
                 return $query->where('name', 'LIKE', '%' . $q . '%');
