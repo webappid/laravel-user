@@ -3,20 +3,20 @@
  * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
-namespace WebAppId\User\Tests\Unit\Repositories;
+namespace WebAppId\Tests\Unit\Repositories;
 
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 use WebAppId\User\Repositories\RolePermissionRepository;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WebAppId\User\Tests\TestCase;
+use WebAppId\Tests\TestCase;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 19/04/20
  * Time: 11.18
  * Class RolePermissionRepositoryTest
- * @package WebAppId\User\Tests\Unit\Repositories
+ * @package WebAppId\Tests\Unit\Repositories
  */
 class RolePermissionRepositoryTest extends TestCase
 {

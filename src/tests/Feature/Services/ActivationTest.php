@@ -3,13 +3,13 @@
  * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
-namespace WebAppId\User\Tests\Feature\Services;
+namespace WebAppId\Tests\Feature\Services;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Services\ActivationService;
 use WebAppId\User\Services\UserService;
-use WebAppId\User\Tests\TestCase;
+use WebAppId\Tests\TestCase;
 
 
 class ActivationTest extends TestCase

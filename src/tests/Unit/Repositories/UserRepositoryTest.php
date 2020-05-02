@@ -4,7 +4,7 @@
  */
 
 
-namespace WebAppId\User\Tests\Unit\Repositories;
+namespace WebAppId\Tests\Unit\Repositories;
 
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -15,14 +15,14 @@ use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
-use WebAppId\User\Tests\TestCase;
+use WebAppId\Tests\TestCase;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 19/04/20
  * Time: 04.05
  * Class UserRepositoryTest
- * @package WebAppId\User\Tests\Unit\Repositories
+ * @package WebAppId\Tests\Unit\Repositories
  */
 class UserRepositoryTest extends TestCase
 {
