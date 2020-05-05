@@ -11,12 +11,12 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "WebAppId\\User\\": "src"
+      "WebAppId\\User\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "WebAppId\\User\\Tests\\": "tests"
+      "WebAppId\\User\\Tests\\": "tests/"
     }
   },
   "require": {
