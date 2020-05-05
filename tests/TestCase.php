@@ -1,6 +1,6 @@
 <?php
 
-namespace WebAppId\Tests;
+namespace WebAppId\User\Tests;
 
 use Faker\Factory as Faker;
 use Illuminate\Container\Container;
@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->loadMigrationsFrom([
-            '--realpath' => realpath(__DIR__ . '/../src/migrations'),
+            '--realpath' => realpath(__DIR__ . './src/migrations'),
         ]);
         $this->artisan('webappid:user:seed');
 

@@ -106,4 +106,11 @@ interface UserRepositoryContract
      * @return string
      */
     public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): ?string;
+
+    /**
+     * @param int $userId
+     * @param User $user
+     * @return mixed
+     */
+    public function updateRememberToken(int $userId, User $user): User;
 }

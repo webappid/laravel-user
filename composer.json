@@ -16,7 +16,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "WebAppId\\Tests\\": "src/tests"
+      "WebAppId\\User\\Tests\\": "tests"
     }
   },
   "require": {

@@ -6,14 +6,14 @@
  * Time: 13:17
  */
 
-namespace WebAppId\Tests\Feature\Services;
+namespace WebAppId\User\Tests\Feature\Services;
 
 use WebAppId\User\Services\Requests\RoleServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WebAppId\Tests\Unit\Repositories\RoleRepositoryTest;
+use WebAppId\User\Tests\Unit\Repositories\RoleRepositoryTest;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Services\RoleService;
-use WebAppId\Tests\TestCase;
+use WebAppId\User\Tests\TestCase;
 
 class RoleServiceTest extends TestCase
 {

@@ -3,15 +3,15 @@
  * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
-namespace WebAppId\Tests\Feature\Services;
+namespace WebAppId\User\Tests\Feature\Services;
 
 
 use WebAppId\User\Services\Requests\PermissionServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Services\PermissionService;
-use WebAppId\Tests\TestCase;
-use WebAppId\Tests\Unit\Repositories\PermissionRepositoryTest;
+use WebAppId\User\Tests\TestCase;
+use WebAppId\User\Tests\Unit\Repositories\PermissionRepositoryTest;
 
 class PermissionServiceTest extends TestCase
 {

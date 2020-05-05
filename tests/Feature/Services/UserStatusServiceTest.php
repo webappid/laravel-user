@@ -4,15 +4,15 @@
  */
 
 
-namespace WebAppId\Tests\Feature\Services;
+namespace WebAppId\User\Tests\Feature\Services;
 
 
 use WebAppId\User\Services\Requests\UserStatusServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Services\UserStatusService;
-use WebAppId\Tests\TestCase;
-use WebAppId\Tests\Unit\Repositories\UserStatusRepositoryTest;
+use WebAppId\User\Tests\TestCase;
+use WebAppId\User\Tests\Unit\Repositories\UserStatusRepositoryTest;
 
 class UserStatusServiceTest extends TestCase
 {

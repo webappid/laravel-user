@@ -11,7 +11,6 @@ use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
-use WebAppId\User\Services\Params\ChangePasswordParam;
 use WebAppId\User\Services\Requests\ChangePasswordRequest;
 use WebAppId\User\Services\Requests\UserServiceRequest;
 use WebAppId\User\Services\Responses\ChangePasswordResponse;
@@ -181,4 +180,12 @@ interface UserServiceContract
                                    UserRepository $userRepository,
                                    ChangePasswordResponse $changePasswordResponse,
                                    $force = false): ChangePasswordResponse;
+
+    /**
+     * @param int $userId
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return mixed
+     */
+    public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse;
 }

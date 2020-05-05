@@ -3,21 +3,21 @@
  * Created by LazyCrud - @DyanGalih <dyan.galih@gmail.com>
  */
 
-namespace WebAppId\Tests\Unit\Repositories;
+namespace WebAppId\User\Tests\Unit\Repositories;
 
 
 use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\Role;
 use WebAppId\User\Repositories\RoleRepository;
-use WebAppId\Tests\TestCase;
+use WebAppId\User\Tests\TestCase;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 19/04/20
  * Time: 10.40
  * Class RoleRepositoryTest
- * @package WebAppId\Tests\Unit\Repositories
+ * @package WebAppId\User\Tests\Unit\Repositories
  */
 class RoleRepositoryTest extends TestCase
 {

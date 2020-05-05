@@ -246,4 +246,22 @@ class UserRepository implements UserRepositoryContract
 
         return $token;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateRememberToken(int $userId, User $user): User
+    {
+        $token = Str::random(80);
+        $user = $user->find($userId);
+        if ($user != null) {
+            try {
+                $user->api_token = $token;
+                $user->save();
+            } catch (QueryException $queryException) {
+                report($queryException);
+            }
+        }
+        return $user;
+    }
 }

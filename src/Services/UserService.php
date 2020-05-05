@@ -371,4 +371,28 @@ class UserService extends BaseService implements UserServiceContract
         }
         return $userServiceResponse;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
+    {
+        $result = $this->container->call([$userRepository,'updateRememberToken'], compact('userId'));
+        if($result!=null){
+            unset($result->id);
+            unset($result->updated_at);
+            unset($result->created_at);
+            unset($result->email_verified_at);
+            unset($result->remember_token);
+            unset($result->password);
+            unset($result->status_id);
+            $userServiceResponse->status = true;
+            $userServiceResponse->user = $result;
+            $userServiceResponse->message = 'Update Token Success';
+        }else{
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = 'Update Token Failed';
+        }
+        return $userServiceResponse;
+    }
 }
