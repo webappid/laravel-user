@@ -6,13 +6,12 @@ use Faker\Factory as Faker;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use WebAppId\User\Models\User;
 use WebAppId\User\ServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
     private $faker;
-
-    protected $prefix_route = "/test";
 
     protected $container;
 
@@ -60,6 +59,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('auth.providers.users.model', User::class );
+        $app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver' => 'sqlite',

@@ -8,11 +8,11 @@
 
 namespace WebAppId\User\Repositories;
 
+use Ramsey\Uuid\Uuid;
 use WebAppId\User\Models\Activation;
 use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
-use Webpatser\Uuid\Uuid;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -31,7 +31,7 @@ class ActivationRepository implements ActivationRepositoryContract
         try {
             $activation->status = 'unused';
             $activation->user_id = $userId;
-            $activation->key = Uuid::generate(4)->string;
+            $activation->key = Uuid::uuid4()->toString();
             $activation->valid_until = Carbon::now('UTC')->addHour(8)->toDateTimeString();
             $activation->save();
             return $activation;
