@@ -8,7 +8,6 @@ namespace WebAppId\User\Tests\Unit\Repositories;
 
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WebAppId\User\Models\Activation;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\RoleRepository;
@@ -78,13 +77,12 @@ class UserRepositoryTest extends TestCase
         try {
             $dummy = $this->container->make(UserRepositoryRequest::class);
             $userStatus = $this->container->call([$this->userStatusRepositoryTest, 'testStore']);
-            $dummy->name = $this->getFaker()->text(255);
-            $dummy->email = $this->getFaker()->text(255);
-            $dummy->email_verified_at = $this->getFaker()->dateTime();
-            $dummy->password = $this->getFaker()->text(255);
-            $dummy->remember_token = $this->getFaker()->text(100);
+            $dummy->name = $this->getFaker()->name;
+            $dummy->email = $this->getFaker()->email;
+            $dummy->email_verified_at = $this->getFaker()->date('Y-m-d H:i:s');
+            $dummy->password = $this->getFaker()->password;
+            $dummy->remember_token = $this->getFaker()->uuid;
             $dummy->status_id = $userStatus->id;
-
         } catch (BindingResolutionException $e) {
             report($e);
         }
