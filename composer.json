@@ -24,7 +24,7 @@
     "laravel/ui": "^2.0",
     "illuminate/support": "^6.0|^7.0",
     "doctrine/dbal": "^2.5",
-    "webappid/laravel-ddd": "^1.0",
+    "webappid/laravel-ddd": "^1.6.5",
     "nesbot/carbon": "^2.0"
   },
   "require-dev": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5738237f8055e44d5332da84f260c22",
+    "content-hash": "5df6e9b6b1bccb32d0f7452b2c31d37a",
     "packages": [
         {
             "name": "brick/math",
@@ -154,12 +154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "acf84c3dfaa29e158f3c8e8a3b513c5fb210ff1e"
+                "reference": "ecff8519e7f1446c9921e4e9704a3875c9afa883"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/acf84c3dfaa29e158f3c8e8a3b513c5fb210ff1e",
-                "reference": "acf84c3dfaa29e158f3c8e8a3b513c5fb210ff1e",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/ecff8519e7f1446c9921e4e9704a3875c9afa883",
+                "reference": "ecff8519e7f1446c9921e4e9704a3875c9afa883",
                 "shasum": ""
             },
             "require": {
@@ -169,13 +169,12 @@
                 "php": "^7.2"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^7.0",
+                "doctrine/coding-standard": "^8.0",
                 "jetbrains/phpstorm-stubs": "^2019.1",
                 "nikic/php-parser": "^4.4",
                 "phpstan/phpstan": "^0.12",
                 "phpunit/phpunit": "^8.5.5",
                 "psalm/plugin-phpunit": "^0.10.0",
-                "slevomat/coding-standard": "^6.3.6",
                 "symfony/console": "^2.0.5|^3.0|^4.0|^5.0",
                 "vimeo/psalm": "^3.11.4"
             },
@@ -256,7 +255,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-30T14:44:51+00:00"
+            "time": "2020-06-06T17:20:16+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -680,12 +679,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c3b06bcb0e80670b1877afca4e4044e45856f705"
+                "reference": "6dee0732994fd1c03762f6f18dc02a630489fd43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c3b06bcb0e80670b1877afca4e4044e45856f705",
-                "reference": "c3b06bcb0e80670b1877afca4e4044e45856f705",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/6dee0732994fd1c03762f6f18dc02a630489fd43",
+                "reference": "6dee0732994fd1c03762f6f18dc02a630489fd43",
                 "shasum": ""
             },
             "require": {
@@ -828,7 +827,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-06-04T14:22:40+00:00"
+            "time": "2020-06-05T13:57:49+00:00"
         },
         {
             "name": "laravel/ui",
@@ -1167,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "4b9bd835261ef23d36397a46a76b496a458305e5"
+                "reference": "53d4edb3413ed11145687666d805e18398ca29d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4b9bd835261ef23d36397a46a76b496a458305e5",
-                "reference": "4b9bd835261ef23d36397a46a76b496a458305e5",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/53d4edb3413ed11145687666d805e18398ca29d3",
+                "reference": "53d4edb3413ed11145687666d805e18398ca29d3",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1241,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-24T18:27:52+00:00"
+            "time": "2020-06-04T21:20:18+00:00"
         },
         {
             "name": "opis/closure",
@@ -2496,12 +2495,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "668290ce5067e7ce76940fc429a2ef2506c52fe7"
+                "reference": "91176c9528590ff34191d727986e48d028b04b99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/668290ce5067e7ce76940fc429a2ef2506c52fe7",
-                "reference": "668290ce5067e7ce76940fc429a2ef2506c52fe7",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/91176c9528590ff34191d727986e48d028b04b99",
+                "reference": "91176c9528590ff34191d727986e48d028b04b99",
                 "shasum": ""
             },
             "require": {
@@ -2565,7 +2564,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-25T12:33:49+00:00"
+            "time": "2020-06-05T13:34:09+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2645,12 +2644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-iconv.git",
-                "reference": "c4de7601eefbf25f9d47190abe07f79fe0a27424"
+                "reference": "2ddc64431e96297f3868d4f7958dcdcea29ce9fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/c4de7601eefbf25f9d47190abe07f79fe0a27424",
-                "reference": "c4de7601eefbf25f9d47190abe07f79fe0a27424",
+                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/2ddc64431e96297f3868d4f7958dcdcea29ce9fc",
+                "reference": "2ddc64431e96297f3868d4f7958dcdcea29ce9fc",
                 "shasum": ""
             },
             "require": {
@@ -2710,7 +2709,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-12T16:47:27+00:00"
+            "time": "2020-06-04T17:06:46+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
@@ -2868,12 +2867,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "1357b1d168eb7f68ad6a134838e46b0b159444a9"
+                "reference": "8dd19dd0cb244eb14f620eedb529a923342276f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/1357b1d168eb7f68ad6a134838e46b0b159444a9",
-                "reference": "1357b1d168eb7f68ad6a134838e46b0b159444a9",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/8dd19dd0cb244eb14f620eedb529a923342276f9",
+                "reference": "8dd19dd0cb244eb14f620eedb529a923342276f9",
                 "shasum": ""
             },
             "require": {
@@ -2937,7 +2936,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-12T16:14:59+00:00"
+            "time": "2020-06-04T17:06:46+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2945,12 +2944,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c"
+                "reference": "3ed80deaf77c304010e3f637bc1842c85fd6c485"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fa79b11539418b02fc5e1897267673ba2c19419c",
-                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3ed80deaf77c304010e3f637bc1842c85fd6c485",
+                "reference": "3ed80deaf77c304010e3f637bc1842c85fd6c485",
                 "shasum": ""
             },
             "require": {
@@ -3010,7 +3009,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-12T16:47:27+00:00"
+            "time": "2020-06-04T17:06:46+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
@@ -3990,22 +3989,25 @@
         },
         {
             "name": "webappid/laravel-ddd",
-            "version": "1.6.3",
+            "version": "1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DyanGalih/laravel-ddd.git",
-                "reference": "f41fdbea58f066e3ec3195de1a873afb93aa2fa5"
+                "reference": "46ce463319466f0789d09ac1ad8875df1aa11185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DyanGalih/laravel-ddd/zipball/f41fdbea58f066e3ec3195de1a873afb93aa2fa5",
-                "reference": "f41fdbea58f066e3ec3195de1a873afb93aa2fa5",
+                "url": "https://api.github.com/repos/DyanGalih/laravel-ddd/zipball/46ce463319466f0789d09ac1ad8875df1aa11185",
+                "reference": "46ce463319466f0789d09ac1ad8875df1aa11185",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "illuminate/support": "5.5.*|6.*|^7.0",
+                "illuminate/support": "^7.0",
                 "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0"
             },
             "type": "library",
             "extra": {
@@ -4030,7 +4032,7 @@
                 }
             ],
             "description": "Laravel DDD",
-            "time": "2020-06-01T02:59:58+00:00"
+            "time": "2020-06-07T02:23:13+00:00"
         }
     ],
     "packages-dev": [
@@ -4208,12 +4210,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "6c6a7c533469873deacf998237e7649fc6b36223"
+                "reference": "ab3e2a7680e98f483cb5d562549a224bde4e8621"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/6c6a7c533469873deacf998237e7649fc6b36223",
-                "reference": "6c6a7c533469873deacf998237e7649fc6b36223",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/ab3e2a7680e98f483cb5d562549a224bde4e8621",
+                "reference": "ab3e2a7680e98f483cb5d562549a224bde4e8621",
                 "shasum": ""
             },
             "require": {
@@ -4268,7 +4270,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2020-05-19T14:25:16+00:00"
+            "time": "2020-06-05T15:27:13+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5025,12 +5027,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1a8bd75c86088b338a7d9fdd6ea41d3eb8ac0776"
+                "reference": "2888671050a3a596b0a765b24f87cb2436e664ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1a8bd75c86088b338a7d9fdd6ea41d3eb8ac0776",
-                "reference": "1a8bd75c86088b338a7d9fdd6ea41d3eb8ac0776",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2888671050a3a596b0a765b24f87cb2436e664ea",
+                "reference": "2888671050a3a596b0a765b24f87cb2436e664ea",
                 "shasum": ""
             },
             "require": {
@@ -5110,7 +5112,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-05-28T08:02:33+00:00"
+            "time": "2020-06-05T06:51:25+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
