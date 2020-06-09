@@ -185,7 +185,11 @@ interface UserServiceContract
      * @param int $userId
      * @param UserRepository $userRepository
      * @param UserServiceResponse $userServiceResponse
+     * @param bool $revoke
      * @return mixed
      */
-    public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse;
+    public function updateRememberToken(int $userId,
+                                        UserRepository $userRepository,
+                                        UserServiceResponse $userServiceResponse,
+                                        bool $revoke = false): UserServiceResponse;
 }

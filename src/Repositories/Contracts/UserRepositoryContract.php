@@ -110,7 +110,8 @@ interface UserRepositoryContract
     /**
      * @param int $userId
      * @param User $user
+     * @param bool $revoke
      * @return mixed
      */
-    public function updateRememberToken(int $userId, User $user): User;
+    public function updateRememberToken(int $userId, User $user, bool $revoke = false): User;
 }
