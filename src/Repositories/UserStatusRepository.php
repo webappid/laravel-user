@@ -82,7 +82,7 @@ class UserStatusRepository implements UserStatusRepositoryContract
      */
     public function delete(int $id, UserStatus $userStatus): bool
     {
-        $userStatus = $this->getById($id, $userStatus);
+        $userStatus = $userStatus->find($id);
         if($userStatus!=null){
             return $userStatus->delete();
         }else{

@@ -76,7 +76,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function delete(int $id, User $user): bool
     {
-        $user = $this->getById($id, $user);
+        $user = $user->find($id);
         if ($user != null) {
             return $user->delete();
         } else {

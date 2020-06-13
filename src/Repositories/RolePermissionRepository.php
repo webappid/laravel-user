@@ -95,7 +95,7 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
      */
     public function delete(int $id, RolePermission $rolePermission): bool
     {
-        $rolePermission = $this->getById($id, $rolePermission);
+        $rolePermission = $rolePermission->find($id);
         if($rolePermission!=null){
             return $rolePermission->delete();
         }else{

@@ -95,7 +95,7 @@ class PermissionRepository implements PermissionRepositoryContract
      */
     public function delete(int $id, Permission $permission): bool
     {
-        $permission = $this->getById($id, $permission);
+        $permission = $permission->find($id);
         if ($permission != null) {
             return $permission->delete();
         } else {

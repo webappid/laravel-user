@@ -88,7 +88,7 @@ class UserRoleRepository implements UserRoleRepositoryContract
      */
     public function delete(int $id, UserRole $userRole): bool
     {
-        $userRole = $this->getById($id, $userRole);
+        $userRole = $userRole->find($id);
         if($userRole!=null){
             return $userRole->delete();
         }else{
