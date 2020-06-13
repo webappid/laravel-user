@@ -62,7 +62,7 @@ class UserRoleRepository implements UserRoleRepositoryContract
      */
     public function update(int $id, UserRoleRepositoryRequest $userRoleRepositoryRequest, UserRole $userRole): ?UserRole
     {
-        $userRole = $this->getById($id, $userRole);
+        $userRole = $userRole->first($id);
         if($userRole!=null){
             try {
                 $userRole = Lazy::copy($userRoleRepositoryRequest, $userRole);

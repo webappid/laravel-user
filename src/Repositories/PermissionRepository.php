@@ -69,7 +69,7 @@ class PermissionRepository implements PermissionRepositoryContract
      */
     public function update(int $id, PermissionRepositoryRequest $permissionRepositoryRequest, Permission $permission): ?Permission
     {
-        $permission = $this->getById($id, $permission);
+        $permission = $permission->first($id);
         if ($permission != null) {
             try {
                 $permission = Lazy::copy($permissionRepositoryRequest, $permission);

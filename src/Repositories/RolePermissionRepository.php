@@ -69,7 +69,7 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
      */
     public function update(int $id, RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
     {
-        $rolePermission = $this->getById($id, $rolePermission);
+        $rolePermission = $rolePermission->first($id);
         if($rolePermission!=null){
             try {
                 $rolePermission = Lazy::copy($rolePermissionRepositoryRequest, $rolePermission);

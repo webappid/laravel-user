@@ -56,7 +56,7 @@ class UserStatusRepository implements UserStatusRepositoryContract
      */
     public function update(int $id, UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatus $userStatus): ?UserStatus
     {
-        $userStatus = $this->getById($id, $userStatus);
+        $userStatus = $userStatus->first($id);
         if($userStatus!=null){
             try {
                 $userStatus = Lazy::copy($userStatusRepositoryRequest, $userStatus);

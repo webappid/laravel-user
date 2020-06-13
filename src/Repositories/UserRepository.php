@@ -42,7 +42,8 @@ class UserRepository implements UserRepositoryContract
      */
     public function update(int $id, UserRepositoryRequest $userRepositoryRequest, User $user): ?User
     {
-        $user = $this->getById($id, $user);
+        $user = $user->find($id);
+
         if ($user != null) {
             try {
                 $userRepositoryRequest->remember_token = $user->remember_token;
