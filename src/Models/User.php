@@ -31,7 +31,7 @@ class User extends Authentication
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token'
     ];
 
     public function status()

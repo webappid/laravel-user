@@ -114,6 +114,7 @@ class UserRepository implements UserRepositoryContract
             'users.status_id AS status_id',
             'users.password AS password',
             'user_statuses.name AS status',
+            'users.api_token',
             'users.remember_token AS remember_token')
             ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id')
             ->when($q != null, function ($query) use ($q) {
@@ -254,7 +255,7 @@ class UserRepository implements UserRepositoryContract
     public function updateRememberToken(int $userId, User $user, bool $revoke = false): User
     {
         if ($revoke) {
-            $token = '';
+            $token = null;
         } else {
             $token = Str::random(80);
         }
