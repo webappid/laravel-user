@@ -114,4 +114,18 @@ interface UserRepositoryContract
      * @return mixed
      */
     public function updateRememberToken(int $userId, User $user, bool $revoke = false): User;
+
+    /**
+     * @param string $email
+     * @param User $user
+     * @return mixed
+     */
+    public function getLoginToken(string $email, User $user): string;
+
+    /**
+     * @param string $token
+     * @param User $user
+     * @return mixed
+     */
+    public function getUserByLoginToken(string $token, User $user): user;
 }

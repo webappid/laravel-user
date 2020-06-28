@@ -192,4 +192,20 @@ interface UserServiceContract
                                         UserRepository $userRepository,
                                         UserServiceResponse $userServiceResponse,
                                         bool $revoke = false): UserServiceResponse;
+
+    /**
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return mixed
+     */
+    public function getLoginToken(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse;
+
+    /**
+     * @param string $token
+     * @param UserServiceResponse $userServiceResponse
+     * @param UserRepository $userRepository
+     * @return mixed
+     */
+    public function getUserByLoginToken(string $token, UserServiceResponse $userServiceResponse, UserRepository $userRepository): UserServiceResponse;
 }

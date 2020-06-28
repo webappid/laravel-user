@@ -3,6 +3,7 @@
 namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
+use Ramsey\Uuid\Uuid;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Database\QueryException;
@@ -270,5 +271,28 @@ class UserRepository implements UserRepositoryContract
             }
         }
         return $user;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLoginToken(string $email, User $user): string
+    {
+        $user = $user->where('email', $email)->first();
+        $token = null;
+        if ($user != null) {
+            $token = Uuid::uuid4()->toString();
+            Cache::put($token, $user);
+        }
+
+        return $token;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserByLoginToken(string $token, User $user): user
+    {
+        return Cache::pull($token);
     }
 }

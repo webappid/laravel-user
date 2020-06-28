@@ -377,8 +377,8 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $revoke = false): UserServiceResponse
     {
-        $result = $this->container->call([$userRepository,'updateRememberToken'], compact('userId', 'revoke'));
-        if($result!=null){
+        $result = $this->container->call([$userRepository, 'updateRememberToken'], compact('userId', 'revoke'));
+        if ($result != null) {
             unset($result->id);
             unset($result->updated_at);
             unset($result->created_at);
@@ -389,9 +389,43 @@ class UserService extends BaseService implements UserServiceContract
             $userServiceResponse->status = true;
             $userServiceResponse->user = $result;
             $userServiceResponse->message = 'Update Token Success';
-        }else{
+        } else {
             $userServiceResponse->status = false;
             $userServiceResponse->message = 'Update Token Failed';
+        }
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLoginToken(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
+    {
+        $token = $this->container->call([$userRepository, 'getLoginToken'], compact('email'));
+        if ($token != null) {
+            $userServiceResponse->activationKey = $token;
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Generate Token Success";
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Generate Token Failed";
+        }
+        return $userServiceResponse;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserByLoginToken(string $token, UserServiceResponse $userServiceResponse, UserRepository $userRepository): UserServiceResponse
+    {
+        $user = $this->container->call([$userRepository, 'getUserByLoginToken'], compact('token'));
+        if ($user != null) {
+            $userServiceResponse->user = $user;
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Get user by token Success";
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Get user by token failed";
         }
         return $userServiceResponse;
     }

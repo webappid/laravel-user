@@ -150,4 +150,18 @@ class UserRepositoryTest extends TestCase
         $result = $this->container->call([$this->userRepository, 'getCount'], ['q' => $q]);
         self::assertGreaterThanOrEqual(1, $result);
     }
+
+    public function testGetLoginToken()
+    {
+        $user = $this->testStore();
+        $status = $this->container->call([$this->userRepository,'getLoginToken'],['email' => $user->email]);
+        self::assertNotEquals(null, $status);
+        return $status;
+    }
+
+    public function testGetUserByLoginToken(){
+        $token = $this->testGetLoginToken();
+        $user = $this->container->call([$this->userRepository,'getUserByLoginToken'],['token' => $token]);
+        self::assertNotEquals(null, $user);
+    }
 }
