@@ -24,6 +24,10 @@ class RoleTableSeeder extends Seeder
                 "name" => "member",
                 "description" => "Role For Member"
             ],
+            [
+                "name" => "partner",
+                "description" => "Role For Partner"
+            ],
 
         ];
 
