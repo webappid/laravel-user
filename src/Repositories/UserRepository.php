@@ -113,9 +113,7 @@ class UserRepository implements UserRepositoryContract
             'users.name AS name',
             'users.email AS email',
             'users.status_id AS status_id',
-            'users.password AS password',
             'user_statuses.name AS status',
-            'users.api_token',
             'users.remember_token AS remember_token')
             ->leftJoin('user_statuses', 'user_statuses.id', '=', 'users.status_id')
             ->when($q != null, function ($query) use ($q) {
@@ -140,7 +138,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setUpdatePassword(string $email, string $password, User $user): ?User
     {
-        $user = $this->getByEmail($email, $user);
+        $user = $user->where('email', $email)->first();
         if ($user != null) {
             try {
                 $user->password = bcrypt($password);
@@ -160,7 +158,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setUpdateStatusUser(string $email, int $status, User $user): ?User
     {
-        $user = $this->getByEmail($email, $user);
+        $user = $user->where('email', $email)->first();
         if ($user != null) {
             try {
                 $user->status_id = $status;
@@ -180,7 +178,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setUpdateName(string $email, string $name, User $user): ?User
     {
-        $user = $this->getByEmail($email, $user);
+        $user = $user->where('email', $email)->first();
         if ($user != null) {
             try {
                 $user->name = $name;
@@ -200,7 +198,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function deleteByEmail(string $email, User $user): bool
     {
-        $user = $this->getByEmail($email, $user);
+        $user = $user->where('email', $email)->fisrt();
         try {
             return $user->delete();
         } catch (QueryException $queryException) {
@@ -214,7 +212,7 @@ class UserRepository implements UserRepositoryContract
      */
     public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): ?string
     {
-        $user = $this->getByEmail($email, $user);
+        $user = $user->where('email', $email)->first();
 
         $key = env('APP_KEY');
 

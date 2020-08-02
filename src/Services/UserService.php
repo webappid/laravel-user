@@ -305,6 +305,7 @@ class UserService extends BaseService implements UserServiceContract
             $userServiceResponse->status = true;
             $userServiceResponse->message = "Data Found";
             $userServiceResponse->user = $result;
+            $userServiceResponse->roleList = $result->roles;
         } else {
             $userServiceResponse->status = false;
             $userServiceResponse->message = "Data Not Found";
