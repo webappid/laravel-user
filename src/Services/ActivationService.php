@@ -47,12 +47,12 @@ class ActivationService extends BaseService implements ActivationServiceContract
         } else {
             $resultActivate = $this->container->call([$activationRepository, 'setActivate'], ['key' => $activationKey]);
             if ($resultActivate->status == 'used') {
-                $resultStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'],['email' => $resultActivate->user->email, 'status' => 2]);
-                if($resultStatus != null) {
+                $resultStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $resultActivate->user->email, 'status' => 2]);
+                if ($resultStatus != null) {
                     $activateResponse->status = true;
                     $activateResponse->message = 'User Active';
                     DB::commit();
-                }else{
+                } else {
                     DB::rollBack();
                 }
             } else {

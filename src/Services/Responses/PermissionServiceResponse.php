@@ -5,8 +5,8 @@
 
 namespace WebAppId\User\Services\Responses;
 
-use WebAppId\User\Models\Permission;
 use WebAppId\DDD\Responses\AbstractResponse;
+use WebAppId\User\Models\Permission;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

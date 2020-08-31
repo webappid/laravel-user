@@ -9,12 +9,12 @@
 namespace WebAppId\User\Repositories;
 
 
-use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\UserRole;
 use WebAppId\User\Repositories\Contracts\UserRoleRepositoryContract;
+use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -63,12 +63,12 @@ class UserRoleRepository implements UserRoleRepositoryContract
     public function update(int $id, UserRoleRepositoryRequest $userRoleRepositoryRequest, UserRole $userRole): ?UserRole
     {
         $userRole = $userRole->first($id);
-        if($userRole!=null){
+        if ($userRole != null) {
             try {
                 $userRole = Lazy::copy($userRoleRepositoryRequest, $userRole);
                 $userRole->save();
                 return $userRole;
-            }catch (QueryException $queryException){
+            } catch (QueryException $queryException) {
                 report($queryException);
             }
         }
@@ -89,9 +89,9 @@ class UserRoleRepository implements UserRoleRepositoryContract
     public function delete(int $id, UserRole $userRole): bool
     {
         $userRole = $userRole->find($id);
-        if($userRole!=null){
+        if ($userRole != null) {
             return $userRole->delete();
-        }else{
+        } else {
             return false;
         }
     }
@@ -101,7 +101,8 @@ class UserRoleRepository implements UserRoleRepositoryContract
      */
     public function get(UserRole $userRole, int $length = 12): LengthAwarePaginator
     {
-        return $this->getColumn($userRole)->paginate($length);
+        return $this->getColumn($userRole)->paginate($length)
+            ->appends(request()->input());
     }
 
     /**

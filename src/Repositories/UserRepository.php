@@ -2,19 +2,19 @@
 
 namespace WebAppId\User\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
-use Ramsey\Uuid\Uuid;
-use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Ramsey\Uuid\Uuid;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Contracts\UserRepositoryContract;
+use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 
 /**
  * Class UserRepository
@@ -73,35 +73,6 @@ class UserRepository implements UserRepositoryContract
     }
 
     /**
-     * @inheritDoc
-     */
-    public function delete(int $id, User $user): bool
-    {
-        $user = $user->find($id);
-        if ($user != null) {
-            return $user->delete();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function get(User $user, int $length = 12, string $q = null): LengthAwarePaginator
-    {
-        return $this->getColumn($user, $q)->paginate($length);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(User $user, string $q = null): int
-    {
-        return $this->getColumn($user, $q)->count();
-    }
-
-    /**
      * @param User $user
      * @param string|null $q
      * @return Builder
@@ -121,6 +92,36 @@ class UserRepository implements UserRepositoryContract
                     ->where('users.name', 'LIKE', '%' . $q . '%')
                     ->orWhere('users.email', $q);
             });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(int $id, User $user): bool
+    {
+        $user = $user->find($id);
+        if ($user != null) {
+            return $user->delete();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(User $user, int $length = 12, string $q = null): LengthAwarePaginator
+    {
+        return $this->getColumn($user, $q)->paginate($length)
+            ->appends(request()->input());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCount(User $user, string $q = null): int
+    {
+        return $this->getColumn($user, $q)->count();
     }
 
     /**

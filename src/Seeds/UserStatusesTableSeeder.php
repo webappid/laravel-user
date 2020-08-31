@@ -24,7 +24,7 @@ class UserStatusesTableSeeder extends Seeder
             'Disable',
             'Block'
         );
-        
+
         foreach ($statuses as $status) {
             $userStatusRepositoryRequest = $this->container->make(UserStatusRepositoryRequest::class);
             $userStatusRepositoryRequest->name = $status;

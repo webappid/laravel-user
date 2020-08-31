@@ -7,12 +7,12 @@
 namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
-use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
-use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\UserStatus;
+use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
+use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 
 
 /**
@@ -46,7 +46,7 @@ class UserStatusRepository implements UserStatusRepositoryContract
             (
                 'user_statuses.id',
                 'user_statuses.name'
-            )->when($q!=null, function($query) use ($q){
+            )->when($q != null, function ($query) use ($q) {
                 return $query->where('name', 'LIKE', '%' . $q . '%');
             });
     }
@@ -57,12 +57,12 @@ class UserStatusRepository implements UserStatusRepositoryContract
     public function update(int $id, UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatus $userStatus): ?UserStatus
     {
         $userStatus = $userStatus->first($id);
-        if($userStatus!=null){
+        if ($userStatus != null) {
             try {
                 $userStatus = Lazy::copy($userStatusRepositoryRequest, $userStatus);
                 $userStatus->save();
                 return $userStatus;
-            }catch (QueryException $queryException){
+            } catch (QueryException $queryException) {
                 report($queryException);
             }
         }
@@ -83,9 +83,9 @@ class UserStatusRepository implements UserStatusRepositoryContract
     public function delete(int $id, UserStatus $userStatus): bool
     {
         $userStatus = $userStatus->find($id);
-        if($userStatus!=null){
+        if ($userStatus != null) {
             return $userStatus->delete();
-        }else{
+        } else {
             return false;
         }
     }
@@ -95,7 +95,8 @@ class UserStatusRepository implements UserStatusRepositoryContract
      */
     public function get(UserStatus $userStatus, int $length = 12, string $q = null): LengthAwarePaginator
     {
-        return $this->getColumn($userStatus, $q)->paginate($length);
+        return $this->getColumn($userStatus, $q)->paginate($length)
+            ->appends(request()->input());
     }
 
     /**
@@ -105,7 +106,7 @@ class UserStatusRepository implements UserStatusRepositoryContract
     {
         return $this->getColumn($userStatus, $q)->count();
     }
-    
+
     /**
      * @inheritDoc
      */

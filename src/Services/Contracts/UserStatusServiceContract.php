@@ -60,13 +60,13 @@ interface UserStatusServiceContract
      * @param UserStatusServiceResponseList $userStatusServiceResponseList
      * @return UserStatusServiceResponseList
      */
-    public function get(UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList,int $length = 12): UserStatusServiceResponseList;
+    public function get(UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList;
 
     /**
      * @param UserStatusRepository $userStatusRepository
      * @return int
      */
-    public function getCount(UserStatusRepository $userStatusRepository):int;
+    public function getCount(UserStatusRepository $userStatusRepository): int;
 
     /**
      * @param string $q
@@ -75,12 +75,12 @@ interface UserStatusServiceContract
      * @param int $length
      * @return UserStatusServiceResponseList
      */
-    public function getWhere(string $q, UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList,int $length = 12): UserStatusServiceResponseList;
+    public function getWhere(string $q, UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList;
 
     /**
      * @param string $q
      * @param UserStatusRepository $userStatusRepository
      * @return int
      */
-    public function getWhereCount(string $q, UserStatusRepository $userStatusRepository):int;
+    public function getWhereCount(string $q, UserStatusRepository $userStatusRepository): int;
 }

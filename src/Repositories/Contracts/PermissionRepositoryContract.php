@@ -5,9 +5,9 @@
 
 namespace WebAppId\User\Repositories\Contracts;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\User\Models\Permission;
 use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

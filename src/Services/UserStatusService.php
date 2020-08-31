@@ -5,15 +5,14 @@
 
 namespace WebAppId\User\Services;
 
+use WebAppId\DDD\Services\BaseService;
+use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
+use WebAppId\User\Repositories\UserStatusRepository;
+use WebAppId\User\Services\Contracts\UserStatusServiceContract;
 use WebAppId\User\Services\Requests\UserStatusServiceRequest;
 use WebAppId\User\Services\Responses\UserStatusServiceResponse;
 use WebAppId\User\Services\Responses\UserStatusServiceResponseList;
-use Illuminate\Container\Container;
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
-use WebAppId\User\Repositories\UserStatusRepository;
-use WebAppId\User\Services\Contracts\UserStatusServiceContract;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

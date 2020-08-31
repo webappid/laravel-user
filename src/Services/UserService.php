@@ -6,23 +6,23 @@
 namespace WebAppId\User\Services;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use WebAppId\DDD\Services\BaseService;
+use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\User;
+use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
+use WebAppId\User\Repositories\UserRepository;
+use WebAppId\User\Repositories\UserRoleRepository;
+use WebAppId\User\Services\Contracts\UserServiceContract;
 use WebAppId\User\Services\Requests\ChangePasswordRequest;
 use WebAppId\User\Services\Requests\UserServiceRequest;
 use WebAppId\User\Services\Responses\ChangePasswordResponse;
 use WebAppId\User\Services\Responses\ResetPasswordResponse;
 use WebAppId\User\Services\Responses\UserServiceResponse;
 use WebAppId\User\Services\Responses\UserServiceResponseList;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
-use WebAppId\User\Repositories\ActivationRepository;
-use WebAppId\User\Repositories\UserRepository;
-use WebAppId\User\Repositories\UserRoleRepository;
-use WebAppId\User\Services\Contracts\UserServiceContract;
 
 /**
  * Class UserService

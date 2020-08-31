@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class AddUserStatusToUsersTable extends Migration
 {
@@ -19,7 +19,7 @@ class AddUserStatusToUsersTable extends Migration
                 ->unsigned()
                 ->nullable(true)
                 ->comment('Users status');
-            
+
             /**
              * Relation to database
              */
@@ -29,7 +29,7 @@ class AddUserStatusToUsersTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *
@@ -37,7 +37,7 @@ class AddUserStatusToUsersTable extends Migration
      */
     public function down()
     {
-        
+
         if (Config::get('database.default') != 'sqlite') {
             $columns = [];
             $foreigns = [];
@@ -45,13 +45,13 @@ class AddUserStatusToUsersTable extends Migration
                 array_push($columns, 'status_id');
                 array_push($foreigns, 'status_id');
             }
-            
-            
+
+
             if (count($columns)) {
                 Schema::table('users', function (Blueprint $table) use ($foreigns) {
                     $table->dropForeign($foreigns);
                 });
-                
+
                 Schema::table('users', function (Blueprint $table) use ($columns) {
                     $table->dropColumn($columns);
                 });

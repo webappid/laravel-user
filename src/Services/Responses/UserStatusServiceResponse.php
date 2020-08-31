@@ -5,8 +5,8 @@
 
 namespace WebAppId\User\Services\Responses;
 
-use WebAppId\User\Models\UserStatus;
 use WebAppId\DDD\Responses\AbstractResponse;
+use WebAppId\User\Models\UserStatus;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

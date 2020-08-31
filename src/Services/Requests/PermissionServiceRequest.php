@@ -14,25 +14,25 @@ namespace WebAppId\User\Services\Requests;
  */
 class PermissionServiceRequest
 {
-    
+
     /**
      * @var string
      */
     public $name;
-                
+
     /**
      * @var string
      */
     public $description;
-                
+
     /**
      * @var int
      */
     public $created_by;
-                
+
     /**
      * @var int
      */
     public $updated_by;
-                
+
 }

@@ -6,14 +6,14 @@
 namespace WebAppId\User\Services;
 
 
-use WebAppId\User\Services\Contracts\RoleServiceContract;
-use WebAppId\User\Services\Requests\RoleServiceRequest;
-use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
-use WebAppId\User\Services\Responses\RoleServiceResponse;
-use WebAppId\User\Services\Responses\RoleServiceResponseList;
 use WebAppId\DDD\Services\BaseService;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use WebAppId\User\Repositories\RoleRepository;
+use WebAppId\User\Services\Contracts\RoleServiceContract;
+use WebAppId\User\Services\Requests\RoleServiceRequest;
+use WebAppId\User\Services\Responses\RoleServiceResponse;
+use WebAppId\User\Services\Responses\RoleServiceResponseList;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

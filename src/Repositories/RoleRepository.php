@@ -6,12 +6,12 @@
 namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
-use WebAppId\User\Models\Role;
-use WebAppId\User\Repositories\Contracts\RoleRepositoryContract;
-use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\User\Models\Role;
+use WebAppId\User\Repositories\Contracts\RoleRepositoryContract;
+use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -94,7 +94,8 @@ class RoleRepository implements RoleRepositoryContract
      */
     public function get(Role $role, int $length = 12, string $q = null): LengthAwarePaginator
     {
-        return $this->getColumn($role, $q)->paginate($length);
+        return $this->getColumn($role, $q)->paginate($length)
+            ->appends(request()->input());
     }
 
     /**

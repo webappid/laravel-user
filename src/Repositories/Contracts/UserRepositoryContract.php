@@ -6,9 +6,9 @@
 namespace WebAppId\User\Repositories\Contracts;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

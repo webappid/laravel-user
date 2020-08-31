@@ -8,6 +8,7 @@
 
 namespace WebAppId\User\Commands;
 
+use Artisan;
 use Illuminate\Console\Command;
 
 class SeedCommand extends Command
@@ -32,7 +33,7 @@ class SeedCommand extends Command
      */
     public function handle()
     {
-        \Artisan::call('db:seed', ['--class' => 'WebAppId\User\Seeds\DatabaseSeeder']);
+        Artisan::call('db:seed', ['--class' => 'WebAppId\User\Seeds\DatabaseSeeder']);
         $this->info('Seeded: WebAppId\User\Seeds\UserSeeder');
     }
 }

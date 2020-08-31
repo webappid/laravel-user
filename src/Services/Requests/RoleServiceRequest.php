@@ -14,15 +14,15 @@ namespace WebAppId\User\Services\Requests;
  */
 class RoleServiceRequest
 {
-    
+
     /**
      * @var string
      */
     public $name;
-                
+
     /**
      * @var string
      */
     public $description;
-                
+
 }

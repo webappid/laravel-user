@@ -14,10 +14,10 @@ namespace WebAppId\User\Services\Requests;
  */
 class UserStatusServiceRequest
 {
-    
+
     /**
      * @var string
      */
     public $name;
-                
+
 }

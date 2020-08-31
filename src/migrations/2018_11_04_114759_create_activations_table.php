@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateActivationsTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreateActivationsTable extends Migration
                 ->unsigned();
             $table->string('key')
                 ->index();
-            $table->enum('status',['unused','used'])
+            $table->enum('status', ['unused', 'used'])
                 ->nullable(false)
                 ->default('unused');
             $table->dateTime('valid_until');

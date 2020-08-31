@@ -28,7 +28,7 @@ class RoleCheck
     {
         $roles = Auth::user()->roles;
         $access = false;
-        
+
         $userRoles = explode('|', $userRole);
         if ($roles != null) {
             foreach ($roles as $role) {

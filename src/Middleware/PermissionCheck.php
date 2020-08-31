@@ -28,7 +28,7 @@ class PermissionCheck
         $roles = Auth::user()->roles;
         $access = false;
 
-        foreach($roles as $role) {
+        foreach ($roles as $role) {
             $permissions = $role->permissions;
             $rolePermissions = explode('|', $rolePermission);
             if ($permissions != null) {

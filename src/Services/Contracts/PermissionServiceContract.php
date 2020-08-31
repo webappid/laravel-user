@@ -60,11 +60,11 @@ interface PermissionServiceContract
      * @param PermissionServiceResponseList $permissionServiceResponseList
      * @return PermissionServiceResponseList
      */
-    public function get(PermissionRepository $permissionRepository, PermissionServiceResponseList $permissionServiceResponseList,int $length = 12): PermissionServiceResponseList;
+    public function get(PermissionRepository $permissionRepository, PermissionServiceResponseList $permissionServiceResponseList, int $length = 12): PermissionServiceResponseList;
 
     /**
      * @param PermissionRepository $permissionRepository
      * @return int
      */
-    public function getCount(PermissionRepository $permissionRepository):int;
+    public function getCount(PermissionRepository $permissionRepository): int;
 }

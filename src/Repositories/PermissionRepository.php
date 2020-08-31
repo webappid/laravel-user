@@ -9,12 +9,12 @@
 namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
-use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
+use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
-use WebAppId\User\Repositories\Contracts\PermissionRepositoryContract;
 use WebAppId\User\Models\Permission;
-use Illuminate\Database\QueryException;
+use WebAppId\User\Repositories\Contracts\PermissionRepositoryContract;
+use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -110,7 +110,8 @@ class PermissionRepository implements PermissionRepositoryContract
     {
         return $this
             ->getColumn($permission, $q)
-            ->paginate($length);
+            ->paginate($length)
+            ->appends(request()->input());
     }
 
     /**

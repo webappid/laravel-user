@@ -5,14 +5,14 @@
 
 namespace WebAppId\User\Services;
 
-use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
-use WebAppId\User\Services\Requests\PermissionServiceRequest;
-use WebAppId\User\Services\Responses\PermissionServiceResponse;
-use WebAppId\User\Services\Responses\PermissionServiceResponseList;
 use WebAppId\DDD\Services\BaseService;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Repositories\PermissionRepository;
+use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use WebAppId\User\Services\Contracts\PermissionServiceContract;
+use WebAppId\User\Services\Requests\PermissionServiceRequest;
+use WebAppId\User\Services\Responses\PermissionServiceResponse;
+use WebAppId\User\Services\Responses\PermissionServiceResponseList;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

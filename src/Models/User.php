@@ -8,9 +8,9 @@
 
 namespace WebAppId\User\Models;
 
-use Illuminate\Foundation\Auth\User AS Authentication;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Auth\User as Authentication;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authentication
 {

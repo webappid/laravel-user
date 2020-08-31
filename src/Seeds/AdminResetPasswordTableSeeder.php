@@ -1,8 +1,9 @@
 <?php
+
 namespace WebAppId\User\Seeds;
 
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 use WebAppId\User\Repositories\UserRepository;
 
 

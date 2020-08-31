@@ -17,6 +17,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->commands(SeedCommand::class);
     }
+
     public function boot()
     {
         if ($this->isLaravel53AndUp()) {
@@ -27,6 +28,7 @@ class ServiceProvider extends BaseServiceProvider
             ], 'migrations');
         }
     }
+
     protected function isLaravel53AndUp()
     {
         return version_compare($this->app->version(), '5.3.0', '>=');

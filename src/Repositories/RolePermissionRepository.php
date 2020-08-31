@@ -9,12 +9,12 @@
 namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
-use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
+use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
-use Illuminate\Database\QueryException;
+use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -70,12 +70,12 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
     public function update(int $id, RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
     {
         $rolePermission = $rolePermission->first($id);
-        if($rolePermission!=null){
+        if ($rolePermission != null) {
             try {
                 $rolePermission = Lazy::copy($rolePermissionRepositoryRequest, $rolePermission);
                 $rolePermission->save();
                 return $rolePermission;
-            }catch (QueryException $queryException){
+            } catch (QueryException $queryException) {
                 report($queryException);
             }
         }
@@ -96,9 +96,9 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
     public function delete(int $id, RolePermission $rolePermission): bool
     {
         $rolePermission = $rolePermission->find($id);
-        if($rolePermission!=null){
+        if ($rolePermission != null) {
             return $rolePermission->delete();
-        }else{
+        } else {
             return false;
         }
     }
@@ -108,7 +108,8 @@ class RolePermissionRepository implements RolePermissionRepositoryContract
      */
     public function get(RolePermission $rolePermission, int $length = 12): LengthAwarePaginator
     {
-        return $this->getColumn($rolePermission)->paginate($length);
+        return $this->getColumn($rolePermission)->paginate($length)
+            ->appends(request()->input());
     }
 
     /**

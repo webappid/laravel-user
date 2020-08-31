@@ -6,7 +6,6 @@
 namespace WebAppId\User\Repositories\Contracts;
 
 use WebAppId\User\Models\Activation;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
