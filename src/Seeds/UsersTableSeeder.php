@@ -2,9 +2,9 @@
 
 namespace WebAppId\User\Seeds;
 
-use Faker\Factory as Faker;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Repositories\UserRepository;
@@ -22,7 +22,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run(UserRepository $userRepository, UserRoleRepository $userRoleRepository)
     {
-        $randomPassword = Faker::create()->password;
+
+        $randomPassword = Str::random(8);
         $result = $this->container->call([$userRepository, 'getByEmail'], ['email' => 'root@noname.com']);
 
         if ($result == null) {
