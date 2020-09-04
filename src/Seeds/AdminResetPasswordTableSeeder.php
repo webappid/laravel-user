@@ -2,8 +2,8 @@
 
 namespace WebAppId\User\Seeds;
 
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use WebAppId\User\Repositories\UserRepository;
 
 
@@ -19,7 +19,7 @@ class AdminResetPasswordTableSeeder extends Seeder
     {
         $result = $this->container->call([$userRepository, 'getByEmail'], ['email' => 'root@noname.com']);
         if ($result != null) {
-            $randomPassword = Faker::create()->password;
+            $randomPassword = $randomPassword = Str::random(8);
             $result = $this->container->call([$userRepository, 'setUpdatePassword'], ['email' => $result->email, 'password' => $randomPassword]);
             if ($result != null) {
                 error_log("Default admin password : " . $randomPassword);
