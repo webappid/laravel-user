@@ -6,7 +6,6 @@
 namespace WebAppId\User\Services;
 
 use Illuminate\Support\Facades\DB;
-use WebAppId\DDD\Services\BaseService;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Services\Contracts\ActivationServiceContract;
@@ -19,7 +18,7 @@ use WebAppId\User\Services\Responses\ActivateResponse;
  * Class ActivationService
  * @package WebAppId\User\Services
  */
-class ActivationService extends BaseService implements ActivationServiceContract
+class ActivationService implements ActivationServiceContract
 {
 
     /**
@@ -31,7 +30,7 @@ class ActivationService extends BaseService implements ActivationServiceContract
                              ActivateResponse $activateResponse): ActivateResponse
     {
         DB::beginTransaction();
-        $result = $this->container->call([$activationRepository, 'getByKey'], ['key' => $activationKey]);
+        $result = app()->call([$activationRepository, 'getByKey'], ['key' => $activationKey]);
         if ($result == null) {
             $activateResponse->status = false;
             $activateResponse->message = 'Activation key not found';
@@ -45,9 +44,9 @@ class ActivationService extends BaseService implements ActivationServiceContract
             $activateResponse->message = 'Key Not Valid';
             DB::rollBack();
         } else {
-            $resultActivate = $this->container->call([$activationRepository, 'setActivate'], ['key' => $activationKey]);
+            $resultActivate = app()->call([$activationRepository, 'setActivate'], ['key' => $activationKey]);
             if ($resultActivate->status == 'used') {
-                $resultStatus = $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $resultActivate->user->email, 'status' => 2]);
+                $resultStatus = app()->call([$userRepository, 'setUpdateStatusUser'], ['email' => $resultActivate->user->email, 'status' => 2]);
                 if ($resultStatus != null) {
                     $activateResponse->status = true;
                     $activateResponse->message = 'User Active';

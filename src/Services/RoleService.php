@@ -6,8 +6,7 @@
 namespace WebAppId\User\Services;
 
 
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Services\Contracts\RoleServiceContract;
@@ -22,7 +21,7 @@ use WebAppId\User\Services\Responses\RoleServiceResponseList;
  * Class RoleService
  * @package WebAppId\User\Services
  */
-class RoleService extends BaseService implements RoleServiceContract
+class RoleService implements RoleServiceContract
 {
     /**
      * @inheritDoc
@@ -31,7 +30,7 @@ class RoleService extends BaseService implements RoleServiceContract
     {
         $roleRepositoryRequest = Lazy::copy($roleServiceRequest, $roleRepositoryRequest);
 
-        $result = $this->container->call([$roleRepository, 'store'], ['roleRepositoryRequest' => $roleRepositoryRequest]);
+        $result = app()->call([$roleRepository, 'store'], ['roleRepositoryRequest' => $roleRepositoryRequest]);
         if ($result != null) {
             $roleServiceResponse->status = true;
             $roleServiceResponse->message = 'Store Data Success';
@@ -51,7 +50,7 @@ class RoleService extends BaseService implements RoleServiceContract
     {
         $roleRepositoryRequest = Lazy::copy($roleServiceRequest, $roleRepositoryRequest);
 
-        $result = $this->container->call([$roleRepository, 'update'], ['id' => $id, 'roleRepositoryRequest' => $roleRepositoryRequest]);
+        $result = app()->call([$roleRepository, 'update'], ['id' => $id, 'roleRepositoryRequest' => $roleRepositoryRequest]);
         if ($result != null) {
             $roleServiceResponse->status = true;
             $roleServiceResponse->message = 'Update Data Success';
@@ -69,7 +68,7 @@ class RoleService extends BaseService implements RoleServiceContract
      */
     public function getById(int $id, RoleRepository $roleRepository, RoleServiceResponse $roleServiceResponse): RoleServiceResponse
     {
-        $result = $this->container->call([$roleRepository, 'getById'], ['id' => $id]);
+        $result = app()->call([$roleRepository, 'getById'], ['id' => $id]);
         if ($result != null) {
             $roleServiceResponse->status = true;
             $roleServiceResponse->message = 'Data Found';
@@ -87,7 +86,7 @@ class RoleService extends BaseService implements RoleServiceContract
      */
     public function delete(int $id, RoleRepository $roleRepository): bool
     {
-        return $this->container->call([$roleRepository, 'delete'], ['id' => $id]);
+        return app()->call([$roleRepository, 'delete'], ['id' => $id]);
     }
 
     /**
@@ -98,14 +97,14 @@ class RoleService extends BaseService implements RoleServiceContract
                         int $length = 12,
                         string $q = null): RoleServiceResponseList
     {
-        $result = $this->container->call([$roleRepository, 'get'], ['q' => $q]);
+        $result = app()->call([$roleRepository, 'get'], ['q' => $q]);
 
         if (count($result) > 0) {
             $roleServiceResponseList->status = true;
             $roleServiceResponseList->message = 'Data Found';
             $roleServiceResponseList->roleList = $result;
-            $roleServiceResponseList->count = $this->container->call([$roleRepository, 'getCount']);
-            $roleServiceResponseList->countFiltered = $this->container->call([$roleRepository, 'getCount'], ['q' => $q]);
+            $roleServiceResponseList->count = app()->call([$roleRepository, 'getCount']);
+            $roleServiceResponseList->countFiltered = app()->call([$roleRepository, 'getCount'], ['q' => $q]);
         } else {
             $roleServiceResponseList->status = false;
             $roleServiceResponseList->message = 'Data Not Found';
@@ -119,6 +118,6 @@ class RoleService extends BaseService implements RoleServiceContract
      */
     public function getCount(RoleRepository $roleRepository, string $q = null): int
     {
-        return $this->container->call([$roleRepository, 'getCount'], ['q' => $q]);
+        return app()->call([$roleRepository, 'getCount'], ['q' => $q]);
     }
 }

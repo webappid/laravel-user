@@ -32,7 +32,6 @@ class RoleRepositoryTest extends TestCase
         try {
             $this->roleRepository = $this->container->make(RoleRepository::class);
         } catch (BindingResolutionException $e) {
-            dd($e);
             report($e);
         }
     }

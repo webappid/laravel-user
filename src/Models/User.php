@@ -11,10 +11,11 @@ namespace WebAppId\User\Models;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Auth\User as Authentication;
 use Illuminate\Notifications\Notifiable;
+use WebAppId\Lazy\Traits\ModelTrait;
 
 class User extends Authentication
 {
-    use Notifiable;
+    use Notifiable, ModelTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +34,25 @@ class User extends Authentication
     protected $hidden = [
         'password', 'remember_token', 'api_token'
     ];
+
+    /**
+     * @param bool $isFresh
+     * @return mixed
+     */
+    public function getColumns(bool $isFresh = false)
+    {
+        $columns = $this->getAllColumn($isFresh);
+
+        $forbiddenField = [
+            "created_at",
+            "updated_at"
+        ];
+        foreach ($forbiddenField as $item) {
+            unset($columns[$item]);
+        }
+
+        return $columns;
+    }
 
     public function status()
     {

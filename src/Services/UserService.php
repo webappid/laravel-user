@@ -8,8 +8,7 @@ namespace WebAppId\User\Services;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
@@ -28,7 +27,7 @@ use WebAppId\User\Services\Responses\UserServiceResponseList;
  * Class UserService
  * @package WebAppId\User\Http\Services
  */
-class UserService extends BaseService implements UserServiceContract
+class UserService implements UserServiceContract
 {
     /**
      * @inheritDoc
@@ -46,7 +45,7 @@ class UserService extends BaseService implements UserServiceContract
         $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
 
         DB::beginTransaction();
-        $result = $this->container->call([$userRepository, 'store'], ['userRepositoryRequest' => $userRepositoryRequest]);
+        $result = app()->call([$userRepository, 'store'], ['userRepositoryRequest' => $userRepositoryRequest]);
 
         $roles = $this->storeUserRoles($userRoleList, $result->id, $userRoleRepository);
 
@@ -56,7 +55,7 @@ class UserService extends BaseService implements UserServiceContract
             return $userServiceResponse;
         }
 
-        $resultActivation = $this->container->call([$activationRepository, 'store'], ['userId' => $result->id]);
+        $resultActivation = app()->call([$activationRepository, 'store'], ['userId' => $result->id]);
 
         if ($resultActivation == null) {
             DB::rollback();
@@ -91,7 +90,7 @@ class UserService extends BaseService implements UserServiceContract
         $roles = [];
         foreach ($userRoleList as $userRole) {
             try {
-                $userRoleRepositoryRequest = $this->container->make(UserRoleRepositoryRequest::class);
+                $userRoleRepositoryRequest = app()->make(UserRoleRepositoryRequest::class);
                 $userRoleRepositoryRequest->role_id = $userRole;
                 $userRoleRepositoryRequest->user_id = $userId;
             } catch (BindingResolutionException $e) {
@@ -99,7 +98,7 @@ class UserService extends BaseService implements UserServiceContract
             }
 
 
-            $userRoleResult = $this->container->call([$userRoleRepository, 'store'], compact('userRoleRepositoryRequest'));
+            $userRoleResult = app()->call([$userRoleRepository, 'store'], compact('userRoleRepositoryRequest'));
 
             if ($userRoleResult == null) {
                 Db::rollBack();
@@ -125,9 +124,9 @@ class UserService extends BaseService implements UserServiceContract
         $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
 
         DB::beginTransaction();
-        $result = $this->container->call([$userRepository, 'update'], compact('id', 'userRepositoryRequest'));
+        $result = app()->call([$userRepository, 'update'], compact('id', 'userRepositoryRequest'));
 
-        $removeUserRole = $this->container->call([$userRoleRepository, 'deleteByUserId'], ['user_id' => $id]);
+        $removeUserRole = app()->call([$userRoleRepository, 'deleteByUserId'], ['user_id' => $id]);
 
         $roles = [];
 
@@ -160,7 +159,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function getById(int $id, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'getById'], ['id' => $id]);
+        $result = app()->call([$userRepository, 'getById'], ['id' => $id]);
 
         if ($result != null) {
             $userServiceResponse->status = true;
@@ -179,7 +178,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function delete(int $id, UserRepository $userRepository): bool
     {
-        return $this->container->call([$userRepository, 'delete'], ['id' => $id]);
+        return app()->call([$userRepository, 'delete'], ['id' => $id]);
     }
 
     /**
@@ -187,14 +186,14 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function get(UserRepository $userRepository, UserServiceResponseList $userServiceResponseList, int $length = 12, string $q = null): UserServiceResponseList
     {
-        $result = $this->container->call([$userRepository, 'get'], ['q' => $q]);
+        $result = app()->call([$userRepository, 'get'], ['q' => $q]);
 
         if (count($result) > 0) {
             $userServiceResponseList->status = true;
             $userServiceResponseList->message = 'Data Found';
             $userServiceResponseList->userList = $result;
-            $userServiceResponseList->count = $this->container->call([$userRepository, 'getCount']);
-            $userServiceResponseList->countFiltered = $this->container->call([$userRepository, 'getCount'], ['q' => $q]);
+            $userServiceResponseList->count = app()->call([$userRepository, 'getCount']);
+            $userServiceResponseList->countFiltered = app()->call([$userRepository, 'getCount'], ['q' => $q]);
         } else {
             $userServiceResponseList->status = false;
             $userServiceResponseList->message = 'Data Not Found';
@@ -208,7 +207,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function getCount(UserRepository $userRepository, string $q = null): int
     {
-        return $this->container->call([$userRepository, 'getCount'], ['q' => $q]);
+        return app()->call([$userRepository, 'getCount'], ['q' => $q]);
     }
 
     /**
@@ -220,7 +219,7 @@ class UserService extends BaseService implements UserServiceContract
                                    $force = false): ChangePasswordResponse
     {
 
-        $userResult = $this->container->call([$userRepository, 'getByEmail'], ['email' => $changePasswordRequest->email]);
+        $userResult = app()->call([$userRepository, 'getByEmail'], ['email' => $changePasswordRequest->email]);
         if ($userResult != null) {
             if ($changePasswordRequest->password !== $changePasswordRequest->retypePassword && !$force) {
                 $changePasswordResponse->status = false;
@@ -229,7 +228,7 @@ class UserService extends BaseService implements UserServiceContract
                 $changePasswordResponse->status = false;
                 $changePasswordResponse->message = "Old password not match";
             } else {
-                $changePasswordResult = $this->container->call([$userRepository, 'setUpdatePassword'], ['email' => $changePasswordRequest->email, 'password' => $changePasswordRequest->password]);
+                $changePasswordResult = app()->call([$userRepository, 'setUpdatePassword'], ['email' => $changePasswordRequest->email, 'password' => $changePasswordRequest->password]);
                 if ($changePasswordResult == null) {
                     $changePasswordResponse->status = false;
                     $changePasswordResponse->message = "Update Password Failed, please contact your admin";
@@ -251,7 +250,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function updateUserStatus(string $email, int $status, UserRepository $userRepository): ?User
     {
-        return $this->container->call([$userRepository, 'setUpdateStatusUser'], ['email' => $email, 'status' => $status]);
+        return app()->call([$userRepository, 'setUpdateStatusUser'], ['email' => $email, 'status' => $status]);
     }
 
     /**
@@ -259,7 +258,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function updateUserName(string $email, string $name, UserRepository $userRepository): ?User
     {
-        return $this->container->call([$userRepository, 'setUpdateName'], ['email' => $email, 'name' => $name]);
+        return app()->call([$userRepository, 'setUpdateName'], ['email' => $email, 'name' => $name]);
     }
 
     /**
@@ -267,7 +266,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function sendForgotPasswordLink(array $credential, UserRepository $userRepository, ResetPasswordResponse $resetPasswordResponse): ResetPasswordResponse
     {
-        $token = $this->container->call([$userRepository, 'setResetPasswordTokenByEmail'], ['email' => $credential['email']]);
+        $token = app()->call([$userRepository, 'setResetPasswordTokenByEmail'], ['email' => $credential['email']]);
         if ($token != null) {
             $resetPasswordResponse->status = true;
             $resetPasswordResponse->message = "token created";
@@ -300,7 +299,8 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'getByEmail'], compact('email'));
+        $result = app()->call([$userRepository, 'getByEmail'], compact('email'));
+
         if ($result != null) {
             $userServiceResponse->status = true;
             $userServiceResponse->message = "Data Found";
@@ -319,7 +319,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function setUpdateStatusUser(string $email, int $status, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'setUpdateStatusUser'], compact('email', 'status'));
+        $result = app()->call([$userRepository, 'setUpdateStatusUser'], compact('email', 'status'));
         if (!$result != null) {
             $userServiceResponse->status = true;
             $userServiceResponse->message = "Update Status Success";
@@ -336,7 +336,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function setUpdateName(string $email, string $name, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'setUpdateName'], compact('email', 'name'));
+        $result = app()->call([$userRepository, 'setUpdateName'], compact('email', 'name'));
         if ($result != null) {
             $userServiceResponse->status = true;
             $userServiceResponse->message = "Update Name Success";
@@ -353,7 +353,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function deleteByEmail(string $email, UserRepository $userRepository): bool
     {
-        return $this->container->call([$userRepository, 'deleteByEmail'], compact('email'));
+        return app()->call([$userRepository, 'deleteByEmail'], compact('email'));
     }
 
     /**
@@ -361,7 +361,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function setResetPasswordTokenByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'setResetPasswordTokenByEmail'], compact('email'));
+        $result = app()->call([$userRepository, 'setResetPasswordTokenByEmail'], compact('email'));
         if ($result != null) {
             $userServiceResponse->status = true;
             $userServiceResponse->message = "Reset Password Token By Email Success";
@@ -378,7 +378,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $revoke = false): UserServiceResponse
     {
-        $result = $this->container->call([$userRepository, 'updateRememberToken'], compact('userId', 'revoke'));
+        $result = app()->call([$userRepository, 'updateRememberToken'], compact('userId', 'revoke'));
         if ($result != null) {
             unset($result->id);
             unset($result->updated_at);
@@ -402,7 +402,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function getLoginToken(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
-        $token = $this->container->call([$userRepository, 'getLoginToken'], compact('email'));
+        $token = app()->call([$userRepository, 'getLoginToken'], compact('email'));
         if ($token != null) {
             $userServiceResponse->activationKey = $token;
             $userServiceResponse->status = true;
@@ -419,7 +419,7 @@ class UserService extends BaseService implements UserServiceContract
      */
     public function getUserByLoginToken(string $token, UserServiceResponse $userServiceResponse, UserRepository $userRepository): UserServiceResponse
     {
-        $user = $this->container->call([$userRepository, 'getUserByLoginToken'], compact('token'));
+        $user = app()->call([$userRepository, 'getUserByLoginToken'], compact('token'));
         if ($user != null) {
             $userServiceResponse->user = $user;
             $userServiceResponse->status = true;

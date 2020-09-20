@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Models\Join;
+use WebAppId\User\Models\Permission;
 use WebAppId\User\Models\RolePermission;
+use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 
@@ -25,98 +28,36 @@ use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
  */
 class RolePermissionRepository implements RolePermissionRepositoryContract
 {
-    /**
-     * @inheritDoc
-     */
-    public function store(RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
-    {
-        try {
-            $rolePermission = Lazy::copy($rolePermissionRepositoryRequest, $rolePermission);
-            $rolePermission->save();
-            return $rolePermission;
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return null;
-        }
-    }
+    use RolePermissionRepositoryTrait;
 
-    protected function getColumn($content): Builder
+    public function __construct()
     {
-        return $content
-            ->select
-            (
-                'role_permissions.id',
-                'role_permissions.role_id',
-                'role_permissions.permission_id',
-                'users.name',
-                'permissions.id',
-                'permissions.name',
-                'permissions.description',
-                'roles.id',
-                'roles.name',
-                'roles.description',
-                'updated_users.id AS updated_id',
-                'updated_users.name AS updated_name'
-            )
-            ->join('users as users', 'role_permissions.created_by', 'users.id')
-            ->join('permissions as permissions', 'role_permissions.permission_id', 'permissions.id')
-            ->join('roles as roles', 'role_permissions.role_id', 'roles.id')
-            ->join('users as updated_users', 'role_permissions.updated_by', 'updated_users.id');
-    }
+        $updated_users = app()->make(Join::class);
+        $updated_users->class = User::class;
+        $updated_users->foreign = 'updated_by';
+        $updated_users->type = 'inner';
+        $updated_users->primary = 'users.id';
+        $this->joinTable['users'] = $updated_users;
 
-    /**
-     * @inheritDoc
-     */
-    public function update(int $id, RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
-    {
-        $rolePermission = $rolePermission->first($id);
-        if ($rolePermission != null) {
-            try {
-                $rolePermission = Lazy::copy($rolePermissionRepositoryRequest, $rolePermission);
-                $rolePermission->save();
-                return $rolePermission;
-            } catch (QueryException $queryException) {
-                report($queryException);
-            }
-        }
-        return $rolePermission;
-    }
+        $created_users = app()->make(Join::class);
+        $created_users->class = User::class;
+        $created_users->foreign = 'created_by';
+        $created_users->type = 'inner';
+        $created_users->primary = 'created_users.id';
+        $this->joinTable['created_users'] = $created_users;
 
-    /**
-     * @inheritDoc
-     */
-    public function getById(int $id, RolePermission $rolePermission): ?RolePermission
-    {
-        return $this->getColumn($rolePermission)->find($id);
-    }
+        $permissions = app()->make(Join::class);
+        $permissions->class = Permission::class;
+        $permissions->foreign = 'permission_id';
+        $permissions->type = 'inner';
+        $permissions->primary = 'permissions.id';
+        $this->joinTable['permissions'] = $permissions;
 
-    /**
-     * @inheritDoc
-     */
-    public function delete(int $id, RolePermission $rolePermission): bool
-    {
-        $rolePermission = $rolePermission->find($id);
-        if ($rolePermission != null) {
-            return $rolePermission->delete();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function get(RolePermission $rolePermission, int $length = 12): LengthAwarePaginator
-    {
-        return $this->getColumn($rolePermission)->paginate($length)
-            ->appends(request()->input());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(RolePermission $rolePermission): int
-    {
-        return $rolePermission->count();
+        $roles = app()->make(Join::class);
+        $roles->class = Permission::class;
+        $roles->foreign = 'role_id';
+        $roles->type = 'inner';
+        $roles->primary = 'roles.id';
+        $this->joinTable['roles'] = $roles;
     }
 }

@@ -5,8 +5,7 @@
 
 namespace WebAppId\User\Services;
 
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Services\Contracts\UserStatusServiceContract;
@@ -21,7 +20,7 @@ use WebAppId\User\Services\Responses\UserStatusServiceResponseList;
  * Class UserStatusService
  * @package WebAppId\User\Services
  */
-class UserStatusService extends BaseService implements UserStatusServiceContract
+class UserStatusService implements UserStatusServiceContract
 {
     /**
      * @inheritDoc
@@ -30,7 +29,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
     {
         $userStatusRepositoryRequest = Lazy::copy($userStatusServiceRequest, $userStatusRepositoryRequest);
 
-        $result = $this->container->call([$userStatusRepository, 'store'], ['userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
+        $result = app()->call([$userStatusRepository, 'store'], ['userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
         if ($result != null) {
             $userStatusServiceResponse->status = true;
             $userStatusServiceResponse->message = 'Store Data Success';
@@ -50,7 +49,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
     {
         $userStatusRepositoryRequest = Lazy::copy($userStatusServiceRequest, $userStatusRepositoryRequest);
 
-        $result = $this->container->call([$userStatusRepository, 'update'], ['id' => $id, 'userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
+        $result = app()->call([$userStatusRepository, 'update'], ['id' => $id, 'userStatusRepositoryRequest' => $userStatusRepositoryRequest]);
         if ($result != null) {
             $userStatusServiceResponse->status = true;
             $userStatusServiceResponse->message = 'Update Data Success';
@@ -68,7 +67,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getById(int $id, UserStatusRepository $userStatusRepository, UserStatusServiceResponse $userStatusServiceResponse): UserStatusServiceResponse
     {
-        $result = $this->container->call([$userStatusRepository, 'getById'], ['id' => $id]);
+        $result = app()->call([$userStatusRepository, 'getById'], ['id' => $id]);
         if ($result != null) {
             $userStatusServiceResponse->status = true;
             $userStatusServiceResponse->message = 'Data Found';
@@ -86,7 +85,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function delete(int $id, UserStatusRepository $userStatusRepository): bool
     {
-        return $this->container->call([$userStatusRepository, 'delete'], ['id' => $id]);
+        return app()->call([$userStatusRepository, 'delete'], ['id' => $id]);
     }
 
     /**
@@ -94,13 +93,13 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function get(UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList
     {
-        $result = $this->container->call([$userStatusRepository, 'get']);
+        $result = app()->call([$userStatusRepository, 'get']);
 
         if (count($result) > 0) {
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatusList = $result;
-            $userStatusServiceResponseList->count = $this->container->call([$userStatusRepository, 'getCount']);
+            $userStatusServiceResponseList->count = app()->call([$userStatusRepository, 'getCount']);
         } else {
             $userStatusServiceResponseList->status = false;
             $userStatusServiceResponseList->message = 'Data Not Found';
@@ -114,7 +113,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getCount(UserStatusRepository $userStatusRepository): int
     {
-        return $this->container->call([$userStatusRepository, 'getCount']);
+        return app()->call([$userStatusRepository, 'getCount']);
     }
 
     /**
@@ -122,13 +121,13 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getWhere(string $q, UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList
     {
-        $result = $this->container->call([$userStatusRepository, 'get'], ['q' => $q]);
+        $result = app()->call([$userStatusRepository, 'get'], ['q' => $q]);
         if (count($result) > 0) {
             $userStatusServiceResponseList->status = true;
             $userStatusServiceResponseList->message = 'Data Found';
             $userStatusServiceResponseList->userStatusList = $result;
-            $userStatusServiceResponseList->count = $this->container->call([$userStatusRepository, 'getCount']);
-            $userStatusServiceResponseList->countFiltered = $this->container->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
+            $userStatusServiceResponseList->count = app()->call([$userStatusRepository, 'getCount']);
+            $userStatusServiceResponseList->countFiltered = app()->call([$userStatusRepository, 'getWhereCount'], ['q' => $q]);
         } else {
             $userStatusServiceResponseList->status = false;
             $userStatusServiceResponseList->message = 'Data Not Found';
@@ -141,7 +140,7 @@ class UserStatusService extends BaseService implements UserStatusServiceContract
      */
     public function getWhereCount(string $q, UserStatusRepository $userStatusRepository): int
     {
-        return $this->container->call([$userStatusRepository, 'getCount'], ['q' => $q]);
+        return app()->call([$userStatusRepository, 'getCount'], ['q' => $q]);
     }
 
 }

@@ -5,8 +5,7 @@
 
 namespace WebAppId\User\Services;
 
-use WebAppId\DDD\Services\BaseService;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Repositories\PermissionRepository;
 use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
 use WebAppId\User\Services\Contracts\PermissionServiceContract;
@@ -21,7 +20,7 @@ use WebAppId\User\Services\Responses\PermissionServiceResponseList;
  * Class PermissionService
  * @package WebAppId\User\Services
  */
-class PermissionService extends BaseService implements PermissionServiceContract
+class PermissionService implements PermissionServiceContract
 {
     /**
      * @inheritDoc
@@ -30,7 +29,7 @@ class PermissionService extends BaseService implements PermissionServiceContract
     {
         $permissionRepositoryRequest = Lazy::copy($permissionServiceRequest, $permissionRepositoryRequest);
 
-        $result = $this->container->call([$permissionRepository, 'store'], ['permissionRepositoryRequest' => $permissionRepositoryRequest]);
+        $result = app()->call([$permissionRepository, 'store'], ['permissionRepositoryRequest' => $permissionRepositoryRequest]);
         if ($result != null) {
             $permissionServiceResponse->status = true;
             $permissionServiceResponse->message = 'Store Data Success';
@@ -50,7 +49,7 @@ class PermissionService extends BaseService implements PermissionServiceContract
     {
         $permissionRepositoryRequest = Lazy::copy($permissionServiceRequest, $permissionRepositoryRequest);
 
-        $result = $this->container->call([$permissionRepository, 'update'], ['id' => $id, 'permissionRepositoryRequest' => $permissionRepositoryRequest]);
+        $result = app()->call([$permissionRepository, 'update'], ['id' => $id, 'permissionRepositoryRequest' => $permissionRepositoryRequest]);
         if ($result != null) {
             $permissionServiceResponse->status = true;
             $permissionServiceResponse->message = 'Update Data Success';
@@ -68,7 +67,7 @@ class PermissionService extends BaseService implements PermissionServiceContract
      */
     public function getById(int $id, PermissionRepository $permissionRepository, PermissionServiceResponse $permissionServiceResponse): PermissionServiceResponse
     {
-        $result = $this->container->call([$permissionRepository, 'getById'], ['id' => $id]);
+        $result = app()->call([$permissionRepository, 'getById'], ['id' => $id]);
         if ($result != null) {
             $permissionServiceResponse->status = true;
             $permissionServiceResponse->message = 'Data Found';
@@ -86,7 +85,7 @@ class PermissionService extends BaseService implements PermissionServiceContract
      */
     public function delete(int $id, PermissionRepository $permissionRepository): bool
     {
-        return $this->container->call([$permissionRepository, 'delete'], ['id' => $id]);
+        return app()->call([$permissionRepository, 'delete'], ['id' => $id]);
     }
 
     /**
@@ -97,14 +96,14 @@ class PermissionService extends BaseService implements PermissionServiceContract
                         int $length = 12,
                         string $q = null): PermissionServiceResponseList
     {
-        $result = $this->container->call([$permissionRepository, 'get'], ['q' => $q]);
+        $result = app()->call([$permissionRepository, 'get'], ['q' => $q]);
 
         if (count($result) > 0) {
             $permissionServiceResponseList->status = true;
             $permissionServiceResponseList->message = 'Data Found';
             $permissionServiceResponseList->permissionList = $result;
-            $permissionServiceResponseList->count = $this->container->call([$permissionRepository, 'getCount']);
-            $permissionServiceResponseList->countFiltered = $this->container->call([$permissionRepository, 'getCount'], ['q' => $q]);
+            $permissionServiceResponseList->count = app()->call([$permissionRepository, 'getCount']);
+            $permissionServiceResponseList->countFiltered = app()->call([$permissionRepository, 'getCount'], ['q' => $q]);
         } else {
             $permissionServiceResponseList->status = false;
             $permissionServiceResponseList->message = 'Data Not Found';
@@ -118,6 +117,6 @@ class PermissionService extends BaseService implements PermissionServiceContract
      */
     public function getCount(PermissionRepository $permissionRepository, string $q = null): int
     {
-        return $this->container->call([$permissionRepository, 'getCount'], ['q' => $q]);
+        return app()->call([$permissionRepository, 'getCount'], ['q' => $q]);
     }
 }

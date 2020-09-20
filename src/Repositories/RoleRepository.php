@@ -5,13 +5,7 @@
 
 namespace WebAppId\User\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\QueryException;
-use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
-use WebAppId\User\Models\Role;
 use WebAppId\User\Repositories\Contracts\RoleRepositoryContract;
-use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -22,95 +16,10 @@ use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
  */
 class RoleRepository implements RoleRepositoryContract
 {
-    /**
-     * @inheritDoc
-     */
-    public function store(RoleRepositoryRequest $roleRepositoryRequest, Role $role): ?Role
-    {
-        try {
-            $role = Lazy::copy($roleRepositoryRequest, $role);
-            $role->save();
-            return $role;
-        } catch (QueryException $queryException) {
-            report($queryException);
-            return null;
-        }
-    }
+    use RoleRepositoryTrait;
 
-    protected function getColumn($content, string $q = null): Builder
+    public function __construct()
     {
-        return $content
-            ->select
-            (
-                'roles.id',
-                'roles.name',
-                'roles.description'
-            )->when($q != null, function ($query) use ($q) {
-                return $query->where('name', 'LIKE', '%' . $q . '%');
-            });
-    }
 
-    /**
-     * @inheritDoc
-     */
-    public function update(int $id, RoleRepositoryRequest $roleRepositoryRequest, Role $role): ?Role
-    {
-        $role = $role->find($id);
-        if ($role != null) {
-            try {
-                $role = Lazy::copy($roleRepositoryRequest, $role);
-                $role->save();
-                return $role;
-            } catch (QueryException $queryException) {
-                report($queryException);
-            }
-        }
-        return $role;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getById(int $id, Role $role): ?Role
-    {
-        return $this->getColumn($role)->find($id);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function delete(int $id, Role $role): bool
-    {
-        $role = $role->find($id);
-        if ($role != null) {
-            return $role->delete();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function get(Role $role, int $length = 12, string $q = null): LengthAwarePaginator
-    {
-        return $this->getColumn($role, $q)->paginate($length)
-            ->appends(request()->input());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCount(Role $role, string $q = null): int
-    {
-        return $this->getColumn($role, $q)->count();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getByName(string $name, Role $role): ?Role
-    {
-        return $role->where('name', $name)->first();
     }
 }
