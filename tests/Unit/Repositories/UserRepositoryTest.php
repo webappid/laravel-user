@@ -6,14 +6,14 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
-use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
+use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Repositories\UserRepository;
-use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
+use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Tests\TestCase;
 
 /**
@@ -154,14 +154,15 @@ class UserRepositoryTest extends TestCase
     public function testGetLoginToken()
     {
         $user = $this->testStore();
-        $status = $this->container->call([$this->userRepository,'getLoginToken'],['email' => $user->email]);
+        $status = $this->container->call([$this->userRepository, 'getLoginToken'], ['email' => $user->email]);
         self::assertNotEquals(null, $status);
         return $status;
     }
 
-    public function testGetUserByLoginToken(){
+    public function testGetUserByLoginToken()
+    {
         $token = $this->testGetLoginToken();
-        $user = $this->container->call([$this->userRepository,'getUserByLoginToken'],['token' => $token]);
+        $user = $this->container->call([$this->userRepository, 'getUserByLoginToken'], ['token' => $token]);
         self::assertNotEquals(null, $user);
     }
 }

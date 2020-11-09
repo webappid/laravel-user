@@ -6,13 +6,7 @@
 
 namespace WebAppId\User\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\QueryException;
-use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
-use WebAppId\User\Models\UserStatus;
 use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
-use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 
 
 /**

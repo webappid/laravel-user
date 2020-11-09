@@ -9,15 +9,10 @@
 namespace WebAppId\User\Repositories;
 
 
-use Illuminate\Database\QueryException;
-use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\Role;
 use WebAppId\User\Models\User;
-use WebAppId\User\Models\UserRole;
 use WebAppId\User\Repositories\Contracts\UserRoleRepositoryContract;
-use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

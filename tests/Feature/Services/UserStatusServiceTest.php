@@ -7,9 +7,9 @@
 namespace WebAppId\User\Tests\Feature\Services;
 
 
-use WebAppId\User\Services\Requests\UserStatusServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\User\Services\Requests\UserStatusServiceRequest;
 use WebAppId\User\Services\UserStatusService;
 use WebAppId\User\Tests\TestCase;
 use WebAppId\User\Tests\Unit\Repositories\UserStatusRepositoryTest;
@@ -68,7 +68,7 @@ class UserStatusServiceTest extends TestCase
 
     public function testGet()
     {
-        for ($i=0; $i<$this->getFaker()->numberBetween(50, $this->getFaker()->numberBetween(50, 100)); $i++){
+        for ($i = 0; $i < $this->getFaker()->numberBetween(50, $this->getFaker()->numberBetween(50, 100)); $i++) {
             $this->testStore($i);
         }
         $result = $this->container->call([$this->userStatusService, 'get']);

@@ -5,9 +5,9 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
-use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\UserStatus;
+use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use WebAppId\User\Repositories\UserStatusRepository;
 use WebAppId\User\Tests\TestCase;
 
@@ -21,7 +21,7 @@ use WebAppId\User\Tests\TestCase;
 class UserStatusRepositoryTest extends TestCase
 {
     /**
-     * @var UserStatusRepository 
+     * @var UserStatusRepository
      */
     private $userStatusRepository;
 

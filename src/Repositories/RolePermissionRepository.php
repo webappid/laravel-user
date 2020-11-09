@@ -8,16 +8,10 @@
 
 namespace WebAppId\User\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\QueryException;
-use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\Permission;
-use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
-use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

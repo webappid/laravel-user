@@ -7,10 +7,10 @@
 namespace WebAppId\User\Tests\Feature\Services;
 
 
-use WebAppId\User\Services\Requests\ChangePasswordRequest;
-use WebAppId\User\Services\Requests\UserServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\User\Services\Requests\ChangePasswordRequest;
+use WebAppId\User\Services\Requests\UserServiceRequest;
 use WebAppId\User\Services\UserService;
 use WebAppId\User\Tests\TestCase;
 use WebAppId\User\Tests\Unit\Repositories\RoleRepositoryTest;

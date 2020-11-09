@@ -8,12 +8,12 @@
 
 namespace WebAppId\User\Tests\Feature\Services;
 
-use WebAppId\User\Services\Requests\RoleServiceRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use WebAppId\User\Tests\Unit\Repositories\RoleRepositoryTest;
 use WebAppId\DDD\Tools\Lazy;
+use WebAppId\User\Services\Requests\RoleServiceRequest;
 use WebAppId\User\Services\RoleService;
 use WebAppId\User\Tests\TestCase;
+use WebAppId\User\Tests\Unit\Repositories\RoleRepositoryTest;
 
 class RoleServiceTest extends TestCase
 {
@@ -69,7 +69,7 @@ class RoleServiceTest extends TestCase
 
     public function testGet()
     {
-        for ($i=0; $i<$this->getFaker()->numberBetween(50, $this->getFaker()->numberBetween(50, 100)); $i++){
+        for ($i = 0; $i < $this->getFaker()->numberBetween(50, $this->getFaker()->numberBetween(50, 100)); $i++) {
             $this->testStore($i);
         }
         $result = $this->container->call([$this->roleService, 'get']);

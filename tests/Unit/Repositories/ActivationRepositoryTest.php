@@ -5,10 +5,10 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\Activation;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\Requests\ActivationRepositoryRequest;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Tests\TestCase;
 
 /**
@@ -70,7 +70,8 @@ class ActivationRepositoryTest extends TestCase
         self::assertNotEquals(null, $result);
     }
 
-    public function testActivate(){
+    public function testActivate()
+    {
         $activation = $this->testStore();
         $result = $this->container->call([$this->activationRepository, 'setActivate'], ['key' => $activation->key]);
         self::assertNotEquals(null, $result);

@@ -8,10 +8,6 @@
 
 namespace WebAppId\User\Repositories;
 
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Carbon;
-use Ramsey\Uuid\Uuid;
-use WebAppId\User\Models\Activation;
 use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
 
 /**

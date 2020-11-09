@@ -6,9 +6,9 @@
 namespace WebAppId\User\Tests\Unit\Repositories;
 
 
-use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\Role;
+use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;
 use WebAppId\User\Repositories\RoleRepository;
 use WebAppId\User\Tests\TestCase;
 

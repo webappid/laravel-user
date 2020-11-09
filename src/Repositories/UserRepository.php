@@ -20,7 +20,7 @@ class UserRepository implements UserRepositoryContract
         $user_statuses->class = UserStatus::class;
         $user_statuses->foreign = 'status_id';
         $user_statuses->type = 'inner';
-        $user_statuses->primary = 'users.id';
+        $user_statuses->primary = 'user_statuses.id';
         $this->joinTable['user_statuses'] = $user_statuses;
 
     }

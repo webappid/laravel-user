@@ -5,10 +5,10 @@
 
 namespace WebAppId\User\Tests\Unit\Repositories;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
 use WebAppId\User\Repositories\RolePermissionRepository;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use WebAppId\User\Tests\TestCase;
 
 /**
