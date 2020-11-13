@@ -25,8 +25,7 @@
     "doctrine/dbal": "^2.5",
     "nesbot/carbon": "^2.0",
     "webappid/lazy": "^1.0@dev",
-    "webappid/laravel-ddd": "^1.0@dev",
-    "laravel/ui": "9999999-dev"
+    "webappid/laravel-ddd": "^1.0@dev"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.0",
