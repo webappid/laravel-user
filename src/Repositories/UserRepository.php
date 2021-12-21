@@ -4,13 +4,12 @@ namespace WebAppId\User\Repositories;
 
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\UserStatus;
-use WebAppId\User\Repositories\Contracts\UserRepositoryContract;
 
 /**
  * Class UserRepository
  * @package WebAppId\User\Http\Repositories
  */
-class UserRepository implements UserRepositoryContract
+class UserRepository
 {
     use UserRepositoryTrait;
 

@@ -6,9 +6,6 @@
 
 namespace WebAppId\User\Repositories;
 
-use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
-
-
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 18/04/20
@@ -16,7 +13,7 @@ use WebAppId\User\Repositories\Contracts\UserStatusRepositoryContract;
  * Class UserStatusRepository
  * @package WebAppId\User\Repositories
  */
-class UserStatusRepository implements UserStatusRepositoryContract
+class UserStatusRepository
 {
     use UserStatusRepositoryTrait;
 }

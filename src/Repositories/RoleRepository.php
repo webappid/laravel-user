@@ -5,8 +5,6 @@
 
 namespace WebAppId\User\Repositories;
 
-use WebAppId\User\Repositories\Contracts\RoleRepositoryContract;
-
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 17:14:01
@@ -14,7 +12,7 @@ use WebAppId\User\Repositories\Contracts\RoleRepositoryContract;
  * Class RoleRepository
  * @package WebAppId\User\Repositories
  */
-class RoleRepository implements RoleRepositoryContract
+class RoleRepository
 {
     use RoleRepositoryTrait;
 

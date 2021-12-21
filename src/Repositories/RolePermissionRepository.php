@@ -11,7 +11,6 @@ namespace WebAppId\User\Repositories;
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\Permission;
 use WebAppId\User\Models\User;
-use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -20,7 +19,7 @@ use WebAppId\User\Repositories\Contracts\RolePermissionRepositoryContract;
  * Class RolePermissionRepository
  * @package WebAppId\User\Repositories
  */
-class RolePermissionRepository implements RolePermissionRepositoryContract
+class RolePermissionRepository
 {
     use RolePermissionRepositoryTrait;
 

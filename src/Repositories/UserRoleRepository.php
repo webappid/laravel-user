@@ -12,7 +12,6 @@ namespace WebAppId\User\Repositories;
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\Role;
 use WebAppId\User\Models\User;
-use WebAppId\User\Repositories\Contracts\UserRoleRepositoryContract;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -21,7 +20,7 @@ use WebAppId\User\Repositories\Contracts\UserRoleRepositoryContract;
  * Class UserRoleRepository
  * @package WebAppId\User\Repositories
  */
-class UserRoleRepository implements UserRoleRepositoryContract
+class UserRoleRepository
 {
     use UserRoleRepositoryTrait;
 

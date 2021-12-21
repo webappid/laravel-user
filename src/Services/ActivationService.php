@@ -8,7 +8,6 @@ namespace WebAppId\User\Services;
 use Illuminate\Support\Facades\DB;
 use WebAppId\User\Repositories\ActivationRepository;
 use WebAppId\User\Repositories\UserRepository;
-use WebAppId\User\Services\Contracts\ActivationServiceContract;
 use WebAppId\User\Services\Responses\ActivateResponse;
 
 /**
@@ -18,7 +17,7 @@ use WebAppId\User\Services\Responses\ActivateResponse;
  * Class ActivationService
  * @package WebAppId\User\Services
  */
-class ActivationService implements ActivationServiceContract
+class ActivationService
 {
 
     /**

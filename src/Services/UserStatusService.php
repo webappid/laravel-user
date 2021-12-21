@@ -8,7 +8,6 @@ namespace WebAppId\User\Services;
 use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Repositories\Requests\UserStatusRepositoryRequest;
 use WebAppId\User\Repositories\UserStatusRepository;
-use WebAppId\User\Services\Contracts\UserStatusServiceContract;
 use WebAppId\User\Services\Requests\UserStatusServiceRequest;
 use WebAppId\User\Services\Responses\UserStatusServiceResponse;
 use WebAppId\User\Services\Responses\UserStatusServiceResponseList;
@@ -20,7 +19,7 @@ use WebAppId\User\Services\Responses\UserStatusServiceResponseList;
  * Class UserStatusService
  * @package WebAppId\User\Services
  */
-class UserStatusService implements UserStatusServiceContract
+class UserStatusService
 {
     /**
      * @inheritDoc

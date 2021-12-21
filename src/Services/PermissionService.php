@@ -8,7 +8,6 @@ namespace WebAppId\User\Services;
 use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Repositories\PermissionRepository;
 use WebAppId\User\Repositories\Requests\PermissionRepositoryRequest;
-use WebAppId\User\Services\Contracts\PermissionServiceContract;
 use WebAppId\User\Services\Requests\PermissionServiceRequest;
 use WebAppId\User\Services\Responses\PermissionServiceResponse;
 use WebAppId\User\Services\Responses\PermissionServiceResponseList;
@@ -20,7 +19,7 @@ use WebAppId\User\Services\Responses\PermissionServiceResponseList;
  * Class PermissionService
  * @package WebAppId\User\Services
  */
-class PermissionService implements PermissionServiceContract
+class PermissionService
 {
     /**
      * @inheritDoc

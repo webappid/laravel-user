@@ -15,7 +15,6 @@ use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 use WebAppId\User\Repositories\Requests\UserRoleRepositoryRequest;
 use WebAppId\User\Repositories\UserRepository;
 use WebAppId\User\Repositories\UserRoleRepository;
-use WebAppId\User\Services\Contracts\UserServiceContract;
 use WebAppId\User\Services\Requests\ChangePasswordRequest;
 use WebAppId\User\Services\Requests\UserServiceRequest;
 use WebAppId\User\Services\Responses\ChangePasswordResponse;
@@ -27,7 +26,7 @@ use WebAppId\User\Services\Responses\UserServiceResponseList;
  * Class UserService
  * @package WebAppId\User\Http\Services
  */
-class UserService implements UserServiceContract
+class UserService
 {
     /**
      * @inheritDoc

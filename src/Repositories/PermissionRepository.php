@@ -10,7 +10,6 @@ namespace WebAppId\User\Repositories;
 
 use WebAppId\Lazy\Models\Join;
 use WebAppId\User\Models\User;
-use WebAppId\User\Repositories\Contracts\PermissionRepositoryContract;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
@@ -19,7 +18,7 @@ use WebAppId\User\Repositories\Contracts\PermissionRepositoryContract;
  * Class PermissionRepository
  * @package WebAppId\User\Repositories
  */
-class PermissionRepository implements PermissionRepositoryContract
+class PermissionRepository
 {
     use PermissionRepositoryTrait;
 

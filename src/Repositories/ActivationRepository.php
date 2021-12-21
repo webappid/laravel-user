@@ -8,8 +8,6 @@
 
 namespace WebAppId\User\Repositories;
 
-use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
-
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>
  * Date: 28/04/2020
@@ -17,7 +15,7 @@ use WebAppId\User\Repositories\Contracts\ActivationRepositoryContract;
  * Class ActivationRepository
  * @package WebAppId\User\Repositories
  */
-class ActivationRepository implements ActivationRepositoryContract
+class ActivationRepository
 {
     use ActivationRepositoryTrait;
 }
