@@ -9,7 +9,7 @@
 namespace WebAppId\User\Services\Responses;
 
 
-use WebAppId\DDD\Responses\AbstractResponse;
+use WebAppId\SmartResponse\Responses\AbstractResponse;
 
 class ActivateResponse extends AbstractResponse
 {

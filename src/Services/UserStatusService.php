@@ -22,7 +22,11 @@ use WebAppId\User\Services\Responses\UserStatusServiceResponseList;
 class UserStatusService
 {
     /**
-     * @inheritDoc
+     * @param UserStatusServiceRequest $userStatusServiceRequest
+     * @param UserStatusRepositoryRequest $userStatusRepositoryRequest
+     * @param UserStatusRepository $userStatusRepository
+     * @param UserStatusServiceResponse $userStatusServiceResponse
+     * @return UserStatusServiceResponse
      */
     public function store(UserStatusServiceRequest $userStatusServiceRequest, UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatusRepository $userStatusRepository, UserStatusServiceResponse $userStatusServiceResponse): UserStatusServiceResponse
     {
@@ -42,7 +46,12 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatusServiceRequest $userStatusServiceRequest
+     * @param UserStatusRepositoryRequest $userStatusRepositoryRequest
+     * @param UserStatusRepository $userStatusRepository
+     * @param UserStatusServiceResponse $userStatusServiceResponse
+     * @return UserStatusServiceResponse
      */
     public function update(int $id, UserStatusServiceRequest $userStatusServiceRequest, UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatusRepository $userStatusRepository, UserStatusServiceResponse $userStatusServiceResponse): UserStatusServiceResponse
     {
@@ -62,7 +71,10 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatusRepository $userStatusRepository
+     * @param UserStatusServiceResponse $userStatusServiceResponse
+     * @return UserStatusServiceResponse
      */
     public function getById(int $id, UserStatusRepository $userStatusRepository, UserStatusServiceResponse $userStatusServiceResponse): UserStatusServiceResponse
     {
@@ -80,7 +92,9 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatusRepository $userStatusRepository
+     * @return bool
      */
     public function delete(int $id, UserStatusRepository $userStatusRepository): bool
     {
@@ -88,7 +102,10 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param UserStatusRepository $userStatusRepository
+     * @param UserStatusServiceResponseList $userStatusServiceResponseList
+     * @param int $length
+     * @return UserStatusServiceResponseList
      */
     public function get(UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList
     {
@@ -108,7 +125,8 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param UserStatusRepository $userStatusRepository
+     * @return int
      */
     public function getCount(UserStatusRepository $userStatusRepository): int
     {
@@ -116,7 +134,11 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param string $q
+     * @param UserStatusRepository $userStatusRepository
+     * @param UserStatusServiceResponseList $userStatusServiceResponseList
+     * @param int $length
+     * @return UserStatusServiceResponseList
      */
     public function getWhere(string $q, UserStatusRepository $userStatusRepository, UserStatusServiceResponseList $userStatusServiceResponseList, int $length = 12): UserStatusServiceResponseList
     {
@@ -135,7 +157,9 @@ class UserStatusService
     }
 
     /**
-     * @inheritDoc
+     * @param string $q
+     * @param UserStatusRepository $userStatusRepository
+     * @return int
      */
     public function getWhereCount(string $q, UserStatusRepository $userStatusRepository): int
     {

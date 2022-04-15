@@ -9,13 +9,15 @@
 namespace WebAppId\User\Models;
 
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authentication;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use WebAppId\Lazy\Traits\ModelTrait;
 
 class User extends Authentication
 {
-    use Notifiable, ModelTrait;
+    use Notifiable, ModelTrait, HasFactory, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +34,7 @@ class User extends Authentication
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'api_token'
+        'password', 'remember_token'
     ];
 
     /**
@@ -46,7 +48,6 @@ class User extends Authentication
         $forbiddenField = [
             "email_verified_at",
             "password",
-            "api_token",
             "remember_token",
             "created_at",
             "updated_at"

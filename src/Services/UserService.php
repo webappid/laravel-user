@@ -29,7 +29,15 @@ use WebAppId\User\Services\Responses\UserServiceResponseList;
 class UserService
 {
     /**
-     * @inheritDoc
+     * @param UserServiceRequest $userServiceRequest
+     * @param UserRepositoryRequest $userRepositoryRequest
+     * @param UserRepository $userRepository
+     * @param array $userRoleList
+     * @param UserRoleRepositoryRequest $userRoleRepositoryRequest
+     * @param UserRoleRepository $userRoleRepository
+     * @param ActivationRepository $activationRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
      */
     public function store(
         UserServiceRequest $userServiceRequest,
@@ -109,7 +117,15 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserServiceRequest $userServiceRequest
+     * @param UserRepositoryRequest $userRepositoryRequest
+     * @param UserRepository $userRepository
+     * @param array $userRoleList
+     * @param UserRoleRepositoryRequest $userRoleRepositoryRequest
+     * @param UserRoleRepository $userRoleRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
      */
     public function update(int $id,
                            UserServiceRequest $userServiceRequest,
@@ -154,7 +170,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
      */
     public function getById(int $id, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
@@ -173,7 +192,9 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserRepository $userRepository
+     * @return bool
      */
     public function delete(int $id, UserRepository $userRepository): bool
     {
@@ -181,7 +202,11 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param UserRepository $userRepository
+     * @param UserServiceResponseList $userServiceResponseList
+     * @param int $length
+     * @param string|null $q
+     * @return UserServiceResponseList
      */
     public function get(UserRepository $userRepository, UserServiceResponseList $userServiceResponseList, int $length = 12, string $q = null): UserServiceResponseList
     {
@@ -202,7 +227,9 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param UserRepository $userRepository
+     * @param string|null $q
+     * @return int
      */
     public function getCount(UserRepository $userRepository, string $q = null): int
     {
@@ -210,7 +237,11 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param ChangePasswordRequest $changePasswordRequest
+     * @param UserRepository $userRepository
+     * @param ChangePasswordResponse $changePasswordResponse
+     * @param $force
+     * @return ChangePasswordResponse
      */
     public function changePassword(ChangePasswordRequest $changePasswordRequest,
                                    UserRepository $userRepository,
@@ -245,7 +276,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param int $status
+     * @param UserRepository $userRepository
+     * @return User|null
      */
     public function updateUserStatus(string $email, int $status, UserRepository $userRepository): ?User
     {
@@ -253,7 +287,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param string $name
+     * @param UserRepository $userRepository
+     * @return User|null
      */
     public function updateUserName(string $email, string $name, UserRepository $userRepository): ?User
     {
@@ -261,7 +298,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param array $credential
+     * @param UserRepository $userRepository
+     * @param ResetPasswordResponse $resetPasswordResponse
+     * @return ResetPasswordResponse
      */
     public function sendForgotPasswordLink(array $credential, UserRepository $userRepository, ResetPasswordResponse $resetPasswordResponse): ResetPasswordResponse
     {
@@ -279,7 +319,9 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $token
+     * @param ChangePasswordResponse $changePasswordResponse
+     * @return ChangePasswordResponse
      */
     public function getEmailByResetToken(string $token, ChangePasswordResponse $changePasswordResponse): ChangePasswordResponse
     {
@@ -294,7 +336,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse|null
      */
     public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
@@ -314,7 +359,11 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param int $status
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse|null
      */
     public function setUpdateStatusUser(string $email, int $status, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
@@ -331,7 +380,11 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param string $name
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse|null
      */
     public function setUpdateName(string $email, string $name, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
     {
@@ -348,7 +401,9 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @return bool
      */
     public function deleteByEmail(string $email, UserRepository $userRepository): bool
     {
@@ -356,7 +411,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
      */
     public function setResetPasswordTokenByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
@@ -373,7 +431,11 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param int $userId
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @param bool $revoke
+     * @return UserServiceResponse
      */
     public function updateRememberToken(int $userId, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $revoke = false): UserServiceResponse
     {
@@ -397,7 +459,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param UserRepository $userRepository
+     * @param UserServiceResponse $userServiceResponse
+     * @return UserServiceResponse
      */
     public function getLoginToken(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): UserServiceResponse
     {
@@ -414,7 +479,10 @@ class UserService
     }
 
     /**
-     * @inheritDoc
+     * @param string $token
+     * @param UserServiceResponse $userServiceResponse
+     * @param UserRepository $userRepository
+     * @return UserServiceResponse
      */
     public function getUserByLoginToken(string $token, UserServiceResponse $userServiceResponse, UserRepository $userRepository): UserServiceResponse
     {

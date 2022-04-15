@@ -9,7 +9,7 @@ namespace WebAppId\User\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\Lazy\Traits\RepositoryTrait;
 use WebAppId\User\Models\Role;
 use WebAppId\User\Repositories\Requests\RoleRepositoryRequest;

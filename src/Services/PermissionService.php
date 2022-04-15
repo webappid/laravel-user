@@ -22,7 +22,11 @@ use WebAppId\User\Services\Responses\PermissionServiceResponseList;
 class PermissionService
 {
     /**
-     * @inheritDoc
+     * @param PermissionServiceRequest $permissionServiceRequest
+     * @param PermissionRepositoryRequest $permissionRepositoryRequest
+     * @param PermissionRepository $permissionRepository
+     * @param PermissionServiceResponse $permissionServiceResponse
+     * @return PermissionServiceResponse
      */
     public function store(PermissionServiceRequest $permissionServiceRequest, PermissionRepositoryRequest $permissionRepositoryRequest, PermissionRepository $permissionRepository, PermissionServiceResponse $permissionServiceResponse): PermissionServiceResponse
     {
@@ -42,7 +46,12 @@ class PermissionService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param PermissionServiceRequest $permissionServiceRequest
+     * @param PermissionRepositoryRequest $permissionRepositoryRequest
+     * @param PermissionRepository $permissionRepository
+     * @param PermissionServiceResponse $permissionServiceResponse
+     * @return PermissionServiceResponse
      */
     public function update(int $id, PermissionServiceRequest $permissionServiceRequest, PermissionRepositoryRequest $permissionRepositoryRequest, PermissionRepository $permissionRepository, PermissionServiceResponse $permissionServiceResponse): PermissionServiceResponse
     {
@@ -62,7 +71,10 @@ class PermissionService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param PermissionRepository $permissionRepository
+     * @param PermissionServiceResponse $permissionServiceResponse
+     * @return PermissionServiceResponse
      */
     public function getById(int $id, PermissionRepository $permissionRepository, PermissionServiceResponse $permissionServiceResponse): PermissionServiceResponse
     {
@@ -80,7 +92,9 @@ class PermissionService
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param PermissionRepository $permissionRepository
+     * @return bool
      */
     public function delete(int $id, PermissionRepository $permissionRepository): bool
     {
@@ -88,7 +102,11 @@ class PermissionService
     }
 
     /**
-     * @inheritDoc
+     * @param PermissionRepository $permissionRepository
+     * @param PermissionServiceResponseList $permissionServiceResponseList
+     * @param int $length
+     * @param string|null $q
+     * @return PermissionServiceResponseList
      */
     public function get(PermissionRepository $permissionRepository,
                         PermissionServiceResponseList $permissionServiceResponseList,
@@ -112,7 +130,9 @@ class PermissionService
     }
 
     /**
-     * @inheritDoc
+     * @param PermissionRepository $permissionRepository
+     * @param string|null $q
+     * @return int
      */
     public function getCount(PermissionRepository $permissionRepository, string $q = null): int
     {

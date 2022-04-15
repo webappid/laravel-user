@@ -8,7 +8,8 @@
 
 namespace WebAppId\User\Services\Responses;
 
-use WebAppId\DDD\Responses\AbstractResponse;
+
+use WebAppId\SmartResponse\Responses\AbstractResponse;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

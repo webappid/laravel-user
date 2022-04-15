@@ -27,7 +27,9 @@ trait PermissionRepositoryTrait
     use RepositoryTrait;
 
     /**
-     * @inheritDoc
+     * @param PermissionRepositoryRequest $permissionRepositoryRequest
+     * @param Permission $permission
+     * @return Permission|null
      */
     public function store(PermissionRepositoryRequest $permissionRepositoryRequest, Permission $permission): ?Permission
     {
@@ -42,7 +44,10 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param PermissionRepositoryRequest $permissionRepositoryRequest
+     * @param Permission $permission
+     * @return Permission|null
      */
     public function update(int $id, PermissionRepositoryRequest $permissionRepositoryRequest, Permission $permission): ?Permission
     {
@@ -60,7 +65,9 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param Permission $permission
+     * @return Permission|null
      */
     public function getById(int $id, Permission $permission): ?Permission
     {
@@ -68,7 +75,9 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param Permission $permission
+     * @return bool
      */
     public function delete(int $id, Permission $permission): bool
     {
@@ -81,7 +90,10 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param Permission $permission
+     * @param int $length
+     * @param string|null $q
+     * @return LengthAwarePaginator
      */
     public function get(Permission $permission, int $length = 12, string $q = null): LengthAwarePaginator
     {
@@ -105,7 +117,9 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param Permission $permission
+     * @param string|null $q
+     * @return int
      */
     public function getCount(Permission $permission, string $q = null): int
     {
@@ -117,7 +131,9 @@ trait PermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $name
+     * @param Permission $permission
+     * @return Permission|null
      */
     public function getByName(string $name, Permission $permission): ?Permission
     {

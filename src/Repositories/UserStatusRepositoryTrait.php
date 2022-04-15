@@ -26,7 +26,9 @@ trait UserStatusRepositoryTrait
     use RepositoryTrait;
 
     /**
-     * @inheritDoc
+     * @param UserStatusRepositoryRequest $userStatusRepositoryRequest
+     * @param UserStatus $userStatus
+     * @return UserStatus|null
      */
     public function store(UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatus $userStatus): ?UserStatus
     {
@@ -41,7 +43,10 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatusRepositoryRequest $userStatusRepositoryRequest
+     * @param UserStatus $userStatus
+     * @return UserStatus|null
      */
     public function update(int $id, UserStatusRepositoryRequest $userStatusRepositoryRequest, UserStatus $userStatus): ?UserStatus
     {
@@ -59,7 +64,9 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatus $userStatus
+     * @return UserStatus|null
      */
     public function getById(int $id, UserStatus $userStatus): ?UserStatus
     {
@@ -69,7 +76,9 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserStatus $userStatus
+     * @return bool
      */
     public function delete(int $id, UserStatus $userStatus): bool
     {
@@ -82,7 +91,10 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param UserStatus $userStatus
+     * @param int $length
+     * @param string|null $q
+     * @return LengthAwarePaginator
      */
     public function get(UserStatus $userStatus, int $length = 12, string $q = null): LengthAwarePaginator
     {
@@ -106,7 +118,9 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param UserStatus $userStatus
+     * @param string|null $q
+     * @return int
      */
     public function getCount(UserStatus $userStatus, string $q = null): int
     {
@@ -119,7 +133,9 @@ trait UserStatusRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $name
+     * @param UserStatus $userStatus
+     * @return UserStatus|null
      */
     public function getByName(string $name, UserStatus $userStatus): ?UserStatus
     {

@@ -6,7 +6,7 @@
 namespace WebAppId\User\Services\Responses;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Responses\AbstractResponseList;
+use WebAppId\SmartResponse\Responses\AbstractResponseList;
 
 /**
  * @author: Dyan Galih<dyan.galih@gmail.com>

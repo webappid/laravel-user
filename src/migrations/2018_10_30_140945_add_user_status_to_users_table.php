@@ -16,6 +16,7 @@ class AddUserStatusToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('status_id')
+                ->after('email')
                 ->unsigned()
                 ->nullable(true)
                 ->comment('Users status');

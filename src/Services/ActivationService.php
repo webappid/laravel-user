@@ -21,7 +21,11 @@ class ActivationService
 {
 
     /**
-     * @inheritDoc
+     * @param string $activationKey
+     * @param ActivationRepository $activationRepository
+     * @param UserRepository $userRepository
+     * @param ActivateResponse $activateResponse
+     * @return ActivateResponse
      */
     public function activate(string $activationKey,
                              ActivationRepository $activationRepository,

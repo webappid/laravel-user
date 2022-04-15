@@ -31,7 +31,9 @@ trait UserRepositoryTrait
     use RepositoryTrait;
 
     /**
-     * @inheritDoc
+     * @param UserRepositoryRequest $userRepositoryRequest
+     * @param User $user
+     * @return User|null
      */
     public function store(UserRepositoryRequest $userRepositoryRequest, User $user): ?User
     {
@@ -47,7 +49,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param UserRepositoryRequest $userRepositoryRequest
+     * @param User $user
+     * @return User|null
      */
     public function update(int $id, UserRepositoryRequest $userRepositoryRequest, User $user): ?User
     {
@@ -73,7 +78,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param User $user
+     * @return User|null
      */
     public function getById(int $id, User $user): ?User
     {
@@ -83,7 +90,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param User $user
+     * @return bool
      */
     public function delete(int $id, User $user): bool
     {
@@ -96,7 +105,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param User $user
+     * @param int $length
+     * @param string|null $q
+     * @return LengthAwarePaginator
      */
     public function get(User $user, int $length = 12, string $q = null): LengthAwarePaginator
     {
@@ -121,7 +133,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param User $user
+     * @param string|null $q
+     * @return int
      */
     public function getCount(User $user, string $q = null): int
     {
@@ -132,7 +146,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param User $user
+     * @return User|null
      */
     public function getByEmail(string $email, User $user): ?User
     {
@@ -142,7 +158,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param string $password
+     * @param User $user
+     * @return User|null
      */
     public function setUpdatePassword(string $email, string $password, User $user): ?User
     {
@@ -162,7 +181,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param int $status
+     * @param User $user
+     * @return User|null
      */
     public function setUpdateStatusUser(string $email, int $status, User $user): ?User
     {
@@ -182,7 +204,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param string $name
+     * @param User $user
+     * @return User|null
      */
     public function setUpdateName(string $email, string $name, User $user): ?User
     {
@@ -202,7 +227,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param User $user
+     * @return bool
      */
     public function deleteByEmail(string $email, User $user): bool
     {
@@ -216,7 +243,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param Application $application
+     * @param User $user
+     * @return string|null
      */
     public function setResetPasswordTokenByEmail(string $email, Application $application, User $user): ?string
     {
@@ -257,7 +287,10 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $userId
+     * @param User $user
+     * @param bool $revoke
+     * @return User
      */
     public function updateRememberToken(int $userId, User $user, bool $revoke = false): User
     {
@@ -280,7 +313,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param User $user
+     * @return string
      */
     public function getLoginToken(string $email, User $user): string
     {
@@ -295,7 +330,9 @@ trait UserRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $token
+     * @param User $user
+     * @return User
      */
     public function getUserByLoginToken(string $token, User $user): user
     {

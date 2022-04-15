@@ -8,7 +8,7 @@ namespace WebAppId\User\Repositories;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Pagination\LengthAwarePaginator;
-use WebAppId\DDD\Tools\Lazy;
+use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\Lazy\Traits\RepositoryTrait;
 use WebAppId\User\Models\RolePermission;
 use WebAppId\User\Repositories\Requests\RolePermissionRepositoryRequest;
@@ -26,9 +26,11 @@ trait RolePermissionRepositoryTrait
     use RepositoryTrait;
 
     /**
-     * @inheritDoc
+     * @param RolePermissionRepositoryRequest $rolePermissionRepositoryRequest
+     * @param RolePermission $rolePermission
+     * @return object|null
      */
-    public function store(RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
+    public function store(RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?object
     {
         try {
             $rolePermission = Lazy::copy($rolePermissionRepositoryRequest, $rolePermission);
@@ -41,9 +43,12 @@ trait RolePermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param RolePermissionRepositoryRequest $rolePermissionRepositoryRequest
+     * @param RolePermission $rolePermission
+     * @return object
      */
-    public function update(int $id, RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): ?RolePermission
+    public function update(int $id, RolePermissionRepositoryRequest $rolePermissionRepositoryRequest, RolePermission $rolePermission): object
     {
         $rolePermission = $rolePermission->first($id);
         if ($rolePermission != null) {
@@ -59,7 +64,9 @@ trait RolePermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param RolePermission $rolePermission
+     * @return RolePermission|null
      */
     public function getById(int $id, RolePermission $rolePermission): ?RolePermission
     {
@@ -67,7 +74,9 @@ trait RolePermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param RolePermission $rolePermission
+     * @return bool
      */
     public function delete(int $id, RolePermission $rolePermission): bool
     {
@@ -80,7 +89,9 @@ trait RolePermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param RolePermission $rolePermission
+     * @param int $length
+     * @return LengthAwarePaginator
      */
     public function get(RolePermission $rolePermission, int $length = 12): LengthAwarePaginator
     {
@@ -90,7 +101,8 @@ trait RolePermissionRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param RolePermission $rolePermission
+     * @return int
      */
     public function getCount(RolePermission $rolePermission): int
     {

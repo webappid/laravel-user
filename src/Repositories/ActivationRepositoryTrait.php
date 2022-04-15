@@ -21,7 +21,9 @@ use WebAppId\User\Models\Activation;
 trait ActivationRepositoryTrait
 {
     /**
-     * @inheritDoc
+     * @param int $userId
+     * @param Activation $activation
+     * @return Activation|null
      */
     public function store(int $userId, Activation $activation): ?Activation
     {
@@ -39,7 +41,9 @@ trait ActivationRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $key
+     * @param Activation $activation
+     * @return Activation|null
      */
     public function setActivate(string $key, Activation $activation): ?Activation
     {
@@ -65,7 +69,9 @@ trait ActivationRepositoryTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $key
+     * @param Activation $activation
+     * @return Activation|null
      */
     public function getByKey(string $key, Activation $activation): ?Activation
     {
