@@ -45,15 +45,7 @@ class User extends Authentication
     {
         $columns = $this->getAllColumn($isFresh);
 
-        $forbiddenField = [
-            "email_verified_at",
-            "password",
-            "remember_token",
-            "created_at",
-            "updated_at"
-        ];
-
-        foreach ($forbiddenField as $item) {
+        foreach ($this->hidden as $item) {
             unset($columns[$item]);
         }
 

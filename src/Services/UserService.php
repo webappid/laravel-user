@@ -8,6 +8,7 @@ namespace WebAppId\User\Services;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\User\Models\User;
 use WebAppId\User\Repositories\ActivationRepository;
@@ -40,14 +41,14 @@ class UserService
      * @return UserServiceResponse
      */
     public function store(
-        UserServiceRequest $userServiceRequest,
-        UserRepositoryRequest $userRepositoryRequest,
-        UserRepository $userRepository,
-        array $userRoleList,
+        UserServiceRequest        $userServiceRequest,
+        UserRepositoryRequest     $userRepositoryRequest,
+        UserRepository            $userRepository,
+        array                     $userRoleList,
         UserRoleRepositoryRequest $userRoleRepositoryRequest,
-        UserRoleRepository $userRoleRepository,
-        ActivationRepository $activationRepository,
-        UserServiceResponse $userServiceResponse): UserServiceResponse
+        UserRoleRepository        $userRoleRepository,
+        ActivationRepository      $activationRepository,
+        UserServiceResponse       $userServiceResponse): UserServiceResponse
     {
         $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
 
@@ -127,14 +128,14 @@ class UserService
      * @param UserServiceResponse $userServiceResponse
      * @return UserServiceResponse
      */
-    public function update(int $id,
-                           UserServiceRequest $userServiceRequest,
-                           UserRepositoryRequest $userRepositoryRequest,
-                           UserRepository $userRepository,
-                           array $userRoleList,
+    public function update(int                       $id,
+                           UserServiceRequest        $userServiceRequest,
+                           UserRepositoryRequest     $userRepositoryRequest,
+                           UserRepository            $userRepository,
+                           array                     $userRoleList,
                            UserRoleRepositoryRequest $userRoleRepositoryRequest,
-                           UserRoleRepository $userRoleRepository,
-                           UserServiceResponse $userServiceResponse): UserServiceResponse
+                           UserRoleRepository        $userRoleRepository,
+                           UserServiceResponse       $userServiceResponse): UserServiceResponse
     {
         $userRepositoryRequest = Lazy::copy($userServiceRequest, $userRepositoryRequest);
 
@@ -243,10 +244,10 @@ class UserService
      * @param $force
      * @return ChangePasswordResponse
      */
-    public function changePassword(ChangePasswordRequest $changePasswordRequest,
-                                   UserRepository $userRepository,
+    public function changePassword(ChangePasswordRequest  $changePasswordRequest,
+                                   UserRepository         $userRepository,
                                    ChangePasswordResponse $changePasswordResponse,
-                                   $force = false): ChangePasswordResponse
+                                                          $force = false): ChangePasswordResponse
     {
 
         $userResult = app()->call([$userRepository, 'getByEmail'], ['email' => $changePasswordRequest->email]);
@@ -341,9 +342,9 @@ class UserService
      * @param UserServiceResponse $userServiceResponse
      * @return UserServiceResponse|null
      */
-    public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse): ?UserServiceResponse
+    public function getByEmail(string $email, UserRepository $userRepository, UserServiceResponse $userServiceResponse, $isAll = false): ?UserServiceResponse
     {
-        $result = app()->call([$userRepository, 'getByEmail'], compact('email'));
+        $result = app()->call([$userRepository, 'getByEmail'], compact('email', 'isAll'));
 
         if ($result != null) {
             $userServiceResponse->status = true;
@@ -494,6 +495,21 @@ class UserService
         } else {
             $userServiceResponse->status = false;
             $userServiceResponse->message = "Get user by token failed";
+        }
+        return $userServiceResponse;
+    }
+
+    function login(string $email, string $password, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $isAll = true)
+    {
+        $user = app()->call([$userRepository, 'getByEmail'], compact('email', 'isAll'));
+        if ($user != null && Hash::check($password, $user->password)) {
+            $userServiceResponse->user = $user;
+            $userServiceResponse->activationKey = $user->createToken('auth_token')->plainTextToken;
+            $userServiceResponse->status = true;
+            $userServiceResponse->message = "Get user by token Success";
+        } else {
+            $userServiceResponse->status = false;
+            $userServiceResponse->message = "Login Failed";
         }
         return $userServiceResponse;
     }

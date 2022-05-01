@@ -17,6 +17,7 @@ use Ramsey\Uuid\Uuid;
 use WebAppId\Lazy\Tools\Lazy;
 use WebAppId\Lazy\Traits\RepositoryTrait;
 use WebAppId\User\Models\User;
+use WebAppId\User\Models\UserLogin;
 use WebAppId\User\Repositories\Requests\UserRepositoryRequest;
 
 /**
@@ -150,9 +151,9 @@ trait UserRepositoryTrait
      * @param User $user
      * @return User|null
      */
-    public function getByEmail(string $email, User $user): ?User
+    public function getByEmail(string $email, User $user, UserLogin $userLogin, $isAll = false): ?User
     {
-        return $this->getJoin($user)
+        return $this->getJoin($isAll ? $userLogin : $user)
             ->where('email', $email)
             ->first($this->getColumn());
     }
@@ -337,5 +338,12 @@ trait UserRepositoryTrait
     public function getUserByLoginToken(string $token, User $user): user
     {
         return Cache::pull($token);
+    }
+
+    public function login(string $email, User $user, $isAll = false)
+    {
+        $user = $this->getJoin($user)
+            ->where('email', $email)
+            ->first();
     }
 }
