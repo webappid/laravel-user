@@ -24,7 +24,7 @@ class RoleCheck
      * @return mixed|void
      * @throws AuthenticationException
      */
-    public function handle($request, Closure $next, $userRole = "member")
+    public function handle($request, Closure $next, string $userRole = "member")
     {
         $roles = Auth::user()->roles;
         $access = false;
@@ -39,6 +39,7 @@ class RoleCheck
                 }
             }
         }
+        
         if ($access) {
             return $next($request);
         } else {

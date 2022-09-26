@@ -21,7 +21,7 @@ class AuthController extends Controller
         $user = app()->call([$userService, 'login'], ['email' => $request['email'], 'password' => $request['password']]);
 
         if(!$user->status){
-            return $smartResponse->requestDenied();
+            return $smartResponse->requestDenied($response);
         }
 
         $response->setData($user->activationKey);
@@ -31,5 +31,11 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
         $response->setMessage('Logout Success');
         return $smartResponse->success($response);
+    }
+
+    public function requestToken(Request $request, Response $response, SmartResponse $smartResponse, UserService $userService){
+        if (!Auth::attempt($request->only('email'))) {
+            return $smartResponse->requestDenied($response);
+        }
     }
 }

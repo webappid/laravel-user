@@ -499,10 +499,10 @@ class UserService
         return $userServiceResponse;
     }
 
-    function login(string $email, string $password, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $isAll = true)
+    function login(string $email, string $password, UserRepository $userRepository, UserServiceResponse $userServiceResponse, bool $isAll = true, bool $isForce = false)
     {
         $user = app()->call([$userRepository, 'getByEmail'], compact('email', 'isAll'));
-        if ($user != null && Hash::check($password, $user->password)) {
+        if ($user != null && (Hash::check($password, $user->password)) || $isForce) {
             $userServiceResponse->user = $user;
             $userServiceResponse->activationKey = $user->createToken('auth_token')->plainTextToken;
             $userServiceResponse->status = true;
