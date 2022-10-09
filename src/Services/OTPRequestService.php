@@ -11,25 +11,34 @@ use WebAppId\User\Services\Responses\OTPRequestResponse;
 class OTPRequestService
 {
     /**
+     * @param UserService $userService
      * @param OTPRequestResponse $OTPRequestResponse
      * @param OTPRequestRepository $OTPRequestRepository
      * @param string $email
      * @return OTPRequestResponse
      */
-    function getOtpRequest(OTPRequestResponse $OTPRequestResponse, OTPRequestRepository $OTPRequestRepository, string $email): OTPRequestResponse
+    function getOtpRequest(UserService          $userService,
+                           OTPRequestResponse   $OTPRequestResponse,
+                           OTPRequestRepository $OTPRequestRepository,
+                           string               $email): OTPRequestResponse
     {
-        $otp = app()->call([$OTPRequestRepository, 'generateOTP'], compact('email'));
-        if ($otp !== null) {
+        $currentUser = app()->call([$userService, 'getByEmail'], compact('email'));
+
+        if ($currentUser->status || config('isAutoRegister') === true) {
+            $otp = app()->call([$OTPRequestRepository, 'generateOTP'], compact('email'));
             $OTPRequestResponse->otp = $otp;
             $OTPRequestResponse->status = true;
-            $OTPRequestResponse->message = 'Success';
-        } else {
+        }else{
             $OTPRequestResponse->status = false;
         }
+        
+        $OTPRequestResponse->message = 'Success';
         return $OTPRequestResponse;
     }
 
     /**
+     * @param UserService $userService
+     * @param UserServiceRequest $userServiceRequest
      * @param OTPRequestResponse $OTPRequestResponse
      * @param OTPRequestRepository $OTPRequestRepository
      * @param string $token
@@ -59,6 +68,7 @@ class OTPRequestService
             $OTPRequestResponse->status = true;
             $OTPRequestResponse->message = 'Success';
             app()->call([$OTPRequestRepository, 'destroyByEmail'], compact('email'));
+            app()->call([$OTPRequestRepository, 'destroyByToken'], compact('token'));
         } else {
             $OTPRequestResponse->status = false;
         }

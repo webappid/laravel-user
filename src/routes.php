@@ -12,7 +12,7 @@ Route::name('api.')->prefix('api')->group(function () use ($controller) {
         Route::post('/logout', $controller . '\AuthController@logout')->name('logout');
     });
     Route::name('otp.')->prefix('otp')->group(function () use ($controller) {
-        Route::get('/request/{email}', WebAppId\User\Controllers\Otp\RequestController::class)->name('request');
-        Route::get('/login/{token}', WebAppId\User\Controllers\Otp\LoginController::class)->name('request');
+        Route::post('/request', WebAppId\User\Controllers\Otp\RequestController::class)->name('request');
+        Route::post('/login', WebAppId\User\Controllers\Otp\LoginController::class)->name('otpLogin');
     });
 });

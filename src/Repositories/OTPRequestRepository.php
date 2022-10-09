@@ -53,7 +53,7 @@ class OTPRequestRepository
 
     /**
      * @param $token
-     * @return string|null
+     * @return string
      */
     function otpChecked($token): ?string
     {
